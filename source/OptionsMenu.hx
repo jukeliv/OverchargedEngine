@@ -15,12 +15,28 @@ import lime.utils.Assets;
 
 class OptionsMenu extends MusicBeatState
 {
+	var textMenuItems:Array<String> = [
+		'DownScroll',
+		'Antialiasing'];
+
+	var selector:FlxSprite;
+	var curSelected:Int = 0;
+
+	var grpOptions:FlxTypedGroup<FlxSprite>;
+
+	var description:FlxText = new FlxText(0,0,0,null,32).setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+
+	var textStateItems:Array<String> = [
+		(''+FlxG.save.data.downscroll),
+		(''+FlxG.save.data.antialias)
+	];
+
+	var stateShit:FlxText = new FlxText(700,900,0,null,32);
+
 	var optionShit = [
 		'Key Blinds',
 		'Exit'
 	];
-	var selector:FlxText;
-	var curSelected:Int = 0;
 
 	var controlsStrings:Array<String> = [];
 
@@ -36,106 +52,91 @@ class OptionsMenu extends MusicBeatState
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
+		menuBG.antialiasing = FlxG.save.data.antialias;
 		add(menuBG);
 
-		menuItems = new FlxTypedGroup<FlxSprite>();
-		add(menuItems);
+		description.screenCenter();
+		description.y += 1300;
+		description.scrollFactor.set();
+		add(description);
 
-		var tex = Paths.getSparrowAtlas('','');
+		stateShit.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
-		for (i in 0...optionShit.length)
+		add(stateShit);
+
+		grpOptions = new FlxTypedGroup<FlxSprite>();
+		add(grpOptions);
+
+		var tex = Paths.getSparrowAtlas('Options_Menu_Assets','preload');
+
+		for (i in 0...textMenuItems.length)
 		{
-			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
-			menuItem.frames = tex;
-			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
-			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
-			menuItem.animation.play('idle');
-			menuItem.ID = i;
-			//menuItem.screenCenter(X);
-			menuItems.add(menuItem);
-			menuItem.scrollFactor.set();
-			menuItem.antialiasing = true;
+			var options:FlxSprite = new FlxSprite(20, 60 + (i * 160) + 100);
+			options.frames = tex;
+			options.animation.addByPrefix('idle',(textMenuItems[i] + ' Idle'));
+			options.animation.addByPrefix('selected',(textMenuItems[i] + ' Selected'));
+			options.ID = i;
+			grpOptions.add(options);
 		}
 
 		super.create();
-
-		openSubState(new OptionsSubState());
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
- 
-			if (controls.ACCEPT)
-			{
-				changeBinding();
-			}
 
-			if (isSettingControl)
-				waitingInput();
-			else
-			{
-				if (controls.BACK)
-					FlxG.switchState(new MainMenuState());
-				if (controls.UP_P)
-					changeSelection(-1);
-				if (controls.DOWN_P)
-					changeSelection(1);
-			}
-	}
+		stateShit.text = textStateItems[curSelected].toString();
 
-	function waitingInput():Void
-	{
-		if (FlxG.keys.getIsDown().length > 0)
+		if (controls.UP_P)
+			FlxG.sound.play(Paths.sound('scrollMenu','preload'));
+			changeItem(-1);
+
+		if (controls.DOWN_P)
+			FlxG.sound.play(Paths.sound('scrollMenu','preload'));
+			changeItem(1);
+
+		if (controls.BACK)
+			FlxG.switchState(new MainMenuState());
+
+		if (controls.ACCEPT)
 		{
-			PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxG.keys.getIsDown()[0].ID, null);
+			trace(textMenuItems[curSelected] + ':');
+			FlxG.sound.play(Paths.sound('confirmMenu','preload'));
+			switch (textMenuItems[curSelected])
+			{
+				case 'DownScroll':
+					FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
+					trace(FlxG.save.data.downscroll);
+
+				case 'Antialiasing':
+					FlxG.save.data.antialias = !FlxG.save.data.antialias;
+					trace(FlxG.save.data.antialias);
+			}
+			if (controls.BACK)
+				FlxG.switchState(new MainMenuState());
 		}
-		// PlayerSettings.player1.controls.replaceBinding(Control)
+
 	}
-
-	var isSettingControl:Bool = false;
-
-	function changeBinding():Void
-	{
-		if (!isSettingControl)
-		{
-			isSettingControl = true;
-		}
-	}
-
-	function changeSelection(change:Int = 0)
-	{
-		#if !switch
-		NGio.logEvent('Fresh');
-		#end
-
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-
-		curSelected += change;
-
+	function changeItem(huh:Int){
+		curSelected += huh;
 		if (curSelected < 0)
-			curSelected = grpControls.length - 1;
-		if (curSelected >= grpControls.length)
+			curSelected = textMenuItems.length - 1;
+		if (curSelected >= textMenuItems.length)
 			curSelected = 0;
 
-		// selector.y = (70 * curSelected) + 30;
+		grpOptions.forEach(function(spr:FlxSprite){
+			if (spr.ID == curSelected)
+				spr.animation.play('selected');
+			else
+				spr.animation.play('idle');
+		});
 
-		var bullShit:Int = 0;
-
-		for (item in grpControls.members)
-		{
-			item.targetY = bullShit - curSelected;
-			bullShit++;
-
-			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
-
-			if (item.targetY == 0)
-			{
-				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
-			}
+		switch(textMenuItems[curSelected]){
+			case 'DownScroll':
+				description.text = 'Toggle Downscroll';
+			case 'Antialiasing':
+				description.text = 'Toggle Antialiasing';	
 		}
 	}
 }
