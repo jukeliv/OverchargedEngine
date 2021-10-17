@@ -851,6 +851,11 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		switch(SONG.song.toLowerCase()){
+			case 'stage':
+				FlxG.camera.shake(0.02,0.2);
+		}
+
 		new FlxTimer().start(0.3, function(tmr:FlxTimer)
 		{
 			black.alpha -= 0.15;
