@@ -71,8 +71,6 @@ class OptionsMenu extends MusicBeatState
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
-		var tex = Paths.getSparrowAtlas('Options_Menu_Assets','preload');
-
 		for (i in 0...textMenuItems.length)
 		{
 			var options:Alphabet = new Alphabet(20, 60 + (i * 160) + 100,textMenuItems[i].toString());
