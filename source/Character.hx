@@ -30,7 +30,7 @@ class Character extends FlxSprite
 			case 'senpai' | 'bf-pixel' | 'spirit' | 'senpai-angry':
 				antialiasing = false;
 			default:
-				antialiasing = true;
+				antialiasing = FlxG.save.data.antialias;
 		}
 
 		switch (curCharacter)

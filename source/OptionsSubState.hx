@@ -10,8 +10,7 @@ class OptionsSubState extends MusicBeatSubstate
 {
 	var textMenuItems:Array<String> = [
 		'DownScroll',
-		'Antialiasing',
-		'ScrollSpeed'];
+		'Antialiasing'];
 
 	var selector:FlxSprite;
 	var curSelected:Int = 0;
@@ -36,15 +35,19 @@ class OptionsSubState extends MusicBeatSubstate
 
 		add(stateShit);
 
-		grpOptionsTexts = new FlxTypedGroup<FlxText>();
+		grpOptionsTexts = new FlxTypedGroup<FlxSprite>();
 		add(grpOptionsTexts);
+
+		var tex = Paths.getSparrowAtlas('Options_Menu_Assets','preload');
 
 		for (i in 0...textMenuItems.length)
 		{
-			var optionText:FlxText = new FlxText(20, 20 + (i * 50), 0, textMenuItems[i], 32);
-			optionText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			optionText.ID = i;
-			grpOptionsTexts.add(optionText);
+			var optionShit:FlxSprite = new FlxSprite(20, 20 + (i * 50), 0, textMenuItems[i], 32);
+			optionsShit.frames = tex;
+			optionShit.animation.addByPrefix('idle',(textMenuItems[i] + ' Idle'));
+			optionShit.animation.addByPrefix('selected',(textMenuItems[i] + ' Selected'));
+			optionShit.ID = i;
+			grpOptionsTexts.add(optionShit);
 		}
 	}
 
@@ -71,12 +74,16 @@ class OptionsSubState extends MusicBeatSubstate
 		if (controls.BACK)
 			FlxG.switchState(new MainMenuState());
 
-		grpOptionsTexts.forEach(function(txt:FlxText)
+		FlxSprite.forEach(function(spr:FlxSprite){
+
+		});
+
+		grpOptionsTexts.forEach(function(spr:FlxSprite)
 		{
-			if (txt.ID == curSelected)
-				txt.color = FlxColor.YELLOW;
+			if (spr.ID == curSelected)
+				spr.animation.play('selected');
 			else
-				txt.color = FlxColor.WHITE;
+				spr.animation.play('idle');
 		});
 
 		switch(textMenuItems[curSelected]){
@@ -89,14 +96,17 @@ class OptionsSubState extends MusicBeatSubstate
 
 		if (controls.ACCEPT)
 		{
+			trace(textMenuItems[curSelected] + ':');
 			FlxG.sound.play(Paths.sound('confirmMenu','preload'));
 			switch (textMenuItems[curSelected])
 			{
 				case 'DownScroll':
 					FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
+					trace(FlxG.save.data.downscroll);
 
 				case 'Antialiasing':
 					FlxG.save.data.antialias = !FlxG.save.data.antialias;
+					trace(FlxG.save.data.antialias);
 			}
 		}
 	}

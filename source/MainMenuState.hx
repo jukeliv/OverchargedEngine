@@ -109,17 +109,10 @@ class MainMenuState extends MusicBeatState
 			menuItem.antialiasing = true;
 
 			//(optionShit.length + 1 * 100 / 3)
-			if(!endFunnyMove){
-				FlxTween.tween(menuItem,{x:20,y:60 + (i * 160) + 100},0.9,{onComplete:function(twn:FlxTween){
-					endFunnyMove = true;
-					changeItem();
-				}});
-			}
-			else{
-				menuItem.x = 20;
-				menuItem.y = 60 + (i * 160) + 100;
-			}
-			
+			FlxTween.tween(menuItem,{x:20,y:60 + (i * 160) + 100},0.9,{onComplete:function(twn:FlxTween){
+				endFunnyMove = true;
+				changeItem();
+			}});
 		}
 
 		if(endFunnyMove)
@@ -142,6 +135,11 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		if(endFunnyMove){
+			menuItem.x = 20;
+			menuItem.y = 60 + (i * 160) + 100;
+		}
+
 		if (FlxG.sound.music.volume < 0.8)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
