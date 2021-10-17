@@ -35,9 +35,9 @@
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
-	<set name="BUILD_DIR" value="export/pre-release" unless="debug" />
+	<set name="BUILD_DIR" value="export/pre-release" unles="debug" />
 	<set name="BUILD_DIR" value="export/32bit" if="32bit" />
-	<set name="BUILD_DIR" value="export/final" if="final" />
+	<set name="BUILD_DIR" value="export/release" if="release" />
 
 	<classpath name="source" />
 

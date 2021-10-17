@@ -10,6 +10,7 @@ class OptionsSubState extends MusicBeatSubstate
 {
 	var textMenuItems:Array<String> = [
 		'DownScroll',
+		'Antialiasing',
 		'ScrollSpeed'];
 
 	var selector:FlxSprite;
@@ -17,15 +18,26 @@ class OptionsSubState extends MusicBeatSubstate
 
 	var grpOptionsTexts:FlxTypedGroup<FlxText>;
 
+	var description:String;
+
+	var textStateItems:Array<String> = [
+		(''+FlxG.save.data.downscroll),
+		(''+FlxG.save.data.antialias),
+		(''+FlxG.save.data.scrollSpeed)
+	];
+
+	var stateShit:FlxText = new FlxText(700,900,0,null,32);
+
 	public function new()
 	{
 		super();
 
+		stateShit.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+
+		add(stateShit);
+
 		grpOptionsTexts = new FlxTypedGroup<FlxText>();
 		add(grpOptionsTexts);
-
-		selector = new FlxSprite().makeGraphic(5, 5, FlxColor.RED);
-		add(selector);
 
 		for (i in 0...textMenuItems.length)
 		{
@@ -40,10 +52,14 @@ class OptionsSubState extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
+		stateShit.text = textStateItems[curSelected].toString();
+
 		if (controls.UP_P)
+			FlxG.sound.play(Paths.sound('scrollMenu','preload'));
 			curSelected -= 1;
 
 		if (controls.DOWN_P)
+			FlxG.sound.play(Paths.sound('scrollMenu','preload'));
 			curSelected += 1;
 
 		if (curSelected < 0)
@@ -57,19 +73,30 @@ class OptionsSubState extends MusicBeatSubstate
 
 		grpOptionsTexts.forEach(function(txt:FlxText)
 		{
-			txt.color = FlxColor.WHITE;
-
 			if (txt.ID == curSelected)
 				txt.color = FlxColor.YELLOW;
+			else
+				txt.color = FlxColor.WHITE;
 		});
+
+		switch(textMenuItems[curSelected]){
+			case 'DownScroll':
+				description = 'Toggle Downscroll';
+			case 'Antialiasing':
+				description = 'Toggle Antialiasing';
+			
+		}
 
 		if (controls.ACCEPT)
 		{
+			FlxG.sound.play(Paths.sound('confirmMenu','preload'));
 			switch (textMenuItems[curSelected])
 			{
-				case "Controls":
-					FlxG.state.closeSubState();
-					FlxG.state.openSubState(new ControlsSubState());
+				case 'DownScroll':
+					FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
+
+				case 'Antialiasing':
+					FlxG.save.data.antialias = !FlxG.save.data.antialias;
 			}
 		}
 	}
