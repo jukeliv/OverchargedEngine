@@ -16,44 +16,48 @@ import lime.utils.Assets;
 class OptionsMenu extends MusicBeatState
 {
 	var textMenuItems:Array<String> = [
-		'DownScroll',
+		'Use DFJK',
 		'Antialiasing'];
 
 	var selector:FlxSprite;
 	var curSelected:Int = 0;
 
-	var grpOptions:FlxTypedGroup<FlxSprite>;
+	var grpOptions:FlxTypedGroup<Alphabet>;
 
 	var description:FlxText = new FlxText(0,0,0,null,32).setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
 	var textStateItems:Array<String> = [
-		(''+FlxG.save.data.downscroll),
+		(''+FlxG.save.data.dfjk),
 		(''+FlxG.save.data.antialias)
 	];
 
 	var stateShit:FlxText = new FlxText(700,900,0,null,32);
 
-	var optionShit = [
-		'Key Blinds',
-		'Exit'
-	];
-
-	var controlsStrings:Array<String> = [];
-
-	private var grpControls:FlxTypedGroup<Alphabet>;
-
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	override function create()
 	{
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = CoolUtil.coolTextFile(Paths.txt('controls'));
-		menuBG.color = 0xFFea71fd;
-		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
-		menuBG.updateHitbox();
-		menuBG.screenCenter();
-		menuBG.antialiasing = FlxG.save.data.antialias;
-		add(menuBG);
+		var bg:FlxSprite;
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat','preload'));
+		SpriteUtil.scrollFactor(bg,0,0.18);
+		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bg.updateHitbox();
+		bg.screenCenter();
+		bg.visible = true;
+		bg.antialiasing = true;
+		bg.color = 0xE7E7E7;
+		add(bg);
+
+		var fd:FlxSprite;
+		fd = new FlxSprite().loadGraphic(Paths.image('menuDegraded','preload'));
+		SpriteUtil.scrollFactor(fd,0,0.18);
+		fd.setGraphicSize(Std.int(fd.width * 1.1));
+		fd.updateHitbox();
+		fd.screenCenter();
+		fd.visible = true;
+		fd.antialiasing = true;
+		fd.color = 0x2019FF;
+		add(fd);
 
 		description.screenCenter();
 		description.y += 1300;
@@ -64,17 +68,14 @@ class OptionsMenu extends MusicBeatState
 
 		add(stateShit);
 
-		grpOptions = new FlxTypedGroup<FlxSprite>();
+		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
 		var tex = Paths.getSparrowAtlas('Options_Menu_Assets','preload');
 
 		for (i in 0...textMenuItems.length)
 		{
-			var options:FlxSprite = new FlxSprite(20, 60 + (i * 160) + 100);
-			options.frames = tex;
-			options.animation.addByPrefix('idle',(textMenuItems[i] + ' Idle'));
-			options.animation.addByPrefix('selected',(textMenuItems[i] + ' Selected'));
+			var options:Alphabet = new Alphabet(20, 60 + (i * 160) + 100,textMenuItems[i].toString());
 			options.ID = i;
 			grpOptions.add(options);
 		}
@@ -105,9 +106,10 @@ class OptionsMenu extends MusicBeatState
 			FlxG.sound.play(Paths.sound('confirmMenu','preload'));
 			switch (textMenuItems[curSelected])
 			{
-				case 'DownScroll':
-					FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
-					trace(FlxG.save.data.downscroll);
+				case 'Use DFJK':
+					FlxG.save.data.dfjk = !FlxG.save.data.dfjk;
+					controls.LEFT_P = FlxG.save.data.dfjk? 'D':'A';
+					trace(FlxG.save.data.dfjk);
 
 				case 'Antialiasing':
 					FlxG.save.data.antialias = !FlxG.save.data.antialias;

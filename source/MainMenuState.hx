@@ -37,8 +37,8 @@ class MainMenuState extends MusicBeatState
 	var camFollow:FlxObject;
 	var endFunnyMove:Bool = false;
 
-	var bg:FlxSprite = new FlxSprite(0,0).loadGraphic(Paths.image('menuDesat','preload'));
-	var fd:FlxSprite = new FlxSprite(0,0).loadGraphic(Paths.image('menuDegraded','preload'));
+	var bg:FlxSprite = new FlxSprite(0,0);
+	var fd:FlxSprite = new FlxSprite(0,0);
 
 	override function create()
 	{
@@ -58,30 +58,32 @@ class MainMenuState extends MusicBeatState
 		persistentUpdate = persistentDraw = true;
 
 
-		
-		bg.color = 0xE7E7E7;
-		scrollFactor(bg,0,0.18);
+
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat','preload'));
+		SpriteUtil.scrollFactor(bg,0,0.18);
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.visible = false;
+		bg.visible = true;
 		bg.antialiasing = true;
+		bg.color = 0xE7E7E7;
 		add(bg);
-		
-		fd.color = 0x2019FF;
-		scrollFactor(fd,0,0.18);
+
+		fd = new FlxSprite().loadGraphic(Paths.image('menuDegraded','preload'));
+		SpriteUtil.scrollFactor(fd,0,0.18);
 		fd.setGraphicSize(Std.int(fd.width * 1.1));
 		fd.updateHitbox();
 		fd.screenCenter();
-		fd.visible = false;
+		fd.visible = true;
 		fd.antialiasing = true;
+		fd.color = 0x2019FF;
 		add(fd);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
 		magenta = new FlxSprite().loadGraphic(Paths.image('menuDesat','preload'));
-		scrollFactor(magenta,0,0.18);
+		SpriteUtil.scrollFactor(magenta,0,0.18);
 		magenta.setGraphicSize(Std.int(magenta.width * 1.1));
 		magenta.updateHitbox();
 		magenta.screenCenter();
@@ -124,11 +126,6 @@ class MainMenuState extends MusicBeatState
 		add(versionShit);
 
 		super.create();
-	}
-
-	function scrollFactor(spr:FlxSprite,x:Float,y:Float){
-		spr.scrollFactor.x = x;
-		spr.scrollFactor.y = y;
 	}
 
 	var selectedSomethin:Bool = false;

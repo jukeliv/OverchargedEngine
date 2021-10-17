@@ -136,6 +136,12 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+
+		if(SONG.player1 == null)
+			SONG.player1 = 'bf';
+		if(SONG.player2 == null)
+			SONG.player1 = 'dad';
+
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -148,6 +154,7 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(camHUD);
 
 		FlxCamera.defaultCameras = [camGame];
+		//FlxG.cameras.setDefaultDrawTarget(camGame,true);
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -1178,7 +1185,7 @@ class PlayState extends MusicBeatState
 					}
 
 				default:
-					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets','notes');
 					babyArrow.animation.addByPrefix('green', 'arrowUP');
 					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
 					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
@@ -1361,6 +1368,9 @@ class PlayState extends MusicBeatState
 				}
 				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
+
+		if(FlxG.keys.justPressed.R)
+			LoadingState.loadAndSwitchState(new PlayState());
 
 		super.update(elapsed);
 
