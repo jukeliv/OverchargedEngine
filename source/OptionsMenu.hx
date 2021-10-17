@@ -108,7 +108,6 @@ class OptionsMenu extends MusicBeatState
 			{
 				case 'Use DFJK':
 					FlxG.save.data.dfjk = !FlxG.save.data.dfjk;
-					controls.LEFT_P = FlxG.save.data.dfjk? 'D':'A';
 					trace(FlxG.save.data.dfjk);
 
 				case 'Antialiasing':
