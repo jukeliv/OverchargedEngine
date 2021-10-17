@@ -135,11 +135,6 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if(endFunnyMove){
-			menuItem.x = 20;
-			menuItem.y = 60 + (i * 160) + 100;
-		}
-
 		if (FlxG.sound.music.volume < 0.8)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;

@@ -15,14 +15,13 @@ class OptionsSubState extends MusicBeatSubstate
 	var selector:FlxSprite;
 	var curSelected:Int = 0;
 
-	var grpOptionsTexts:FlxTypedGroup<FlxText>;
+	var grpOptions:FlxTypedGroup<FlxSprite>;
 
-	var description:String;
+	var description:FlxText = new FlxText(0,0,0,null,32).setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
 	var textStateItems:Array<String> = [
 		(''+FlxG.save.data.downscroll),
-		(''+FlxG.save.data.antialias),
-		(''+FlxG.save.data.scrollSpeed)
+		(''+FlxG.save.data.antialias)
 	];
 
 	var stateShit:FlxText = new FlxText(700,900,0,null,32);
@@ -31,24 +30,31 @@ class OptionsSubState extends MusicBeatSubstate
 	{
 		super();
 
+		description.screenCenter();
+		description.y += 1300;
+		description.scrollFactor.set();
+		add(description);
+
 		stateShit.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
 		add(stateShit);
 
-		grpOptionsTexts = new FlxTypedGroup<FlxSprite>();
-		add(grpOptionsTexts);
+		grpOptions = new FlxTypedGroup<FlxSprite>();
+		add(grpOptions);
 
 		var tex = Paths.getSparrowAtlas('Options_Menu_Assets','preload');
 
 		for (i in 0...textMenuItems.length)
 		{
-			var optionShit:FlxSprite = new FlxSprite(20, 20 + (i * 50), 0, textMenuItems[i], 32);
-			optionsShit.frames = tex;
-			optionShit.animation.addByPrefix('idle',(textMenuItems[i] + ' Idle'));
-			optionShit.animation.addByPrefix('selected',(textMenuItems[i] + ' Selected'));
-			optionShit.ID = i;
-			grpOptionsTexts.add(optionShit);
+			var options:FlxSprite = new FlxSprite(20, 60 + (i * 160) + 100);
+			options.frames = tex;
+			options.animation.addByPrefix('idle',(textMenuItems[i] + ' Idle'));
+			options.animation.addByPrefix('selected',(textMenuItems[i] + ' Selected'));
+			options.ID = i;
+			grpOptions.add(options);
 		}
+
+
 	}
 
 	override function update(elapsed:Float)
@@ -59,40 +65,14 @@ class OptionsSubState extends MusicBeatSubstate
 
 		if (controls.UP_P)
 			FlxG.sound.play(Paths.sound('scrollMenu','preload'));
-			curSelected -= 1;
+			changeItem(-1);
 
 		if (controls.DOWN_P)
 			FlxG.sound.play(Paths.sound('scrollMenu','preload'));
-			curSelected += 1;
-
-		if (curSelected < 0)
-			curSelected = textMenuItems.length - 1;
-
-		if (curSelected >= textMenuItems.length)
-			curSelected = 0;
+			changeItem(1);
 
 		if (controls.BACK)
 			FlxG.switchState(new MainMenuState());
-
-		FlxSprite.forEach(function(spr:FlxSprite){
-
-		});
-
-		grpOptionsTexts.forEach(function(spr:FlxSprite)
-		{
-			if (spr.ID == curSelected)
-				spr.animation.play('selected');
-			else
-				spr.animation.play('idle');
-		});
-
-		switch(textMenuItems[curSelected]){
-			case 'DownScroll':
-				description = 'Toggle Downscroll';
-			case 'Antialiasing':
-				description = 'Toggle Antialiasing';
-			
-		}
 
 		if (controls.ACCEPT)
 		{
@@ -108,6 +88,27 @@ class OptionsSubState extends MusicBeatSubstate
 					FlxG.save.data.antialias = !FlxG.save.data.antialias;
 					trace(FlxG.save.data.antialias);
 			}
+		}
+	}
+	function changeItem(huh:Int){
+		curSelected += huh;
+		if (curSelected < 0)
+			curSelected = textMenuItems.length - 1;
+		if (curSelected >= textMenuItems.length)
+			curSelected = 0;
+
+		grpOptions.forEach(function(spr:FlxSprite){
+			if (spr.ID == curSelected)
+				spr.animation.play('selected');
+			else
+				spr.animation.play('idle');
+		});
+
+		switch(textMenuItems[curSelected]){
+			case 'DownScroll':
+				description.text = 'Toggle Downscroll';
+			case 'Antialiasing':
+				description.text = 'Toggle Antialiasing';	
 		}
 	}
 }
