@@ -1,0 +1,35 @@
+Hello, this is the SETUP helper, here i gona explain step by step how to install everything to start modding
+in this engine, and in any other engine.
+
+First Step: install Haxe and Neko.
+
+To instal Haxe n' Neko, just go to de haxe official page ( https://haxe.org/download/ ) and download the setup for your os.
+After downloading the file, just open it, an press next, and next. You know, like in any other
+setyo. Just remember to chech the checkBox than says "neko" and a bunch of numbers like "4.2.1"
+or somthing, if you dont do this, will hive you errors while your developing your mod.
+
+1.2 Step: install Git.
+To install Git just go to the Official Git Download Page ( https://git-scm.com/downloads ) and download the setup for your os.
+After downloading the file, just open it and install it as any program. After you install it, your ready to go.
+
+Second step: install Vs Code and Vs BuildTools
+
+To install Vs Code you go to the Official Microsoft Download Vs Code Page ( https://code.visualstudio.com/download ) and download
+the setup for your os. After downloading the file, open it and pres next, and next, and next, like in any other setup. After
+instaling Vs Code, you just install Vs BuildTools, just open this link ( https://cdn.discordapp.com/attachments/828084042120953867/830191004686352444/vs_buildtools__1911057386.1611785237.exe )
+and open the file than you just download, remember to download the c++ stuff, its the only reason why you need to do this, so, after you do everything than the program tell you ,
+and reset your pc ( because, if you don't do it, any change will be afect your os ).
+
+Last Step: instal the Haxe dependences:
+
+After instaling Haxe and Neko, in the folder where you find this file, you will see another file called "Setup.bat".
+Just, open it and it will install automaticly every dependence. After instaling everything, you can just, delete the file,
+it really dont will change anything if you delete it or not. REMEMBER, when you are instaling flixel, it will tell you somthing
+like "you want to use the subName flixel?" just say yes, and in the part, it will be ask you somthing of your code editor or some shit,
+just type "3" and press enter, and now, you can start your mod experience in this new engine, and in this entire comunitty, have a good time
+and tell me if you have problems with the setup, heres my social media if you want to tell me your problems:
+
+Twitter: https://twitter.com/KillerBeanFan2
+
+YT: https://www.youtube.com/channel/UCkcscIIXyUsfj2DsnNDWQbg
+
