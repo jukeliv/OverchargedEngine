@@ -35,10 +35,7 @@ class MainMenuState extends MusicBeatState
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
-	var endFunnyMove:Bool = false;
-
-	var bg:FlxSprite = new FlxSprite(0,0);
-	var fd:FlxSprite = new FlxSprite(0,0);
+	public static var endFunnyMove:Bool = false;
 
 	override function create()
 	{
@@ -57,9 +54,7 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-
-
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat','preload'));
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat','preload'));
 		SpriteUtil.scrollFactor(bg,0,0.18);
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
@@ -69,7 +64,7 @@ class MainMenuState extends MusicBeatState
 		bg.color = 0xE7E7E7;
 		add(bg);
 
-		fd = new FlxSprite().loadGraphic(Paths.image('menuDegraded','preload'));
+		var fd:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDegraded','preload'));
 		SpriteUtil.scrollFactor(fd,0,0.18);
 		fd.setGraphicSize(Std.int(fd.width * 1.1));
 		fd.updateHitbox();
@@ -208,9 +203,9 @@ class MainMenuState extends MusicBeatState
 										trace("Freeplay Menu Selected");
 
 									case 'options':
-										FlxTransitionableState.skipNextTransIn = true;
-										FlxTransitionableState.skipNextTransOut = true;
 										FlxG.switchState(new OptionsMenu());
+
+										trace("Option Menu Selected");
 								}
 							});
 						}

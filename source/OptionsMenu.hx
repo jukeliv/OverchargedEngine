@@ -1,6 +1,9 @@
 package;
 
+import flixel.input.gamepad.FlxGamepad;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import openfl.Lib;
 import Controls.Control;
 import flash.text.TextField;
 import flixel.FlxG;
@@ -12,6 +15,10 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+import lime.app.Application;
+import lime.system.DisplayMode;
+import Controls.KeyboardScheme;
+import openfl.display.FPS;
 
 class OptionsMenu extends MusicBeatState
 {
