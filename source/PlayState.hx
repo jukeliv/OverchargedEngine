@@ -1375,7 +1375,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if(FlxG.keys.justPressed.R)
-			LoadingState.loadAndSwitchState(new PlayState());
+			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 		super.update(elapsed);
 

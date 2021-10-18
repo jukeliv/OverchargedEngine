@@ -1,5 +1,7 @@
 package;
 
+import Discord.DiscordClient;
+import flixel.FlxState;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -20,16 +22,15 @@ import lime.system.DisplayMode;
 import Controls.KeyboardScheme;
 import openfl.display.FPS;
 
-class OptionsMenu extends MusicBeatState
+class OptionsState extends MusicBeatState
 {
-	var textMenuItems:Array<String> = [
-		'Use DFJK',
+	var optionsMenuItems:Array<String> = [
 		'Antialiasing'];
 
 	var selector:FlxSprite;
 	var curSelected:Int = 0;
 
-	var grpOptions:FlxTypedGroup<Alphabet>;
+	var grpOptions:FlxTypedGroup<FlxSprite>;
 
 	var description:FlxText = new FlxText(0,0,0,null,32).setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
@@ -50,7 +51,6 @@ class OptionsMenu extends MusicBeatState
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.visible = true;
 		bg.antialiasing = true;
 		bg.color = 0xE7E7E7;
 		add(bg);
@@ -61,29 +61,36 @@ class OptionsMenu extends MusicBeatState
 		fd.setGraphicSize(Std.int(fd.width * 1.1));
 		fd.updateHitbox();
 		fd.screenCenter();
-		fd.visible = true;
 		fd.antialiasing = true;
 		fd.color = 0x2019FF;
 		add(fd);
 
-		description.screenCenter();
+		/*description.screenCenter();
 		description.y += 1300;
 		description.scrollFactor.set();
-		add(description);
+		add(description);*/
 
 		stateShit.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
-		add(stateShit);
+		//add(stateShit);
 
-		grpOptions = new FlxTypedGroup<Alphabet>();
+		grpOptions = new FlxTypedGroup<FlxSprite>();
 		add(grpOptions);
 
-		for (i in 0...textMenuItems.length)
+		for (i in 0...optionsMenuItems.length)
 		{
-			var options:Alphabet = new Alphabet(20, 60 + (i * 160) + 100,textMenuItems[i].toString());
+			var options:FlxSprite = new FlxSprite(20, 60 + (i * 160) + (optionsMenuItems.length * 100 / 3),optionsMenuItems[i].toString());
+            options.frames = Paths.getSparrowAtlas('Options_Menu_Assets','preload');
+            options.animation.addByPrefix('idle',optionsMenuItems[i]+' Idle');
+            options.animation.addByPrefix('idle',optionsMenuItems[i]+' Selected');
 			options.ID = i;
 			grpOptions.add(options);
 		}
+
+        #if desktop
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("In the Options Menu",null);
+		#end
 
 		super.create();
 	}
@@ -92,7 +99,7 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		stateShit.text = textStateItems[curSelected].toString();
+		//stateShit.text = textStateItems[curSelected].toString();
 
 		if (controls.UP_P)
 			FlxG.sound.play(Paths.sound('scrollMenu','preload'));
@@ -107,28 +114,37 @@ class OptionsMenu extends MusicBeatState
 
 		if (controls.ACCEPT)
 		{
-			trace(textMenuItems[curSelected] + ':');
+			trace(optionsMenuItems[curSelected] + ':');
 			FlxG.sound.play(Paths.sound('confirmMenu','preload'));
-			switch (textMenuItems[curSelected])
-			{
-				case 'Use DFJK':
-					FlxG.save.data.dfjk = !FlxG.save.data.dfjk;
-					trace(FlxG.save.data.dfjk);
 
-				case 'Antialiasing':
-					FlxG.save.data.antialias = !FlxG.save.data.antialias;
-					trace(FlxG.save.data.antialias);
-			}
+            grpOptions.forEach(function(spr:FlxSprite){
+                if(spr.ID == curSelected){
+                    switch(spr.ID){
+                        case 0:
+                            FlxG.save.data.antialias = !FlxG.save.data.antialias;
+                    }
+                }
+            });
+        }
 			if (controls.BACK)
 				FlxG.switchState(new MainMenuState());
-		}
 
+        grpOptions.forEach(function(spr:FlxSprite){
+            if(spr.ID == curSelected){
+                switch(spr.ID){
+                    case 0:
+                        spr.animation.play('selected');
+                }
+            }
+            else
+                spr.animation.play('idle');
+        });
 	}
 	function changeItem(huh:Int){
 		curSelected += huh;
 		if (curSelected < 0)
-			curSelected = textMenuItems.length - 1;
-		if (curSelected >= textMenuItems.length)
+			curSelected = optionsMenuItems.length - 1;
+		if (curSelected >= optionsMenuItems.length)
 			curSelected = 0;
 
 		grpOptions.forEach(function(spr:FlxSprite){
@@ -138,9 +154,7 @@ class OptionsMenu extends MusicBeatState
 				spr.animation.play('idle');
 		});
 
-		switch(textMenuItems[curSelected]){
-			case 'DownScroll':
-				description.text = 'Toggle Downscroll';
+		switch(optionsMenuItems[curSelected]){
 			case 'Antialiasing':
 				description.text = 'Toggle Antialiasing';	
 		}

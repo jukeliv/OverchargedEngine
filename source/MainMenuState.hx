@@ -138,7 +138,7 @@ class MainMenuState extends MusicBeatState
 		}
 		//#end
 
-		if (!selectedSomethin)
+		if (endFunnyMove && !selectedSomethin)
 		{
 			if (controls.UP_P)
 			{
@@ -159,16 +159,6 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				if (optionShit[curSelected] == 'donate')
-				{
-					#if linux
-					Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
-					#else
-					FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
-					#end
-				}
-				else
-				{
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 
@@ -203,14 +193,12 @@ class MainMenuState extends MusicBeatState
 										trace("Freeplay Menu Selected");
 
 									case 'options':
-										FlxG.switchState(new OptionsMenu());
-
+										FlxG.switchState(new OptionsState());
 										trace("Option Menu Selected");
 								}
 							});
 						}
 					});
-				}
 			}
 		}
 
