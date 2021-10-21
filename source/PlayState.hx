@@ -116,6 +116,8 @@ class PlayState extends MusicBeatState
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
 
+	var screenEffect:Effects;
+
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
@@ -156,6 +158,8 @@ class PlayState extends MusicBeatState
 		FlxCamera.defaultCameras = [camGame];
 		//FlxG.cameras.setDefaultDrawTarget(camGame,true);
 
+		screenEffect.camera = camHUD;
+
 		persistentUpdate = true;
 		persistentDraw = true;
 
@@ -168,22 +172,47 @@ class PlayState extends MusicBeatState
 		switch (SONG.song.toLowerCase())
 		{
 			case 'tutorial':
-				dialogue = ["Hey you're pretty cute.", 'Use the arrow keys to keep up \nwith me singing.'];
+				dialogue = new Dialogue([
+					'Hey bf, today you will fight with my dad and thad stuff\nYou want to practice?',
+					'right big ass girl, when i end this shit i will date you!!',
+					'(why i dont select chad as my posible bf?)'
+				],
+				[
+					'gf_surp',
+					'bf_yes',
+					'bf_huh'
+				]);
 			case 'bopeebo':
-				dialogue = [
-					'HEY!',
-					"You think you can just sing\nwith my daughter like that?",
-					"If you want to date her...",
-					"You're going to have to go \nthrough ME first!"
-				];
+				dialogue = new Dialogue([
+					'Hey bf, today you will fight with my dad and thad stuff\nYou want to practice?',
+					'bibap bup bipbip ba bup',
+					'(why i dont select chad as my bf?)'
+				],
+				[
+					'gf_surp',
+					'bf_yes',
+					'bf_huh'
+				]);
 			case 'fresh':
-				dialogue = ["Not too shabby boy.", ""];
+				dialogue = new Dialogue([
+					'Not so bad boy',
+					'i say the same your mother fucker'
+				],
+				[
+					'dad_01',
+					'bf_angry',
+				]);
 			case 'dadbattle':
-				dialogue = [
-					"gah you think you're hot stuff?",
-					"If you can beat me here...",
-					"Only then I will even CONSIDER letting you\ndate my daughter!"
-				];
+				dialogue = new Dialogue([
+					'uff, you think you are hot stuff boy?',
+					'if you can beat me here..',
+					'I will CONSIDER letting you\ndate my daughter!'
+				],
+				[
+					'dad_huh',
+					'dad_angry',
+					'dad_02'
+				]);
 			case 'senpai':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
 			case 'roses':
@@ -191,6 +220,9 @@ class PlayState extends MusicBeatState
 			case 'thorns':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
 		}
+
+		//if(SONG.song.toLowerCase() != 'senpai' || SONG.song.toLowerCase() != 'roses' || SONG.song.toLowerCase() != 'thorns')
+			//add(dialogue);
 
 		#if desktop
 		// Making difficulty text for Discord Rich Presence.
@@ -489,63 +521,25 @@ class PlayState extends MusicBeatState
 		          {
 		                  curStage = 'schoolEvil';
 
+						  #if !html5
 		                  var waveEffectBG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 3, 2);
 		                  var waveEffectFG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 5, 2);
+						  #end
 
 		                  var posX = 400;
-	                          var posY = 200;
+	                      var posY = 200;
 
-		                  var bg:FlxSprite = new FlxSprite(posX, posY);
+						  screenEffect = new Effect('TV');
+						  screenEffect.scrollFactor.set(0.8, 0.9);
+						  //add(screenEffect);
+
+						  var bg:FlxSprite = new FlxSprite(posX, posY);
 		                  bg.frames = Paths.getSparrowAtlas('weeb/animatedEvilSchool');
 		                  bg.animation.addByPrefix('idle', 'background 2', 24);
 		                  bg.animation.play('idle');
 		                  bg.scrollFactor.set(0.8, 0.9);
 		                  bg.scale.set(6, 6);
 		                  add(bg);
-
-		                  /* 
-		                           var bg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('weeb/evilSchoolBG'));
-		                           bg.scale.set(6, 6);
-		                           // bg.setGraphicSize(Std.int(bg.width * 6));
-		                           // bg.updateHitbox();
-		                           add(bg);
-
-		                           var fg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('weeb/evilSchoolFG'));
-		                           fg.scale.set(6, 6);
-		                           // fg.setGraphicSize(Std.int(fg.width * 6));
-		                           // fg.updateHitbox();
-		                           add(fg);
-
-		                           wiggleShit.effectType = WiggleEffectType.DREAMY;
-		                           wiggleShit.waveAmplitude = 0.01;
-		                           wiggleShit.waveFrequency = 60;
-		                           wiggleShit.waveSpeed = 0.8;
-		                    */
-
-		                  // bg.shader = wiggleShit.shader;
-		                  // fg.shader = wiggleShit.shader;
-
-		                  /* 
-		                            var waveSprite = new FlxEffectSprite(bg, [waveEffectBG]);
-		                            var waveSpriteFG = new FlxEffectSprite(fg, [waveEffectFG]);
-
-		                            // Using scale since setGraphicSize() doesnt work???
-		                            waveSprite.scale.set(6, 6);
-		                            waveSpriteFG.scale.set(6, 6);
-		                            waveSprite.setPosition(posX, posY);
-		                            waveSpriteFG.setPosition(posX, posY);
-
-		                            waveSprite.scrollFactor.set(0.7, 0.8);
-		                            waveSpriteFG.scrollFactor.set(0.9, 0.8);
-
-		                            // waveSprite.setGraphicSize(Std.int(waveSprite.width * 6));
-		                            // waveSprite.updateHitbox();
-		                            // waveSpriteFG.setGraphicSize(Std.int(fg.width * 6));
-		                            // waveSpriteFG.updateHitbox();
-
-		                            add(waveSprite);
-		                            add(waveSpriteFG);
-		                    */
 		          }
 		          default:
 		          {
