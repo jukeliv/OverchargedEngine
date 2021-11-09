@@ -303,7 +303,9 @@ class TitleState extends MusicBeatState
 				}
 				else
 				{*/
-					FlxG.switchState(new MainMenuState());
+					FlxG.switchState(new VideoState('assets/videos/dog_test.webm', new MainMenuState()));//test for the video shit
+					
+					//FlxG.switchState(new MainMenuState());
 				//}
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);

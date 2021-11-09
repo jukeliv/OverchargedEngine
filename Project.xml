@@ -93,8 +93,12 @@
 	<assets path="assets/week6"    library="week6"    exclude="*.ogg" if="web"/>
 	<assets path="assets/notes"    library="notes"    exclude="*.mp3" unless="web"/>
 	<assets path="assets/notes"    library="notes"    exclude="*.mp3" unless="web"/>
+
+	<!-- webm stuff -->
 	<assets path="assets/videos" include="*.mp3" if="web"/>
 	<assets path="assets/videos" include="*.ogg" unless="web"/>
+	<haxelib name="actuate" />
+	<haxelib name="extension-webm" if="desktop" />
 
 	
 	<assets path='example_mods' rename='mods' embed='false'/>
@@ -124,8 +128,6 @@
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
-	<haxelib name="actuate" />
-	<haxelib name="extension-webm" if="desktop" />
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 
 	<!-- <haxelib name="markdown" /> -->

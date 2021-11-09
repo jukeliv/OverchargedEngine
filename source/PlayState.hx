@@ -116,8 +116,6 @@ class PlayState extends MusicBeatState
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
 
-	var screenEffect:Effects;
-
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
@@ -156,9 +154,6 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(camHUD);
 
 		FlxCamera.defaultCameras = [camGame];
-		//FlxG.cameras.setDefaultDrawTarget(camGame,true);
-
-		screenEffect.camera = camHUD;
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -172,57 +167,35 @@ class PlayState extends MusicBeatState
 		switch (SONG.song.toLowerCase())
 		{
 			case 'tutorial':
-				dialogue = new Dialogue([
+				dialogue = [
 					'Hey bf, today you will fight with my dad and thad stuff\nYou want to practice?',
 					'right big ass girl, when i end this shit i will date you!!',
 					'(why i dont select chad as my posible bf?)'
-				],
-				[
-					'gf_surp',
-					'bf_yes',
-					'bf_huh'
-				]);
+				];
 			case 'bopeebo':
-				dialogue = new Dialogue([
+				dialogue = [
 					'Hey bf, today you will fight with my dad and thad stuff\nYou want to practice?',
 					'bibap bup bipbip ba bup',
 					'(why i dont select chad as my bf?)'
-				],
-				[
-					'gf_surp',
-					'bf_yes',
-					'bf_huh'
-				]);
+				];
 			case 'fresh':
-				dialogue = new Dialogue([
+				dialogue = [
 					'Not so bad boy',
 					'i say the same your mother fucker'
-				],
-				[
-					'dad_01',
-					'bf_angry',
-				]);
+				];
 			case 'dadbattle':
-				dialogue = new Dialogue([
+				dialogue = [
 					'uff, you think you are hot stuff boy?',
 					'if you can beat me here..',
 					'I will CONSIDER letting you\ndate my daughter!'
-				],
-				[
-					'dad_huh',
-					'dad_angry',
-					'dad_02'
-				]);
+				];
 			case 'senpai':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
 			case 'roses':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
 			case 'thorns':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
-		}
-
-		//if(SONG.song.toLowerCase() != 'senpai' || SONG.song.toLowerCase() != 'roses' || SONG.song.toLowerCase() != 'thorns')
-			//add(dialogue);
+			}
 
 		#if desktop
 		// Making difficulty text for Discord Rich Presence.
@@ -529,10 +502,6 @@ class PlayState extends MusicBeatState
 		                  var posX = 400;
 	                      var posY = 200;
 
-						  screenEffect = new Effect('TV');
-						  screenEffect.scrollFactor.set(0.8, 0.9);
-						  //add(screenEffect);
-
 						  var bg:FlxSprite = new FlxSprite(posX, posY);
 		                  bg.frames = Paths.getSparrowAtlas('weeb/animatedEvilSchool');
 		                  bg.animation.addByPrefix('idle', 'background 2', 24);
@@ -765,10 +734,41 @@ class PlayState extends MusicBeatState
 
 		if (isStoryMode)
 		{
+			if(!SONG.haveDialogues)
+			{
+				switch(curSong.toLowerCase()){
+					case 'winter-horrorland':
+						whinterHorrorlandIntro();
+					default:
+						startCountdown();
+				}
+			}
+			else{
+				if(curSong.toLowerCase() == 'senpai' || curSong.toLowerCase() == 'roses' || curSong.toLowerCase() == 'thorns'){
+					if(curSong.toLowerCase() == 'thorns')
+						FlxG.sound.play(Paths.sound('ANGRY'));
+
+					schoolIntro(doof);
+				}
+				else{
+					addDialogues(doof);
+				}
+			}
+		}
+		else
+		{
 			switch (curSong.toLowerCase())
 			{
-				case "winter-horrorland":
-					var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
+				default:
+					startCountdown();
+			}
+		}
+
+		super.create();
+	}
+
+	function whinterHorrorlandIntro():Void{
+		var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
 					add(blackScreen);
 					blackScreen.scrollFactor.set();
 					camHUD.visible = false;
@@ -795,27 +795,14 @@ class PlayState extends MusicBeatState
 							});
 						});
 					});
-				case 'senpai':
-					schoolIntro(doof);
-				case 'roses':
-					FlxG.sound.play(Paths.sound('ANGRY'));
-					schoolIntro(doof);
-				case 'thorns':
-					schoolIntro(doof);
-				default:
-					startCountdown();
-			}
-		}
-		else
-		{
-			switch (curSong.toLowerCase())
-			{
-				default:
-					startCountdown();
-			}
-		}
+	}
 
-		super.create();
+	function addDialogues(?dialogueBox:DialogueBox):Void
+	{
+		new FlxTimer().start(0.5, function(swagTimer:FlxTimer) 
+		{
+			add(dialogueBox);
+		});
 	}
 
 	function schoolIntro(?dialogueBox:DialogueBox):Void

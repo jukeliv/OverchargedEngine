@@ -1,4 +1,4 @@
-package plugins;
+package;
 
 import flixel.FlxG;
 import openfl.display.Sprite;

@@ -1,11 +1,16 @@
 well, here you just need to do some easy stuff:
-first than all, where you import all the shit ( example: "import flixel.FlxState;" ),
+
+first, copy the folder "webm" and paste it in the root of your pc "C:\", after thad,
+press the windows key + the r key, and it will be open the run shit, just copy and paste "SystemPropertiesAdvanced.exe" and press enter,
+click in the button "Enviroment Variables", now scroll down in "System Variables " and find PATHEXT, check if says "EXE", if it dosn't,
+press "PATHEXT", now "New", and where says "Variable name:" put "PATHEXT", and in "Variable value:" put ".EXE", now press "OK".Now, in
+"User variables for ( here will say your username i)" press "Path", click on "Edit", it will be pop up a window, press where says "New",
+and type "C:\webm\bin", now open Command Prompt or PowerShell, type "ffmpeg" and if it works, will be apear a lot of text, thad says than your done here.
+
+after thad, where you import all the shit ( example: "import flixel.FlxState;" ),
 put this shit: "import plugins.VideoState;".
 
-now, install the ffmpeg https://github.com/BtbN/FFmpeg-Builds/releases ( just download the one
-than end with "gpl-shared" ok? ).
-
-after thad go to "assets", inside the folder,
+now, go to "assets", inside the folder,
 open "video", and put your video with the extension .webm there.
 
 now, to switch state, just use this line of code:
@@ -20,3 +25,5 @@ where says "[true/false]" change it to true or false based on this shit, if it i
 this is good for midway videos while playing or idk for pausing the game and showing the video cutscene.
 
 if you don't understand, lick my nutz and read this ( https://github.com/GrowtopiaFli/openfl-haxeflixel-video-code ) or ask to kade-dev.
+
+here a converter to make your videos to the format .webm ( https://video.online-convert.com/convert-to-webm ).
