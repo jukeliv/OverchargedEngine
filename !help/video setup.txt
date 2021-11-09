@@ -1,0 +1,22 @@
+well, here you just need to do some easy stuff:
+first than all, where you import all the shit ( example: "import flixel.FlxState;" ),
+put this shit: "import plugins.VideoState;".
+
+now, install the ffmpeg https://github.com/BtbN/FFmpeg-Builds/releases ( just download the one
+than end with "gpl-shared" ok? ).
+
+after thad go to "assets", inside the folder,
+open "video", and put your video with the extension .webm there.
+
+now, to switch state, just use this line of code:
+FlxG.switchState(new VideoState('assets/videos/yoursourcevideo.webm', new YourClass(),0 , [true/false]));
+where say "yoursourcevideo.webm" just change it with the name of yout file... .webm, and where says "YourClass", is where you will go when the video ends,
+
+where i put a "0", you put your frameskip ( this shit can't be a float, just remember ), you want to se what hapend when you change it?, well, check your self,
+
+just, don't set it in more than 2 ok?, if you dont do what i tell you, your video will look so faster and lagy, because it just skip the frames ._.,
+
+where says "[true/false]" change it to true or false based on this shit, if it is true, the music playing will automatically be paused,
+this is good for midway videos while playing or idk for pausing the game and showing the video cutscene.
+
+if you don't understand, lick my nutz and read this ( https://github.com/GrowtopiaFli/openfl-haxeflixel-video-code ) or ask to kade-dev.

@@ -3,6 +3,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import lime.utils.Assets;
 import flixel.FlxState;
 
+
 class FeaturesState extends FlxState{
     var featuresText:Alphabet;
 
@@ -14,9 +15,9 @@ class FeaturesState extends FlxState{
         
         for (i in 0...featuresMenuItem.length)
         {
-            var options:Alphabet = new Alphabet(20, 60 + (i * 160) + 100,featuresMenuItem[i].toString());
-            options.ID = i;
-            grpFeatures.add(options);
+            var dik:Alphabet = new Alphabet(20, 60 + (i * 160) + 100,featuresMenuItem[i].toString());
+            dik.ID = i;
+            grpFeatures.add(dik);
         }
 
         var bg:FlxSprite;
@@ -41,16 +42,18 @@ class FeaturesState extends FlxState{
 		fd.color = 0x2019FF;
 		add(fd);
 
+        add(grpFeatures);
+
         super.create();
     }
     override function update(elapsed:Float){
         super.update(elapsed);
-
+        // add the shit to scroll or somthin :)
 
     }
     function getFeaturesShit():Array<String>
     {
-            var fullText:String = Assets.getText(Paths.txt('introText'));
+            var fullText:String = Assets.getText(Paths.txt('featuresTxt'));
     
             var firstArray:Array<String> = fullText.split('\n');
 
