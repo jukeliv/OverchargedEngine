@@ -236,6 +236,7 @@ class ChartingState extends MusicBeatState
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
 
+
 		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
 
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
@@ -249,7 +250,12 @@ class ChartingState extends MusicBeatState
 			_song.player2 = characters[Std.parseInt(character)];
 		});
 
-		player2DropDown.selectedLabel = _song.player2;
+		var player3DropDown = new FlxUIDropDownMenu(120, 200, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
+		{
+			_song.player3 = characters[Std.parseInt(character)];
+		});
+
+		player3DropDown.selectedLabel = _song.player3;
 
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
@@ -265,6 +271,7 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(stepperSpeed);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(player2DropDown);
+		tab_group_song.add(player3DropDown);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.scrollFactor.set();
@@ -456,15 +463,6 @@ class ChartingState extends MusicBeatState
 	}
 
 	var updatedSection:Bool = false;
-
-	/* this function got owned LOL
-		function lengthBpmBullshit():Float
-		{
-			if (_song.notes[curSection].changeBPM)
-				return _song.notes[curSection].lengthInSteps * (_song.notes[curSection].bpm / _song.bpm);
-			else
-				return _song.notes[curSection].lengthInSteps;
-	}*/
 	function sectionStartTime():Float
 	{
 		var daBPM:Int = _song.bpm;
@@ -681,6 +679,11 @@ class ChartingState extends MusicBeatState
 			+ "\nSection: "
 			+ curSection;
 		}
+		fd.x = FlxG.camera.x;
+		fd.y = FlxG.camera.y;
+
+		bg.x = FlxG.camera.x;
+		bg.y = FlxG.camera.y;
 		super.update(elapsed);
 	}
 

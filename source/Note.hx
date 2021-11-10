@@ -131,6 +131,8 @@ class Note extends FlxSprite
 			{
 				case 2:
 					animation.play('greenholdend');
+				case 4:
+					animation.play('greenholdend');
 				case 3:
 					animation.play('redholdend');
 				case 1:
@@ -158,6 +160,8 @@ class Note extends FlxSprite
 						prevNote.animation.play('greenhold');
 					case 3:
 						prevNote.animation.play('redhold');
+					case 4:
+						prevNote.animation.play('greenhold');
 				}
 
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;

@@ -134,7 +134,7 @@ class MainMenuState extends MusicBeatState
 
 		//#if debug
 		if(FlxG.keys.justPressed.SEVEN && endFunnyMove){
-			FlxG.switchState(new ChartingState());
+			FlxG.switchState(new VideoState('assets/videos/secret/e.webm',new MainMenuState()));
 		}
 		//#end
 
