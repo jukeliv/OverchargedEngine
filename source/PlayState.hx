@@ -92,6 +92,12 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
+	public static var shits:Int;
+	public static var bads:Int;
+	public static var goods:Int;
+	public static var sicks:Int;
+	public static var perfects:Int;
+
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
 	var halloweenBG:FlxSprite;
@@ -1674,7 +1680,7 @@ class PlayState extends MusicBeatState
 				{
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{
-						health -= 0.0475;
+						health -= 0.0375;
 						vocals.volume = 0;
 					}
 
@@ -1795,33 +1801,44 @@ class PlayState extends MusicBeatState
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
 
-		var daRating:String = "sick";
+		var daRating:String = "perfect";
 
-		if (noteDiff > Conductor.safeZoneOffset * 0.9)
+		if (noteDiff > Conductor.safeZoneOffset * 0.75)
 		{
 			daRating = 'shit';
-			score = 50;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.55)
 		{
 			daRating = 'bad';
-			score = 100;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.3)
 		{
 			daRating = 'good';
-			score = 200;
+		}
+		else if (noteDiff > Conductor.safeZoneOffset * 0.15)
+		{
+			daRating = 'sick';
+		}
+
+		switch(daRating){
+			case 'shit':
+				score = -50;
+				shits++;
+			case 'bad':
+				score = -24;
+				bads++;
+			case 'good':
+				score = 150;
+				goods++;
+			case 'sicks':
+				score = 200;
+				sicks++;
+			case 'perfect':
+				score = 350;
+				perfects++;
 		}
 
 		songScore += score;
-
-		/* if (combo > 60)
-				daRating = 'sick';
-			else if (combo > 12)
-				daRating = 'good'
-			else if (combo > 4)
-				daRating = 'bad';
-		 */
 
 		var pixelShitPart1:String = "";
 		var pixelShitPart2:String = '';
@@ -2019,36 +2036,6 @@ class PlayState extends MusicBeatState
 				{
 					noteCheck(controlArray[daNote.noteData], daNote);
 				}
-				/* 
-					if (controlArray[daNote.noteData])
-						goodNoteHit(daNote);
-				 */
-				// trace(daNote.noteData);
-				/* 
-						switch (daNote.noteData)
-						{
-							case 2: // NOTES YOU JUST PRESSED
-								if (upP || rightP || downP || leftP)
-									noteCheck(upP, daNote);
-							case 3:
-								if (upP || rightP || downP || leftP)
-									noteCheck(rightP, daNote);
-							case 1:
-								if (upP || rightP || downP || leftP)
-									noteCheck(downP, daNote);
-							case 0:
-								if (upP || rightP || downP || leftP)
-									noteCheck(leftP, daNote);
-						}
-
-					//this is already done in noteCheck / goodNoteHit
-					if (daNote.wasGoodHit)
-					{
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
-					}
-				 */
 			}
 			else
 			{
@@ -2096,6 +2083,7 @@ class PlayState extends MusicBeatState
 			{
 				case 0:
 					if (leftP && spr.animation.curAnim.name != 'confirm')
+
 						spr.animation.play('pressed');
 					if (leftR)
 						spr.animation.play('static');
@@ -2131,7 +2119,7 @@ class PlayState extends MusicBeatState
 	{
 		if (!boyfriend.stunned)
 		{
-			health -= 0.04;
+			health -= 0.07;
 			if (combo > 5 && gf.animOffsets.exists('sad'))
 			{
 				gf.playAnim('sad');
@@ -2206,9 +2194,9 @@ class PlayState extends MusicBeatState
 			}
 
 			if (note.noteData >= 0)
-				health += 0.023;
+				health += 0.093;
 			else
-				health += 0.004;
+				health += 0.025;
 
 			switch (note.noteData)
 			{

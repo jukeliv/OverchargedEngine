@@ -1,5 +1,9 @@
 package;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.FlxCamera;
+import flixel.util.FlxTimer;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -17,6 +21,8 @@ using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
+	var bg:FlxSprite = new FlxSprite();
+	
 	var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
@@ -35,6 +41,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length)
@@ -42,13 +49,6 @@ class FreeplayState extends MusicBeatState
 			songs.push(new SongMetadata(initSonglist[i], 1, 'gf'));
 		}
 
-		/* 
-			if (FlxG.sound.music != null)
-			{
-				if (!FlxG.sound.music.playing)
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
-			}
-		 */
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -80,10 +80,10 @@ class FreeplayState extends MusicBeatState
 			addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
 
 		// LOAD MUSIC
-
 		// LOAD CHARACTERS
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
+		bg.loadGraphic(Paths.image('menuDesat'));
+		bg.color = 0x4248FF;
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -212,7 +212,11 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			FlxG.switchState(new MainMenuState());
+			FlxTween.color(bg,0.3,FlxColor.fromRGB(66,72,240),FlxColor.fromRGB(195,66,255),{type: PINGPONG});
+
+			new FlxTimer().start(0.8,function (tmr:FlxTimer){
+				FlxG.switchState(new MainMenuState());
+			});
 		}
 
 		if (accepted)
