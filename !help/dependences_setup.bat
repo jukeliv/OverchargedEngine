@@ -1,3 +1,7 @@
+@echo off
+
+title Instaling Dependences
+
 haxelib install lime
 haxelib install openfl
 haxelib install flixel
@@ -14,3 +18,7 @@ haxelib install actuate
 haxelib git extension-webm https://github.com/KadeDev/extension-webm
 haxelib install openfl-webm
 lime rebuild extension-webm windows
+
+title Dependences Instaled
+pause>
+exit
