@@ -26,11 +26,6 @@ class OptionsMenu extends MusicBeatState
 
 	override function create()
 	{
-		if (!FlxG.sound.music.playing)
-		{
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
-		}
-
 		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		controlsStrings = CoolUtil.coolTextFile(Paths.txt('controls'));
 		menuBG.color = 0xFFea71fd;
@@ -46,6 +41,8 @@ class OptionsMenu extends MusicBeatState
 		descriptionBar.alpha = 0.4;
 		descriptionBar.antialiasing = false;
 		add(descriptionBar);
+
+		FlxG.sound.playMusic(Paths.sound('breakfast'));
 
 		super.create();
 

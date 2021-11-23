@@ -26,15 +26,13 @@ import flixel.input.FlxKeyManager;
 
 using StringTools;
 
-class KeyBindMenu extends MusicBeatSubstate
+class KeyBindMenu extends OptionsSubStates
 {
 
     var keyTextDisplay:FlxText;
     var keyWarning:FlxText;
     var advertenceText:FlxText;
     var warningTween:FlxTween;
-
-    var bg:FlxSprite;
 
     var keyText:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
     var defaultKeys:Array<String> = ["D", "F", "J", "K", "R"];
@@ -54,12 +52,6 @@ class KeyBindMenu extends MusicBeatSubstate
 	override function create()
 	{	
 		persistentUpdate = persistentDraw = true;
-
-		bg = new FlxSprite(-80).makeGraphic(FlxG.width,FlxG.height,FlxColor.BLACK);
-        bg.alpha = 0.75;
-		bg.screenCenter();
-		bg.antialiasing = false;
-		add(bg);
 
         keyTextDisplay = new FlxText(0, 0, 1280, "", 72);
 		keyTextDisplay.scrollFactor.set(0, 0);
@@ -91,16 +83,6 @@ class KeyBindMenu extends MusicBeatSubstate
 
 		super.create();
 	}
-
-    function changeState(state:FlxSubState){
-        FlxTween.tween(keyTextDisplay,{alpha:0},0.7);
-
-        FlxTween.tween(bg,{alpha:0},0.7,{onComplete: function(twn:FlxTween){
-            FlxG.state.closeSubState();
-            FlxG.state.openSubState(state);
-            trace('Going to ' + state);
-        }});
-    }
 
 	override function update(elapsed:Float)
 	{
@@ -141,7 +123,6 @@ class KeyBindMenu extends MusicBeatSubstate
                 if(FlxG.keys.justPressed.ESCAPE){
                     keys[curSelected] = tempKey;
                     state = "select";
-                    FlxG.sound.play('assets/sounds/cancelMenu.ogg');
                 }
                 else if(FlxG.keys.justPressed.ENTER){
                     addKey(defaultKeys[curSelected]);
@@ -156,6 +137,7 @@ class KeyBindMenu extends MusicBeatSubstate
 
 
             case "exiting":
+                FlxG.sound.play(Paths.sound('cancelMenu'));
                 changeState(new OptionsSubState());
 
             default:

@@ -311,6 +311,8 @@ class Controls extends FlxActionSet
 		inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 		inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
 		inline bindKeys(Control.RESET, [FlxKey.fromString(FlxG.save.data.killBind)]);
+
+		trace('KeyBinds are Load');
 	}
 
 	function getActionFromControl(control:Control):FlxActionDigital

@@ -662,8 +662,6 @@ class PlayState extends MusicBeatState
 		add(boyfriend);
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
-		// doof.x += 70;
-		// doof.y = FlxG.height * 0.5;
 		doof.scrollFactor.set();
 		doof.finishThing = startCountdown;
 
@@ -1594,6 +1592,7 @@ class PlayState extends MusicBeatState
 
 		if (generatedMusic)
 		{
+			var shit:Bool;
 			notes.forEachAlive(function(daNote:Note)
 			{
 				if (daNote.y > FlxG.height)
@@ -1605,10 +1604,15 @@ class PlayState extends MusicBeatState
 				{
 					daNote.visible = true;
 					daNote.active = true;
+
+				}
+
+				if(!shit){
+					if(FlxG.save.data.middleScroll)daNote.x -= 120;
+					shit = true;
 				}
 
 				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed * FlxG.save.data.scrollSpeed, 2)) - FlxG.save.data.offset);
-				if(FlxG.save.data.middleScroll)daNote.x -= 320;
 
 				// i am so fucking sorry for this if condition
 				if (daNote.isSustainNote

@@ -1,5 +1,7 @@
 	package;
 
+	import OptionsSubStates.PlayVariablesMenu;
+	import OptionsSubStates.OptimizationMenu;
 	import flixel.util.FlxTimer;
 	import flixel.FlxSubState;
 	import flixel.FlxG;
@@ -11,8 +13,7 @@
 
 	class OptionsSubState extends MusicBeatSubstate
 	{
-		var textMenuItems:Array<String> = ['Middle Scroll','Controls','Scroll Speed','Offset','Show FPS Counter'];
-		var textMenuDesc:Array<String>;
+		var textMenuItems:Array<String> = ['Controls','Optimization','Play Variables'];
 
 		var selector:FlxSprite;
 		var curSelected:Int = 0;
@@ -36,105 +37,77 @@
 			if(FlxG.save.data.fpsCounter != null)
 				Options.fpsCounter = FlxG.save.data.fpsCounter;
 
-			descText = new FlxText();
-			descText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
-			descText.screenCenter();
-			descText.y += 320;
-			descText.x -= 120;
-			add(descText);
+		descText = new FlxText();
+		descText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
+		descText.screenCenter();
+		descText.y += 320;
+		descText.x -= 120;
+		add(descText);
 
-			updateDesc('Middle Scroll: ' + Options.middleScroll);
+		updateDesc('Middle Scroll: ' + Options.middleScroll);
 
-			grpOptionsTexts = new FlxTypedGroup<FlxText>();
-			add(grpOptionsTexts);
+		grpOptionsTexts = new FlxTypedGroup<FlxText>();
+		add(grpOptionsTexts);
 
-			for (i in 0...textMenuItems.length)
-			{
-				var optionText:FlxText = new FlxText(20, 20 + (i * 50), 0, textMenuItems[i], 32);
-				optionText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, null,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
-				optionText.borderSize = 2;
-				optionText.screenCenter(X);
-				optionText.ID = i;
-				if(optionText.ID == 0){
-					optionText.color = FlxColor.YELLOW;
-				}
-				grpOptionsTexts.add(optionText);
-			}
-		}
-
-		override function update(elapsed:Float)
+		for (i in 0...textMenuItems.length)
 		{
-			super.update(elapsed);
-
-			if (controls.UP_P)
-				cum(-1);
-
-			if (controls.DOWN_P)
-				cum(1);
-
-			if(controls.LEFT_P){
-				switch(textMenuItems[curSelected]){
-					case 'Scroll Speed':
-						updateDesc('Scroll Speed: ' + Options.scrollSpeed);
-						Options.scrollSpeed-=0.1;
-					case 'Offset':
-						updateDesc('Offset: ' + Options.offset);
-						Options.offset-=1;
-				}
+			var optionText:FlxText = new FlxText(20, 20 + (i * 50), 0, textMenuItems[i], 32);
+			optionText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, null,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+			optionText.borderSize = 2;
+			optionText.screenCenter(X);
+			optionText.ID = i;
+			if(optionText.ID == 0){
+				optionText.color = FlxColor.YELLOW;
 			}
-			if(controls.RIGHT_P){
-				switch(textMenuItems[curSelected]){
-					case 'Scroll Speed':
-						updateDesc(('Scroll Speed: ' + Options.scrollSpeed));
-						Options.scrollSpeed+=0.1;
-					case 'Offset':
-						updateDesc('Offset: ' + Options.offset);
-						Options.offset+=1;
-				}
-			}
+			grpOptionsTexts.add(optionText);
+		}
+	}
 
-			if(controls.LEFT_P || controls.RIGHT_P)
-				FlxG.sound.play(Paths.sound('scrollMenu'));			
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
 
-			if(controls.BACK){
-				trace('Back to the main menu ugu');
-				FlxG.switchState(new MainMenuState());
-				save();
-			}
+		if (controls.UP_P)
+			cum(-1);
 
-			if (controls.ACCEPT)
+		if (controls.DOWN_P)
+			cum(1);
+
+		if(controls.BACK){
+			trace('Back to the main menu ugu');
+			FlxG.switchState(new MainMenuState());
+			save();
+		}
+
+		if (controls.ACCEPT)
+		{
+			switch (textMenuItems[curSelected])
 			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
-				switch (textMenuItems[curSelected])
-				{
-					case "Controls":
-						switchSubState(new KeyBindMenu());
-					case "Middle Scroll":
-						Options.middleScroll = !Options.middleScroll;
-						updateDesc('Middle Scroll: ' + Options.middleScroll);
-					case "Show FPS Counter":
-						Options.middleScroll = !Options.middleScroll;
-						updateDesc('Show FPS Counter : ' + Std.string(Options.fpsCounter?'Yes':'No'));
-				}
+				case "Controls":
+					switchSubState(new KeyBindMenu());
+				case "Optimization":
+					switchSubState(new OptimizationMenu());
+				case "Play Variables":
+					switchSubState(new PlayVariablesMenu());
 			}
 		}
+	}
+	function updateDesc(desc:String){
+		descText.text = desc;
+		FlxG.sound.play(Paths.sound('scrollMenu'));
+		trace('Description Updated To: ' + descText.text);
+	}
 
 		function switchSubState(subState:FlxSubState){
 			grpOptionsTexts.forEach(function(txt:FlxText)
 			{
-				FlxTween.tween(txt,{alpha: 0.7});
+				FlxTween.tween(txt,{alpha: 0});
 			});
-
-			new FlxTimer().start(0.7,function (tmr:FlxTimer){
+			new FlxTimer().start(0.45, function(tmr:FlxTimer){
 				FlxG.state.closeSubState();
-	            FlxG.state.openSubState(subState);
-            	trace('Changing to ' + subState);
+				FlxG.state.openSubState(subState);
+				trace('Going to ' + subState);
 			});
-		}
-
-		function updateDesc(desc:String){
-			descText.text = desc;
-			trace('Description Updated To: ' + descText.text);
 		}
 
 		function cum(huh:Int){
@@ -152,8 +125,8 @@
 			{
 				case "Controls":
 					updateDesc('KeyBlinds Menu');
-				case "Middle Scroll":
-					updateDesc('Middle Scroll: ' + Options.middleScroll);
+				case "Optimization":
+					updateDesc('Optimization Menu: Change some variables \n if you dont have a bad pc dont touch this to much');
 				case 'Scroll Speed':
 					updateDesc('Scroll Speed: ' + Options.scrollSpeed);
 				case 'Offset':
