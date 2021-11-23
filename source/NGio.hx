@@ -111,7 +111,6 @@ class NGio
 				var medal = NG.core.medals.get(id);
 				trace('loaded medal id:$id, name:${medal.name}, description:${medal.description}');
 			}
-
 			// Unlocking medals
 			var unlockingMedal = NG.core.medals.get(54352);// medal ids are listed in your NG project viewer
 			if (!unlockingMedal.unlocked)
@@ -171,7 +170,6 @@ class NGio
 			for (score in NG.core.scoreBoards.get(8737).scores)
 			{
 				trace('score loaded user:${score.user.name}, score:${score.formatted_value}');
-
 			}
 		 */
 

@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -66,10 +67,11 @@ class Main extends Sprite
 		#if !debug
 		initialState = TitleState;
 		#end
-		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 
-		var ourSource:String = "assets/videos/DO NOT DELETE OR GAME WILL CRASH/dontDelete.webm";
+		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 		
+		var ourSource:String = "assets/videos/crash/dontDelete.webm";
+				
 		#if web
 		var str1:String = "HTML CRAP";
 		var vHandler = new VideoHandler();
@@ -88,8 +90,9 @@ class Main extends Sprite
 		addChild(webmHandle.webm);
 		GlobalVideo.setWebm(webmHandle);
 		#end
+
 		#if !mobile
-		addChild(new FPS(10, 3, 0xFFFFFF));
+		if(FlxG.save.data.fpsCounter) addChild(new FPS(10, 3, 0xFFFFFF));
 		#end
 
 	}

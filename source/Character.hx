@@ -26,13 +26,7 @@ class Character extends FlxSprite
 		this.isPlayer = isPlayer;
 
 		var tex:FlxAtlasFrames;
-		switch(curCharacter){
-			case 'senpai' | 'bf-pixel' | 'spirit' | 'senpai-angry':
-				antialiasing = false;
-			default:
-				antialiasing = true;
-				//antialiasing = FlxG.save.data.antialias;
-		}
+		antialiasing = true;
 
 		switch (curCharacter)
 		{
@@ -394,6 +388,8 @@ class Character extends FlxSprite
 				width -= 100;
 				height -= 100;
 
+				antialiasing = false;
+
 				flipX = true;
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('weeb/bfPixelsDEAD');
@@ -410,6 +406,7 @@ class Character extends FlxSprite
 				// pixel bullshit
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
+				antialiasing = false;
 				flipX = true;
 
 			case 'senpai':
@@ -431,6 +428,7 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 
+				antialiasing = false;
 			case 'senpai-angry':
 				frames = Paths.getSparrowAtlas('weeb/senpai');
 				animation.addByPrefix('idle', 'Angry Senpai Idle', 24, false);
@@ -448,6 +446,8 @@ class Character extends FlxSprite
 
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
+
+				antialiasing = false;
 
 			case 'spirit':
 				frames = Paths.getPackerAtlas('weeb/spirit');
@@ -467,6 +467,8 @@ class Character extends FlxSprite
 				updateHitbox();
 
 				playAnim('idle');
+
+				antialiasing = false;
 
 			case 'parents-christmas':
 				frames = Paths.getSparrowAtlas('christmas/mom_dad_christmas_assets');

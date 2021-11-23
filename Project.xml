@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' : Overcharged Engine" file="Overcharged" packageName="com.overchargeddev.overcharged" package="com.overchargeddev.overcharged" main="Main" version="0.0.1 a" company="overcharged dev" />
+	<app title="Friday Night Funkin'" file="Funkin" packageName="com.overchargedev.overcharged" package="com.overchargedev.overcharged" main="Main" funkinversion="0.2.7.1" version="0.1a" company="ninjamuffin99" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -18,16 +18,16 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" />
+	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="true" />
 
 	<!--HTML5-specific-->
-	<window if="html5" resizable="true" />
+	<window if="html5" resizable="true" vsync="false"/>
 
 	<!--Desktop-specific-->
-	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="true"/>
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
+	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false" vsync="false"/>
 
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
@@ -35,9 +35,8 @@
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
-	<set name="BUILD_DIR" value="export/pre-release" unles="debug" />
+	<set name="BUILD_DIR" value="export/release" unless="debug" />
 	<set name="BUILD_DIR" value="export/32bit" if="32bit" />
-	<set name="BUILD_DIR" value="export/release" if="release" />
 
 	<classpath name="source" />
 
@@ -58,8 +57,6 @@
 		<library name="week4"    preload="true" />
 		<library name="week5"    preload="true" />
 		<library name="week6"    preload="true" />
-		<library name="notes"    preload="true" />
-		<library name="videos"   preload="true"/>
 	</section>
 	
 	<section if="NO_PRELOAD_ALL">
@@ -72,10 +69,8 @@
 		<library name="week4"    preload="false" />
 		<library name="week5"    preload="false" />
 		<library name="week6"    preload="false" />
-		<library name="notes"    preload="false" />
-		<library name="videos"   preload="false" />
 	</section>
-
+	
 	<assets path="assets/songs"    library="songs"    exclude="*.ogg" if="web"/>
 	<assets path="assets/songs"    library="songs"    exclude="*.mp3" unless="web"/>
 	<assets path="assets/shared"   library="shared"   exclude="*.ogg" if="web"/>
@@ -93,16 +88,17 @@
 	<assets path="assets/week5"    library="week5"    exclude="*.ogg" if="web"/>
 	<assets path="assets/week5"    library="week5"    exclude="*.mp3" unless="web"/>
 	<assets path="assets/week6"    library="week6"    exclude="*.ogg" if="web"/>
-	<assets path="assets/notes"    library="notes"    exclude="*.mp3" unless="web"/>
-	<assets path="assets/notes"    library="notes"    exclude="*.mp3" unless="web"/>
-	<assets path="assets/preload/videos" include="*.mp3" if="web"/>
-	<assets path="assets/preload/videos" include="*.ogg" unless="web"/>
-
+	<assets path="assets/week6"    library="week6"    exclude="*.mp3" unless="web"/>
+	<assets path="assets/videos" include="*.mp3" if="web"/>
+	<assets path="assets/videos" include="*.ogg" unless="web"/>
+	
 	<assets path='example_mods' rename='mods' embed='false'/>
+	<assets path='assets/videos/Webm-Num.bat' embed='true'/>
+	<assets path='assets/videos/important' rename='assets/videos/crash' embed='false'/>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<!-- <template path='mods' /> -->
 	
-	<assets path="CHANGELOG.md" rename='changelog.txt'/>
+	<assets path="CHANGELOG.md" embed='true'/>
 
 	<!-- NOTE FOR FUTURE SELF SINCE FONTS ARE ALWAYS FUCKY 
 		TO FIX ONE OF THEM, I CONVERTED IT TO OTF. DUNNO IF YOU NEED TO

@@ -1,6 +1,5 @@
 package;
 
-import flixel.tweens.FlxTween;
 import Conductor.BPMChangeEvent;
 import Section.SwagSection;
 import Song.SwagSong;
@@ -81,28 +80,9 @@ class ChartingState extends MusicBeatState
 
 	var leftIcon:HealthIcon;
 	var rightIcon:HealthIcon;
-	var bg:FlxSprite = new FlxSprite(0,0).loadGraphic(Paths.image('menuDesat','preload'));
-	var fd:FlxSprite = new FlxSprite(0,0).loadGraphic(Paths.image('menuDegraded','preload'));
-	var finishedFunnyMovement:Bool = false;
 
 	override function create()
 	{
-		bg.color = 0xCE19FF;
-		fd.color = 0x2019FF;
-		bg.screenCenter();
-		fd.screenCenter();
-
-		bg.setGraphicSize(Std.int(bg.width * 1.5));
-		fd.setGraphicSize(Std.int(fd.width * 1.5));
-		add(bg);
-		add(fd);
-
-		FlxG.camera.zoom = 0.6;
-
-		FlxTween.tween(FlxG.camera,{"zoom": 1},0.7,{onComplete:function(twn:FlxTween){
-			finishedFunnyMovement = true;
-		}});
-
 		curSection = lastSection;
 
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
@@ -128,13 +108,21 @@ class ChartingState extends MusicBeatState
 		curRenderedNotes = new FlxTypedGroup<Note>();
 		curRenderedSustains = new FlxTypedGroup<FlxSprite>();
 
-		var noneSong = 'tutorial';
-		
 		if (PlayState.SONG != null)
 			_song = PlayState.SONG;
 		else
 		{
-			_song = Song.loadFromJson('tutorial');
+			_song = {
+				song: 'Test',
+				notes: [],
+				bpm: 150,
+				needsVoices: true,
+				player1: 'bf',
+				player2: 'dad',
+				gf: 'gf',
+				speed: 1,
+				validScore: false
+			};
 		}
 
 		FlxG.mouse.visible = true;
@@ -236,8 +224,8 @@ class ChartingState extends MusicBeatState
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
 
-
 		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
+		var gfShit:Array<String> = CoolUtil.coolTextFile(Paths.txt('gfVersions'));
 
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
@@ -250,12 +238,14 @@ class ChartingState extends MusicBeatState
 			_song.player2 = characters[Std.parseInt(character)];
 		});
 
-		var player3DropDown = new FlxUIDropDownMenu(120, 200, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
+		player2DropDown.selectedLabel = _song.player2;
+
+		var gfDropDown = new FlxUIDropDownMenu(110, 190, FlxUIDropDownMenu.makeStrIdLabelArray(gfShit, true), function(gf:String)
 		{
-			_song.player3 = characters[Std.parseInt(character)];
+			_song.gf = gfShit[Std.parseInt(gf)];
 		});
 
-		player3DropDown.selectedLabel = _song.player3;
+		gfDropDown.selectedLabel = _song.gf;
 
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
@@ -271,7 +261,7 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(stepperSpeed);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(player2DropDown);
-		tab_group_song.add(player3DropDown);
+		tab_group_song.add(gfDropDown);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.scrollFactor.set();
@@ -463,6 +453,15 @@ class ChartingState extends MusicBeatState
 	}
 
 	var updatedSection:Bool = false;
+
+	/* this function got owned LOL
+		function lengthBpmBullshit():Float
+		{
+			if (_song.notes[curSection].changeBPM)
+				return _song.notes[curSection].lengthInSteps * (_song.notes[curSection].bpm / _song.bpm);
+			else
+				return _song.notes[curSection].lengthInSteps;
+	}*/
 	function sectionStartTime():Float
 	{
 		var daBPM:Int = _song.bpm;
@@ -480,7 +479,6 @@ class ChartingState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if(finishedFunnyMovement){
 		curStep = recalculateSteps();
 
 		Conductor.songPosition = FlxG.sound.music.time;
@@ -678,12 +676,6 @@ class ChartingState extends MusicBeatState
 			+ Std.string(FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 2))
 			+ "\nSection: "
 			+ curSection;
-		}
-		fd.x = FlxG.camera.x;
-		fd.y = FlxG.camera.y;
-
-		bg.x = FlxG.camera.x;
-		bg.y = FlxG.camera.y;
 		super.update(elapsed);
 	}
 

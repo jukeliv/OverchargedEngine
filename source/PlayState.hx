@@ -502,11 +502,13 @@ class PlayState extends MusicBeatState
 		                           // bg.setGraphicSize(Std.int(bg.width * 6));
 		                           // bg.updateHitbox();
 		                           add(bg);
+
 		                           var fg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('weeb/evilSchoolFG'));
 		                           fg.scale.set(6, 6);
 		                           // fg.setGraphicSize(Std.int(fg.width * 6));
 		                           // fg.updateHitbox();
 		                           add(fg);
+
 		                           wiggleShit.effectType = WiggleEffectType.DREAMY;
 		                           wiggleShit.waveAmplitude = 0.01;
 		                           wiggleShit.waveFrequency = 60;
@@ -519,17 +521,21 @@ class PlayState extends MusicBeatState
 		                  /* 
 		                            var waveSprite = new FlxEffectSprite(bg, [waveEffectBG]);
 		                            var waveSpriteFG = new FlxEffectSprite(fg, [waveEffectFG]);
+
 		                            // Using scale since setGraphicSize() doesnt work???
 		                            waveSprite.scale.set(6, 6);
 		                            waveSpriteFG.scale.set(6, 6);
 		                            waveSprite.setPosition(posX, posY);
 		                            waveSpriteFG.setPosition(posX, posY);
+
 		                            waveSprite.scrollFactor.set(0.7, 0.8);
 		                            waveSpriteFG.scrollFactor.set(0.9, 0.8);
+
 		                            // waveSprite.setGraphicSize(Std.int(waveSprite.width * 6));
 		                            // waveSprite.updateHitbox();
 		                            // waveSpriteFG.setGraphicSize(Std.int(fg.width * 6));
 		                            // waveSpriteFG.updateHitbox();
+
 		                            add(waveSprite);
 		                            add(waveSpriteFG);
 		                    */
@@ -563,7 +569,7 @@ class PlayState extends MusicBeatState
 		          }
               }
 
-		gf = new Character(400, 130, SONG.player3);
+		gf = new Character(400, 130, SONG.gf);
 		gf.scrollFactor.set(0.95, 0.95);
 
 		dad = new Character(100, 100, SONG.player2);
@@ -670,9 +676,8 @@ class PlayState extends MusicBeatState
 		add(strumLineNotes);
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
-
+		if(FlxG.save.data.middleScroll)add(playerStrums);
 		// startCountdown();
-
 		generateSong(SONG.song);
 
 		// add(strumLine);
@@ -879,6 +884,7 @@ class PlayState extends MusicBeatState
 	}
 
 	var startTimer:FlxTimer;
+	var perfectMode:Bool = false;
 
 	function startCountdown():Void
 	{
@@ -898,7 +904,7 @@ class PlayState extends MusicBeatState
 		{
 			dad.dance();
 			gf.dance();
-			boyfriend.playAnim('idle');
+			boyfriend.dance();
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
@@ -1188,6 +1194,9 @@ class PlayState extends MusicBeatState
 					}
 			}
 
+			if(FlxG.save.data.middleScroll)
+				babyArrow.x -= 320;
+
 			babyArrow.updateHitbox();
 			babyArrow.scrollFactor.set();
 
@@ -1209,7 +1218,7 @@ class PlayState extends MusicBeatState
 			babyArrow.x += 50;
 			babyArrow.x += ((FlxG.width / 2) * player);
 
-			strumLineNotes.add(babyArrow);
+			if(!FlxG.save.data.middleScroll){strumLineNotes.add(babyArrow);}
 		}
 	}
 
@@ -1310,6 +1319,10 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+		#if !debug
+		perfectMode = false;
+		#end
+
 		if (FlxG.keys.justPressed.NINE)
 		{
 			if (iconP1.animation.curAnim.name == 'bf-old')
@@ -1333,14 +1346,6 @@ class PlayState extends MusicBeatState
 				}
 				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
-
-		if(FlxG.keys.justPressed.F4 && PlayStateVariables.scrollSpeed < 3.1)
-			PlayStateVariables.scrollSpeed+=0.1;
-		else if(FlxG.keys.justPressed.F4 && PlayStateVariables.scrollSpeed > 0)
-			PlayStateVariables.scrollSpeed-=0.1;
-		
-		if(FlxG.keys.justPressed.F1)
-			PlayStateVariables.botPlay = !PlayStateVariables.botPlay;
 
 		super.update(elapsed);
 
@@ -1602,7 +1607,8 @@ class PlayState extends MusicBeatState
 					daNote.active = true;
 				}
 
-				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed * PlayStateVariables.scrollSpeed, 2)));
+				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed * FlxG.save.data.scrollSpeed, 2)) - FlxG.save.data.offset);
+				if(FlxG.save.data.middleScroll)daNote.x -= 320;
 
 				// i am so fucking sorry for this if condition
 				if (daNote.isSustainNote
@@ -1628,6 +1634,16 @@ class PlayState extends MusicBeatState
 						if (SONG.notes[Math.floor(curStep / 16)].altAnim)
 							altAnim = '-alt';
 					}
+
+					strumLineNotes.forEach(function(spr:FlxSprite){
+						if(spr.ID == Std.int(Math.abs(daNote.noteData)) % 4){
+							spr.animation.play('confirm',true);
+
+							new FlxTimer().start(dad.holdTimer,function(tmr:FlxTimer){
+								spr.animation.play('static');
+							});
+						}
+					});
 
 					switch (Math.abs(daNote.noteData))
 					{
@@ -1674,6 +1690,14 @@ class PlayState extends MusicBeatState
 
 		if (!inCutscene)
 			keyShit();
+		if(inCutscene)
+			strumLineNotes.forEach(function(spr:FlxSprite){
+				spr.alpha = 0;
+			});
+		else
+			strumLineNotes.forEach(function(spr:FlxSprite){
+				spr.alpha = 1;
+			});
 
 		#if debug
 		if (FlxG.keys.justPressed.ONE)
@@ -1962,7 +1986,7 @@ class PlayState extends MusicBeatState
 			{
 				var daNote = possibleNotes[0];
 
-				if (PlayStateVariables.botPlay)
+				if (perfectMode)
 					noteCheck(true, daNote);
 
 				// Jump notes
@@ -2024,6 +2048,7 @@ class PlayState extends MusicBeatState
 								if (upP || rightP || downP || leftP)
 									noteCheck(leftP, daNote);
 						}
+
 					//this is already done in noteCheck / goodNoteHit
 					if (daNote.wasGoodHit)
 					{

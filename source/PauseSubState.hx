@@ -22,6 +22,8 @@ class PauseSubState extends MusicBeatSubstate
 
 	var pauseMusic:FlxSound;
 
+	public static var storyMode:Bool = true;
+
 	public function new(x:Float, y:Float)
 	{
 		super();
@@ -108,7 +110,10 @@ class PauseSubState extends MusicBeatSubstate
 				case "Restart Song":
 					FlxG.resetState();
 				case "Exit to menu":
-					FlxG.switchState(new MainMenuState());
+					if(storyMode)
+						FlxG.switchState(new StoryMenuState());
+					else
+						FlxG.switchState(new FreeplayState());
 			}
 		}
 

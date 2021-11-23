@@ -1,5 +1,6 @@
 package;
 
+import flixel.math.FlxRandom;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -33,7 +34,7 @@ using StringTools;
 class TitleState extends MusicBeatState
 {
 	static var initialized:Bool = false;
-
+	
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
@@ -58,9 +59,9 @@ class TitleState extends MusicBeatState
 
 		super.create();
 
+		#if ng
 		NGio.noLogin(APIStuff.API);
 
-		#if ng
 		var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
 		trace('NEWGROUNDS LOL');
 		#end
@@ -270,7 +271,7 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
-			#if !switch
+			#if ng
 			NGio.unlockMedal(60960);
 
 			// If it's Friday according to da clock
@@ -286,11 +287,37 @@ class TitleState extends MusicBeatState
 			transitioning = true;
 			// FlxG.sound.music.stop();
 
+			var debug = false;
+			#if debug
+			debug = true;
+			#end
+
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
-				//FlxG.switchState(new VideoState("assets/videos/test/a.webm", new MainMenuState()));//test for the video shit
-					
-				FlxG.switchState(new MainMenuState());
+				// Check if version is outdated
+				var rand = new FlxRandom().bool(80);
+				if(debug){
+					var version:String = Application.current.meta.get('version');
+
+					if (version.trim() != NGio.GAME_VER_NUMS.trim() && !OutdatedSubState.leftState)
+					{
+						FlxG.switchState(new OutdatedSubState());
+						trace('OLD VERSION!');
+						trace('old ver');
+						trace(version.trim());
+						trace('cur ver');
+						trace(NGio.GAME_VER_NUMS.trim());
+					}
+					else
+					{
+						FlxG.switchState(new VideoState('assets/videos/secret/e.webm',new MainMenuState()));
+					}
+				}
+
+				else{
+					if(rand)FlxG.switchState(new VideoState('assets/videos/secret/e.webm',new MainMenuState()));
+					else FlxG.switchState(new MainMenuState());
+				}
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
