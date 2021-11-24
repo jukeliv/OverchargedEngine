@@ -31,7 +31,8 @@ This game was made with love to Newgrounds and its community. Extra love to Tom 
 			- Mute Inst/Voices in ChartEditor.
 			- Start Full Combo Simulation.
 - mod.json:
-	- This are like the `modChart.lua` from kade engine but this ones are in `JSON`. If a lot of peapole tell us than they want to use `lua` instead, we will changeit 
+	- This are like the `modChart.lua` from kade engine but this ones are in `JSON`. If a lot of peapole tell us than they want to use `lua` instead, we will change it
+	- This are a bit strange, in the `modChart.lua` you can do everything you want, but here you just have some stuff than you can edit, like in psych with hes events but this are in jsons
 
 ## Build instructions
 
