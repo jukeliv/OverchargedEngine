@@ -30,6 +30,9 @@ This game was made with love to Newgrounds and its community. Extra love to Tom 
 			- Play a sound while the shiti chart line touch a note.
 			- Mute Inst/Voices in ChartEditor.
 			- Start Full Combo Simulation.
+- Customs.cpp:
+	- This are like the `modChart.lua` from kade engine but this ones are in `C++`:
+		-Remember to install [MSVC](https://visualstudio.microsoft.com/es/vs/features/cplusplus/?ranMID=46131&ranEAID=a1LgFw09t88&ranSiteID=a1LgFw09t88-YoFuSujvay2qX3pyaFBTIw&epi=a1LgFw09t88-YoFuSujvay2qX3pyaFBTIw&irgwc=1&OCID=AID2200057_aff_7806_1243925&tduid=%28ir__zuo6ojck9ckf6ijc1wqdaho63v2xoh2q2ovfskvd00%29%287806%29%281243925%29%28a1LgFw09t88-YoFuSujvay2qX3pyaFBTIw%29%28%29&irclickid=_zuo6ojck9ckf6ijc1wqdaho63v2xoh2q2ovfskvd00) to use this feature.
 
 ## Build instructions
 
