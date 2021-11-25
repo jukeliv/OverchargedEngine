@@ -1,5 +1,6 @@
 package;
 
+import flixel.tweens.FlxEase;
 import flixel.util.FlxTimer;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
@@ -9,7 +10,7 @@ import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-class OptionsSubStates extends MusicBeatSubstate
+class OptionsCategory extends MusicBeatSubstate
 {
     //Here you add some gloval functions, than are used in most of the Options Menus
     var descText:FlxText;
@@ -25,22 +26,19 @@ class OptionsSubStates extends MusicBeatSubstate
 
         super.create();
     }
-    public function changeState(state:FlxSubState){
-        spr_UI.forEach(function(spr:FlxSprite){
-            FlxTween.tween(spr,{alpha:0},0.45,{onComplete: function(twn:FlxTween){
-            }});
-        });
-        
-        FlxTween.tween(descText,{alpha:0},0.45,{onComplete: function(twn:FlxTween){
-        }});
+    function changeState(state:FlxSubState,confirm:Bool){
+		if(confirm)
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+
+        FlxTween.tween(descText,{alpha:0},0.35,{ease: FlxEase.elasticInOut});
 
         new FlxTimer().start(0.45,function(tmr:FlxTimer){
             FlxG.state.closeSubState();
             FlxG.state.openSubState(state);
             trace('goto  ' + state);
         });
-    }
 
+    }
     function updateDesc(desc:String){
         descText.text = desc;
         FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -48,7 +46,7 @@ class OptionsSubStates extends MusicBeatSubstate
     }
 }
 
-class OptimizationMenu extends OptionsSubStates{
+class OptimizationMenu extends OptionsCategory{
     var textMenuItems:Array<String> = ['Optimization  Type','Have BackGround','Have Dad','Back'];
 	var curSelected:Int = 0;
 
@@ -136,7 +134,7 @@ class OptimizationMenu extends OptionsSubStates{
 			switch (textMenuItems[curSelected])
 			{
 				case "Controls":
-					switchSubState(new KeyBindMenu());
+					switchSubState(new KeyBindMenu(),true);
 				case "Middle Scroll":
 					Options.middleScroll = !Options.middleScroll;
 					updateDesc('Middle Scroll: ' + Options.middleScroll);
@@ -147,12 +145,12 @@ class OptimizationMenu extends OptionsSubStates{
 			}
 		}
 
-		function switchSubState(subState:FlxSubState){
+		function switchSubState(subState:FlxSubState,shish:Bool){
 			grpOptionsTexts.forEach(function(txt:FlxText)
 			{
 				FlxTween.tween(txt,{alpha: 0});
 			});
-			changeState(subState);
+			changeState(subState,shish);
 		}
 
 		function cum(huh:Int){
@@ -197,7 +195,7 @@ class OptimizationMenu extends OptionsSubStates{
 		}
 }
 
-class PlayVariablesMenu extends OptionsSubStates{
+class CustomizablesMenu extends OptionsCategory{
     var textMenuItems:Array<String> = ['Middle Scroll','Scroll Speed','Offset','Show FPS Counter'];
 	var curSelected:Int = 0;
 
@@ -205,10 +203,8 @@ class PlayVariablesMenu extends OptionsSubStates{
 
 	var grpOptionsTexts:FlxTypedGroup<FlxText>;
 
-	public function new()
-		{
-		super();
-
+	public override function create()
+	{
 		//load values
 		if(FlxG.save.data.middleScroll != null)
 			Options.middleScroll = FlxG.save.data.middleScroll;
@@ -236,6 +232,8 @@ class PlayVariablesMenu extends OptionsSubStates{
 			}
 			grpOptionsTexts.add(optionText);
 		}
+
+		super.create();
 	}
 
 	override function update(elapsed:Float)
@@ -280,7 +278,7 @@ class PlayVariablesMenu extends OptionsSubStates{
 			switch (textMenuItems[curSelected])
 			{
 				case "Controls":
-					switchSubState(new KeyBindMenu());
+					switchSubState(new KeyBindMenu(),true);
 				case "Middle Scroll":
 					Options.middleScroll = !Options.middleScroll;
 					updateDesc('Middle Scroll: ' + Options.middleScroll);
@@ -291,12 +289,12 @@ class PlayVariablesMenu extends OptionsSubStates{
 			}
 		}
 
-		function switchSubState(subState:FlxSubState){
+		function switchSubState(subState:FlxSubState,shish:Bool){
 			grpOptionsTexts.forEach(function(txt:FlxText)
 			{
 				FlxTween.tween(txt,{alpha: 0});
 			});
-			changeState(subState);
+			changeState(subState,shish);
 		}
 
 		function cum(huh:Int){

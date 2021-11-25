@@ -26,7 +26,7 @@ import flixel.input.FlxKeyManager;
 
 using StringTools;
 
-class KeyBindMenu extends OptionsSubStates
+class KeyBindMenu extends OptionsCategory
 {
 
     var keyTextDisplay:FlxText;
@@ -60,7 +60,7 @@ class KeyBindMenu extends OptionsSubStates
 		keyTextDisplay.borderQuality = 1;
         add(keyTextDisplay);
 
-        advertenceText = new FlxText(0, -580, 1280, "Backspace: Back to Options Menu\n Enter: Change the keyblind", 42);
+        advertenceText = new FlxText(0, 580, 1280, "Backspace: Back to Options Menu\n Enter: Change the keyblind", 42);
 		advertenceText.scrollFactor.set(0, 0);
 		advertenceText.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         advertenceText.borderSize = 3;
@@ -68,7 +68,7 @@ class KeyBindMenu extends OptionsSubStates
         advertenceText.screenCenter(X);
         add(advertenceText);
 
-        keyWarning = new FlxText(0, 580, 1280, "You select an not alowed key\n please, select another one :D", 42);
+        keyWarning = new FlxText(0, 58, 1280, "You select an not alowed key\n please, select another one :D", 42);
 		keyWarning.scrollFactor.set(0, 0);
 		keyWarning.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         keyWarning.borderSize = 3;
@@ -137,8 +137,8 @@ class KeyBindMenu extends OptionsSubStates
 
 
             case "exiting":
-                FlxG.sound.play(Paths.sound('cancelMenu'));
-                changeState(new OptionsSubState());
+                switchSubState(new OptionsSubState());
+                state = "changing";
 
             default:
                 state = "select";
@@ -149,8 +149,14 @@ class KeyBindMenu extends OptionsSubStates
 			textUpdate();
 
 		super.update(elapsed);
-		
 	}
+
+    function switchSubState(subState:FlxSubState){
+        FlxG.sound.play(Paths.sound('cancelMenu'));
+        FlxTween.tween(keyTextDisplay,{alpha: 0},0.45,{ease: FlxEase.elasticInOut});
+        FlxTween.tween(advertenceText,{alpha: 0},0.45,{ease: FlxEase.elasticInOut});
+        changeState(subState,false);
+    }
 
     function textUpdate(){
 

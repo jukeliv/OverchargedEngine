@@ -25,6 +25,7 @@ class MainMenuState extends MusicBeatState
 	var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
+	var menuImageItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
@@ -54,47 +55,74 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBGMagenta'));
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.18;
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bg.setGraphicSize(Std.int(bg.width * 1.2));
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = true;
 		add(bg);
 
+		var df:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDF'));
+		df.scrollFactor.x = 0;
+		df.scrollFactor.y = 0.18;
+		df.setGraphicSize(Std.int(bg.width * 1.5));
+		df.angle = 15;
+		df.updateHitbox();
+		df.screenCenter();
+		df.antialiasing = true;
+		add(df);
+
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuBGBlue'));
 		magenta.scrollFactor.x = 0;
 		magenta.scrollFactor.y = 0.18;
-		magenta.setGraphicSize(Std.int(magenta.width * 1.1));
+		magenta.setGraphicSize(Std.int(magenta.width * 1.2));
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
 		magenta.antialiasing = true;
-		magenta.color = 0xFFfd719b;
 		add(magenta);
-		// magenta.scrollFactor.set();
+
+		menuImageItems = new FlxTypedGroup<FlxSprite>();
+		add(menuImageItems);
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
 		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
 
+		for(i in 0...4){
+			var spr:FlxSprite = new FlxSprite();
+			spr.loadGraphic('assets/images/mainMenu/img_bg_' + (i + 1));
+			spr.ID = i;
+			spr.screenCenter();
+			spr.scrollFactor.set();
+			spr.setGraphicSize(Std.int(spr.width * 1.1));
+			if(spr.ID != 0)
+				spr.visible = false;
+			menuImageItems.add(spr);
+		}
+
 		for (i in 0...optionShit.length)
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
 			menuItem.frames = tex;
+
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
+
 			menuItem.ID = i;
-			menuItem.screenCenter(X);
-			menuItems.add(menuItem);
+			menuItem.x += 25;
+
 			menuItem.scrollFactor.set();
 			menuItem.antialiasing = true;
+
+			menuItems.add(menuItem);
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);
@@ -115,6 +143,10 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		menuImageItems.forEach(function(spr:FlxSprite){
+			setPosition(spr,camFollow.x - 200,camFollow.y);
+
+		});
 		if (FlxG.sound.music.volume < 0.8)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
@@ -197,11 +229,6 @@ class MainMenuState extends MusicBeatState
 		}
 
 		super.update(elapsed);
-
-		menuItems.forEach(function(spr:FlxSprite)
-		{
-			spr.screenCenter(X);
-		});
 	}
 
 	function changeItem(huh:Int = 0)
@@ -213,6 +240,15 @@ class MainMenuState extends MusicBeatState
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
 
+		menuImageItems.forEach(function(sprite:FlxSprite){
+			if(sprite.ID == curSelected)
+				sprite.visible = true;
+			else
+				sprite.visible = false;
+
+			sprite.updateHitbox();
+		});
+
 		menuItems.forEach(function(spr:FlxSprite)
 		{
 			spr.animation.play('idle');
@@ -220,10 +256,18 @@ class MainMenuState extends MusicBeatState
 			if (spr.ID == curSelected)
 			{
 				spr.animation.play('selected');
-				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
+				camFollow.setPosition(spr.getGraphicMidpoint().x + 85, spr.getGraphicMidpoint().y);
 			}
 
 			spr.updateHitbox();
 		});
+	}
+
+	function setPosition(sprite:FlxSprite,x:Float,y:Float){
+		sprite.x = x;
+		sprite.y = y;
+		trace(sprite + ' new position');
+		trace('X: ' + x);
+		trace('Y: ' + y);
 	}
 }

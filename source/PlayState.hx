@@ -1,5 +1,7 @@
 package;
 
+import CustomChart.SwagModChart;
+
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -48,6 +50,9 @@ class PlayState extends MusicBeatState
 {
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
+
+	public static var CUSTOM:SwagModChart;
+
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
@@ -154,6 +159,8 @@ class PlayState extends MusicBeatState
 
 		if (SONG == null)
 			SONG = Song.loadFromJson('tutorial');
+		if(CUSTOM == null && SONG.song.toLowerCase() == 'tutorial')
+			CUSTOM = CustomChart.loadFromJson();
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -1592,7 +1599,7 @@ class PlayState extends MusicBeatState
 
 		if (generatedMusic)
 		{
-			var shit:Bool;
+			var shit:Bool = false;
 			notes.forEachAlive(function(daNote:Note)
 			{
 				if (daNote.y > FlxG.height)
@@ -1612,7 +1619,7 @@ class PlayState extends MusicBeatState
 					shit = true;
 				}
 
-				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed * FlxG.save.data.scrollSpeed, 2)) - FlxG.save.data.offset);
+				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed * FlxG.save.data.scrollSpeed, 2)));
 
 				// i am so fucking sorry for this if condition
 				if (daNote.isSustainNote
@@ -1638,16 +1645,6 @@ class PlayState extends MusicBeatState
 						if (SONG.notes[Math.floor(curStep / 16)].altAnim)
 							altAnim = '-alt';
 					}
-
-					strumLineNotes.forEach(function(spr:FlxSprite){
-						if(spr.ID == Std.int(Math.abs(daNote.noteData)) % 4){
-							spr.animation.play('confirm',true);
-
-							new FlxTimer().start(dad.holdTimer,function(tmr:FlxTimer){
-								spr.animation.play('static');
-							});
-						}
-					});
 
 					switch (Math.abs(daNote.noteData))
 					{
@@ -1791,49 +1788,63 @@ class PlayState extends MusicBeatState
 
 	var endingSong:Bool = false;
 
-	private function popUpScore(strumtime:Float):Void
+	private function popUpScore(strumtime:Float,?strin:String = null):Void
 	{
-		var noteDiff:Float = Math.abs(strumtime - Conductor.songPosition);
+		var noteDiff:Float = Math.abs((strumtime) - Conductor.songPosition);
 		// boyfriend.playAnim('hey');
 		vocals.volume = 1;
 
+		var rating:FlxSprite = new FlxSprite();
 		var placement:String = Std.string(combo);
 
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.55;
 		//
-
-		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
 
-		var daRating:String = "sick";
+		var daRating:String = "perfect";
+		var saveFrames = (FlxG.save.data.saveFrames / 4);
 
-		if (noteDiff > Conductor.safeZoneOffset * 0.9)
+		if (noteDiff > Conductor.safeZoneOffset * 0.9 + saveFrames)
+		{
+			daRating = 'awfull';
+			score-=100;
+		}
+		else if (noteDiff > Conductor.safeZoneOffset * 0.85 + saveFrames)
 		{
 			daRating = 'shit';
-			score = 50;
+			score = -50;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.75 + saveFrames)
+		{
+			daRating = 'fuck';
+			score = 0;
+		}
+		else if (noteDiff > Conductor.safeZoneOffset * 0.6 + saveFrames)
 		{
 			daRating = 'bad';
+			score = 50;
+		}
+		else if (noteDiff > Conductor.safeZoneOffset * 0.55 + saveFrames)
+		{
+			daRating = 'meh';
 			score = 100;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.2 + saveFrames)
 		{
 			daRating = 'good';
 			score = 200;
 		}
+		else if (noteDiff > Conductor.safeZoneOffset * 0.1 + saveFrames)
+		{
+			daRating = 'sick';
+			score = 250;
+		}
+		else
+			score = 400;
 
 		songScore += score;
-
-		/* if (combo > 60)
-				daRating = 'sick';
-			else if (combo > 12)
-				daRating = 'good'
-			else if (combo > 4)
-				daRating = 'bad';
-		 */
 
 		var pixelShitPart1:String = "";
 		var pixelShitPart2:String = '';
@@ -1844,9 +1855,15 @@ class PlayState extends MusicBeatState
 			pixelShitPart2 = '-pixel';
 		}
 
-		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2));
+		if(strin == null)
+			rating.loadGraphic(Paths.image('rating/' + pixelShitPart1 + daRating + pixelShitPart2,'shared'));
+		else
+			rating.loadGraphic(Paths.image('rating/' + pixelShitPart1 + strin + pixelShitPart2,'shared'));
 		rating.screenCenter();
-		rating.x = coolText.x - 40;
+		
+		rating.x = (coolText.x - 40);
+		rating.x  -= 250;
+
 		rating.y -= 60;
 		rating.acceleration.y = 550;
 		rating.velocity.y -= FlxG.random.int(140, 175);
@@ -1906,7 +1923,7 @@ class PlayState extends MusicBeatState
 			numScore.velocity.y -= FlxG.random.int(140, 160);
 			numScore.velocity.x = FlxG.random.float(-5, 5);
 
-			if (combo >= 10 || combo == 0)
+			if (combo >= 10 || combo == 1)
 				add(numScore);
 
 			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
@@ -1919,10 +1936,6 @@ class PlayState extends MusicBeatState
 
 			daLoop++;
 		}
-		/* 
-			trace(combo);
-			trace(seperatedScore);
-		 */
 
 		coolText.text = Std.string(seperatedScore);
 		// add(coolText);
@@ -2143,14 +2156,15 @@ class PlayState extends MusicBeatState
 	{
 		if (!boyfriend.stunned)
 		{
-			health -= 0.04;
+			popUpScore(0,'awfull');
+			health -= 0.07;
 			if (combo > 5 && gf.animOffsets.exists('sad'))
 			{
 				gf.playAnim('sad');
 			}
 			combo = 0;
 
-			songScore -= 10;
+			songScore -= 50;
 
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
@@ -2345,6 +2359,7 @@ class PlayState extends MusicBeatState
 	override function stepHit()
 	{
 		super.stepHit();
+
 		if (FlxG.sound.music.time > Conductor.songPosition + 20 || FlxG.sound.music.time < Conductor.songPosition - 20)
 		{
 			resyncVocals();
@@ -2359,9 +2374,25 @@ class PlayState extends MusicBeatState
 	var lightningStrikeBeat:Int = 0;
 	var lightningOffset:Int = 8;
 
+	function switchDad(char:String){
+		remove(dad);
+		dad = new Character(dad.x,dad.y,char);
+		add(dad);
+		trace('Dad changed to ' + dad);
+	}
+
 	override function beatHit()
 	{
 		super.beatHit();
+		
+		for(i in 0... CUSTOM.steps.length){
+			if(curStep == Std.int(CUSTOM.steps[i])){
+				switch(CUSTOM.events[i].toString()){
+					case "changeDad":
+						switchDad(CUSTOM.values[i].toString());
+				}
+			}
+		}
 
 		if (generatedMusic)
 		{
