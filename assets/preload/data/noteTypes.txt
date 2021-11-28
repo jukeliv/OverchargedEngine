@@ -1,0 +1,2 @@
+default note
+health note

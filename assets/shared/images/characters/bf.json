@@ -1,0 +1,58 @@
+{
+	"offsets":{[
+		"idle":{[
+		"x": -5,
+		"y": 0
+		]},
+		"singUP":{[
+			"x": -29,
+			"y": 27
+		]},
+		"singRIGHT":{[
+			"x": -38,
+			"y": -7
+		]},
+		"singLEFT":{[
+			"x": 12,
+			"y": -6
+		]},
+		"singDOWN":{[
+			"x": -10,
+			"y": -50
+		]},
+	
+		"singUPmiss":{[
+			"x": -29,
+			"y": 27
+		]},
+		"singRIGHTmiss":{[
+			"x": -38,
+			"y": -7
+		]},
+		"singLEFTmiss":{[
+			"x": 12,
+			"y": -6
+		]},
+		"singDOWNmiss":{[
+			"x": -10,
+			"y": -50
+		]},
+	
+		"hey":{[
+			"x": 7,
+			"y": 4
+		]},
+		"firstDeath":{[
+			"x": 37,
+			"y": 11
+		]},
+		"deathLoop":{[
+			"x": 37,
+			"y": 11
+		]},
+		"deathConfirm":{[
+			"x": 37,
+			"y": 11
+		]},
+	]}
+}

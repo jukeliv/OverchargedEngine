@@ -40,7 +40,7 @@ class DialogueBox extends FlxSpriteGroup
 
 		switch (PlayState.SONG.song.toLowerCase())
 		{
-			case 'senpai':
+			case 'senpai' |  'tutorial' | 'fresh' | 'bopeebo' | 'dadbattle':
 				FlxG.sound.playMusic(Paths.music('Lunchbox'), 0);
 				FlxG.sound.music.fadeIn(1, 0, 0.8);
 			case 'thorns':
@@ -87,6 +87,11 @@ class DialogueBox extends FlxSpriteGroup
 				var face:FlxSprite = new FlxSprite(320, 170).loadGraphic(Paths.image('weeb/spiritFaceForward'));
 				face.setGraphicSize(Std.int(face.width * 6));
 				add(face);
+			 default:
+				hasDialog = true;
+				box.frames = Paths.getSparrowAtlas('speech_bubble_talking');
+				box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
+				box.animation.addByPrefix('normal', 'speech bubble normal', 24, true);
 		}
 
 		this.dialogueList = dialogueList;
@@ -113,11 +118,15 @@ class DialogueBox extends FlxSpriteGroup
 		portraitRight.visible = false;
 		
 		box.animation.play('normalOpen');
-		box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
-		box.updateHitbox();
+		if(PlayState.isPixel){
+			box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
+			box.updateHitbox();
+		}
 		add(box);
 
 		box.screenCenter(X);
+		if(!PlayState.isPixel)
+			box.y += 330;
 		portraitLeft.screenCenter(X);
 
 		handSelect = new FlxSprite(FlxG.width * 0.9, FlxG.height * 0.9).loadGraphic(Paths.image('weeb/pixelUI/hand_textbox'));
@@ -141,8 +150,16 @@ class DialogueBox extends FlxSpriteGroup
 		add(swagDialogue);
 
 		dialogue = new Alphabet(0, 80, "", false, true);
-		// dialogue.x = 90;
-		// add(dialogue);
+
+		var spaceText:FlxText = new FlxText(0,0,0,'Press SPACE to Skip');
+		spaceText.screenCenter();
+		spaceText.x += 100;
+		spaceText.y += 300;
+		spaceText.setFormat(Paths.font("vcr.ttf"),32,FlxColor.WHITE,FlxTextAlign.LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		spaceText.borderSize = 8;
+		spaceText.borderQuality = 3;
+		add(spaceText);
+
 	}
 
 	var dialogueOpened:Bool = false;
@@ -177,7 +194,19 @@ class DialogueBox extends FlxSpriteGroup
 			dialogueStarted = true;
 		}
 
-		if (FlxG.keys.justPressed.ANY  && dialogueStarted == true)
+		var spacePressed:Bool = FlxG.keys.justPressed.SPACE;
+
+		if(spacePressed && dialogueStarted){
+			FlxG.sound.play(Paths.sound('clickText'));
+			isEnding = true;
+			new FlxTimer().start(0.45, function(tmr:FlxTimer)
+			{
+				finishThing();
+				kill();
+			});
+		}
+
+		if (FlxG.keys.justPressed.ANY && !spacePressed && dialogueStarted == true)
 		{
 			remove(dialogue);
 				
@@ -224,30 +253,39 @@ class DialogueBox extends FlxSpriteGroup
 	function startDialogue():Void
 	{
 		cleanDialog();
-		// var theDialog:Alphabet = new Alphabet(0, 70, dialogueList[0], false, true);
-		// dialogue = theDialog;
-		// add(theDialog);
-
-		// swagDialogue.text = ;
 		swagDialogue.resetText(dialogueList[0]);
 		swagDialogue.start(0.04, true);
 
+		//visible shit
 		switch (curCharacter)
 		{
-			case 'dad':
-				portraitRight.visible = false;
-				if (!portraitLeft.visible)
-				{
-					portraitLeft.visible = true;
-					portraitLeft.animation.play('enter');
-				}
-			case 'bf':
+			case 'dad' | 'gf1' | 'mom':
+			portraitRight.visible = false;
+			if (!portraitLeft.visible)
+			{
+				portraitLeft.visible = true;
+				portraitLeft.animation.play('enter');
+			}
+			if(!PlayState.isPixel)
+				box.flipX = true;
+			case 'bf' | 'gf':
 				portraitLeft.visible = false;
 				if (!portraitRight.visible)
 				{
 					portraitRight.visible = true;
 					portraitRight.animation.play('enter');
 				}
+				if(!PlayState.isPixel)
+					box.flipX = false;
+		}
+
+		//LOAD IMAGES
+		switch (curCharacter)
+		{
+			case 'dad':
+				//LOAD DAD CODE
+			case 'bf':
+				//LOAD BF CODE
 		}
 	}
 

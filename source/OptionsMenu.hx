@@ -20,7 +20,6 @@ class OptionsMenu extends MusicBeatState
 	var controlsStrings:Array<String> = [];
 
 	private var grpControls:FlxTypedGroup<Alphabet>;
-	private var descText:FlxText;
 
 	var menuBG:FlxSprite;
 
@@ -34,13 +33,6 @@ class OptionsMenu extends MusicBeatState
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;
 		add(menuBG);
-
-		var descriptionBar:FlxSprite = new FlxSprite().makeGraphic(FlxG.width,400,FlxColor.BLACK);
-		descriptionBar.screenCenter();
-		descriptionBar.y += 500;
-		descriptionBar.alpha = 0.4;
-		descriptionBar.antialiasing = false;
-		add(descriptionBar);
 
 		FlxG.sound.playMusic(Paths.sound('breakfast'));
 

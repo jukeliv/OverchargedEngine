@@ -60,6 +60,11 @@ class Paths
 		return getPath('data/$key.txt', TEXT, library);
 	}
 
+	static public function dialogue(key:String, ?library:String):String
+	{
+		return getPath('data/dialogues/$key.txt',TEXT,library);
+	}
+
 	inline static public function xml(key:String, ?library:String)
 	{
 		return getPath('data/$key.xml', TEXT, library);
@@ -108,6 +113,10 @@ class Paths
 	inline static public function getSparrowAtlas(key:String, ?library:String)
 	{
 		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));
+	}
+
+	static public function getCharAtlas(key:String,?library:String){
+		return cast (getSparrowAtlas('characters/$key', library));
 	}
 
 	inline static public function getPackerAtlas(key:String, ?library:String)

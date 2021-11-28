@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="HEALTH_NOTE.png">
+	<!-- Created with Adobe Animate version 21.0.0.35450 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="health0000" x="0" y="0" width="193" height="189"/>
+	<SubTexture name="health end hold0000" x="0" y="189" width="50" height="64"/>
+	<SubTexture name="health hold piece0000" x="50" y="189" width="50" height="44"/>
+</TextureAtlas>

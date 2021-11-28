@@ -1,7 +1,6 @@
 	package;
 
-	import OptionsCategory.CustomizablesMenu;
-	import OptionsCategory.OptimizationMenu;
+	import OptionsCategory.OptionsCategory;
 	import flixel.util.FlxTimer;
 	import flixel.FlxSubState;
 	import flixel.FlxG;
@@ -13,14 +12,14 @@
 
 	class OptionsSubState extends MusicBeatSubstate
 	{
-		var textMenuItems:Array<String> = ['Controls','Optimization','Play Variables'];
+		var textMenuItems:Array<String> = ['Controls','Optimization','Customizable Variables'];
 
 		var selector:FlxSprite;
 		var curSelected:Int = 0;
 
 		public static var acceptInput:Bool;
 
-		var grpOptionsTexts:FlxTypedGroup<FlxText>;
+		var grpOptionsTexts:FlxTypedGroup<Alphabet>;
 		var descText:FlxText;
 
 		public function new()
@@ -28,7 +27,7 @@
 			super();
 
 			descText = new FlxText();
-			descText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
+			descText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 			descText.screenCenter();
 			descText.y += 320;
 			descText.x -= 120;
@@ -36,19 +35,22 @@
 
 			updateDesc('KeyBlinds Menu');
 
-			grpOptionsTexts = new FlxTypedGroup<FlxText>();
+			grpOptionsTexts = new FlxTypedGroup<Alphabet>();
 			add(grpOptionsTexts);
 
 			for (i in 0...textMenuItems.length)
 			{
-				var optionText:FlxText = new FlxText(20, 20 + (i * 50), 0, textMenuItems[i], 32);
-				optionText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, null,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
-				optionText.borderSize = 2;
+				var optionText:Alphabet = new Alphabet(20, 20 + (i * 50), textMenuItems[i], true,false);
 				optionText.screenCenter(X);
+				optionText.isMenuItem = true;
+				optionText.targetY = i;
+				optionText.extraY = -160;
+				optionText.extraX = 60;
 				optionText.ID = i;
-				if(optionText.ID == 0){
+
+				if(optionText.ID == 0)
 					optionText.color = FlxColor.YELLOW;
-				}
+
 				grpOptionsTexts.add(optionText);
 			}
 		}
@@ -74,11 +76,7 @@
 				switch (textMenuItems[curSelected])
 				{
 					case "Controls":
-						switchSubState(new KeyBindMenu());
-					case "Optimization":
-						switchSubState(new OptimizationMenu());
-					case "Play Variables":
-						switchSubState(new CustomizablesMenu());
+						switchSubState(new KeyBindMenu(),false);
 				}
 			}
 		}
@@ -88,19 +86,24 @@
 			trace('Description Updated To: ' + descText.text);
 		}
 
-		function switchSubState(subState:FlxSubState){
-			grpOptionsTexts.forEach(function(txt:FlxText)
+		function switchSubState(subState:FlxSubState,shish:Bool){
+			if(shish)
+				FlxG.sound.play(Paths.sound('confirmMenu'));
+
+			grpOptionsTexts.forEach(function(txt:Alphabet)
 			{
-				FlxTween.tween(txt,{alpha: 0},0.45);
+				FlxTween.tween(txt,{alpha: 0});
 			});
-			new FlxTimer().start(0.45, function(tmr:FlxTimer){
+			new FlxTimer().start(0.45,function(tmr:FlxTimer){
 				FlxG.state.closeSubState();
 				FlxG.state.openSubState(subState);
-				trace('Going to ' + subState);
+				trace('goto  ' + subState);
 			});
 		}
 
 			function cum(huh:Int){
+				descText.screenCenter(X);
+
 				curSelected += huh;
 
 				FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -125,7 +128,7 @@
 						updateDesc('Show FPS Counter : ' + Std.string(Options.fpsCounter?'Yes':'No'));
 				}
 
-				grpOptionsTexts.forEach(function(txt:FlxText)
+				grpOptionsTexts.forEach(function(txt:Alphabet)
 					{
 						if (txt.ID == curSelected)
 							txt.color = FlxColor.YELLOW;

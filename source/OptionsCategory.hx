@@ -13,48 +13,43 @@ import flixel.FlxSprite;
 class OptionsCategory extends MusicBeatSubstate
 {
     //Here you add some gloval functions, than are used in most of the Options Menus
-    var descText:FlxText;
     var spr_UI:FlxTypedGroup<FlxSprite>;
     override function create() {
         //here you add some UI or init some global variables
-        descText = new FlxText();
-		descText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
-		descText.screenCenter();
-		descText.y += 320;
-		descText.x -= 120;
-		add(descText);
-
         super.create();
     }
-    function changeState(state:FlxSubState,confirm:Bool){
+    inline public function changeState(state:FlxSubState,?confirm:Bool = true){
 		if(confirm)
 			FlxG.sound.play(Paths.sound('confirmMenu'));
 
-        FlxTween.tween(descText,{alpha:0},0.35,{ease: FlxEase.elasticInOut});
-
+		spr_UI.forEach(function(spr:FlxSprite){
+			FlxTween.tween(spr,{alpha:0},0.35,{ease: FlxEase.elasticInOut});
+		});
         new FlxTimer().start(0.45,function(tmr:FlxTimer){
             FlxG.state.closeSubState();
             FlxG.state.openSubState(state);
             trace('goto  ' + state);
         });
-
-    }
-    function updateDesc(desc:String){
-        descText.text = desc;
-        FlxG.sound.play(Paths.sound('scrollMenu'));
-        trace('Description Updated To: ' + descText.text);
     }
 }
-
-class OptimizationMenu extends OptionsCategory{
+class OptimizationMenu extends MusicBeatSubstate
+{
     var textMenuItems:Array<String> = ['Optimization  Type','Have BackGround','Have Dad','Back'];
 	var curSelected:Int = 0;
 
 	var grpOptionsTexts:FlxTypedGroup<FlxText>;
+	var descText:FlxText;
 
 	public function new()
 		{
 		super();
+		//desc shit
+		descText = new FlxText();
+		descText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		descText.screenCenter();
+		descText.y += 320;
+		descText.x -= 120;
+		add(descText);
 
 		//load values
 		if(FlxG.save.data.optimType != null)
@@ -84,6 +79,12 @@ class OptimizationMenu extends OptionsCategory{
 	}
 
     var optimText:String;
+
+	function updateDesc(desc:String){
+        descText.text = desc;
+        FlxG.sound.play(Paths.sound('scrollMenu'));
+        trace('Description Updated To: ' + descText.text);
+    }
 
 	override function update(elapsed:Float)
 	{
@@ -146,11 +147,18 @@ class OptimizationMenu extends OptionsCategory{
 		}
 
 		function switchSubState(subState:FlxSubState,shish:Bool){
+			if(shish)
+				FlxG.sound.play(Paths.sound('confirmMenu'));
+
 			grpOptionsTexts.forEach(function(txt:FlxText)
 			{
 				FlxTween.tween(txt,{alpha: 0});
 			});
-			changeState(subState,shish);
+			new FlxTimer().start(0.45,function(tmr:FlxTimer){
+				FlxG.state.closeSubState();
+				FlxG.state.openSubState(subState);
+				trace('goto  ' + subState);
+			});
 		}
 
 		function cum(huh:Int){
@@ -195,19 +203,26 @@ class OptimizationMenu extends OptionsCategory{
 		}
 }
 
-class CustomizablesMenu extends OptionsCategory{
-    var textMenuItems:Array<String> = ['Middle Scroll','Scroll Speed','Offset','Show FPS Counter'];
+class CustomizablesMenu extends MusicBeatSubstate
+{
+    var textMenuItems:Array<String> = ['Scroll Speed','Offset','Show FPS Counter'];
 	var curSelected:Int = 0;
 
 	public static var acceptInput:Bool;
 
+	var descText:FlxText;
 	var grpOptionsTexts:FlxTypedGroup<FlxText>;
 
-	public override function create()
+	public function new()
 	{
+		//desc shit
+		descText = new FlxText();
+		descText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		descText.screenCenter();
+		descText.y += 320;
+		descText.x -= 120;
+		add(descText);
 		//load values
-		if(FlxG.save.data.middleScroll != null)
-			Options.middleScroll = FlxG.save.data.middleScroll;
 		if(FlxG.save.data.scrollSpeed != null)
 			Options.scrollSpeed = FlxG.save.data.scrollSpeed;
 		if(FlxG.save.data.offset != null)
@@ -233,8 +248,14 @@ class CustomizablesMenu extends OptionsCategory{
 			grpOptionsTexts.add(optionText);
 		}
 
-		super.create();
+		super();
 	}
+
+	function updateDesc(desc:String){
+        descText.text = desc;
+        FlxG.sound.play(Paths.sound('scrollMenu'));
+        trace('Description Updated To: ' + descText.text);
+    }
 
 	override function update(elapsed:Float)
 	{
@@ -290,11 +311,18 @@ class CustomizablesMenu extends OptionsCategory{
 		}
 
 		function switchSubState(subState:FlxSubState,shish:Bool){
+			if(shish)
+				FlxG.sound.play(Paths.sound('confirmMenu'));
+
 			grpOptionsTexts.forEach(function(txt:FlxText)
 			{
 				FlxTween.tween(txt,{alpha: 0});
 			});
-			changeState(subState,shish);
+			new FlxTimer().start(0.45,function(tmr:FlxTimer){
+				FlxG.state.closeSubState();
+				FlxG.state.openSubState(subState);
+				trace('goto  ' + subState);
+			});
 		}
 
 		function cum(huh:Int){

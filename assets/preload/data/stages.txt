@@ -1,0 +1,8 @@
+Stage
+Mansion
+Train-Station
+Limo-Stage
+Mall
+Spooky-Mall
+Senpai-School
+Spooky-School

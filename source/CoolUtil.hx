@@ -1,5 +1,6 @@
 package;
 
+import haxe.Json;
 import lime.utils.Assets;
 
 using StringTools;

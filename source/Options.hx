@@ -12,4 +12,5 @@ class Options
 	public static var optimType:Int = 0;
 	public static var hasBg:Bool = true;
 	public static var hasDad:Bool = true;
+	public static var globalAntialias:Bool;
 }

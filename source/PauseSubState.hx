@@ -54,10 +54,10 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelDifficulty);
 
 		levelDifficulty.alpha = 0;
+		FlxTween.tween(levelDifficulty,{alpha: 1},0.7);
 		levelInfo.alpha = 0;
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
-		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
@@ -83,6 +83,11 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		if (pauseMusic.volume < 0.5)
 			pauseMusic.volume += 0.01 * elapsed;
+
+		if(FlxG.keys.justPressed.LEFT)
+			PlayState.blackAlpha-=0.1;
+		else if(FlxG.keys.justPressed.RIGHT)
+			PlayState.blackAlpha+=0.1;
 
 		super.update(elapsed);
 

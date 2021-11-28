@@ -17,6 +17,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import io.newgrounds.NG;
 import lime.app.Application;
+import flash.display.BlendMode;
 
 using StringTools;
 
@@ -30,7 +31,7 @@ class MainMenuState extends MusicBeatState
 	#if !switch
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
 	#else
-	var optionShit:Array<String> = ['story mode', 'freeplay','options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
 
 	var magenta:FlxSprite;
@@ -42,6 +43,8 @@ class MainMenuState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+
+		CameraTweens.tweenInS();
 
 		PlayerSettings.player1.controls.loadKeyBinds();
 
@@ -64,16 +67,6 @@ class MainMenuState extends MusicBeatState
 		bg.antialiasing = true;
 		add(bg);
 
-		var df:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDF'));
-		df.scrollFactor.x = 0;
-		df.scrollFactor.y = 0.18;
-		df.setGraphicSize(Std.int(bg.width * 1.5));
-		df.angle = 15;
-		df.updateHitbox();
-		df.screenCenter();
-		df.antialiasing = true;
-		add(df);
-
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
@@ -87,6 +80,17 @@ class MainMenuState extends MusicBeatState
 		magenta.antialiasing = true;
 		add(magenta);
 
+		var df:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDF'));
+		df.scrollFactor.x = 0;
+		df.scrollFactor.y = 0.18;
+		df.setGraphicSize(Std.int(bg.width * 1.5));
+		df.angle = 15;
+		df.updateHitbox();
+		df.screenCenter();
+		df.antialiasing = true;
+		df.blend = BlendMode.MULTIPLY;
+		add(df);
+
 		menuImageItems = new FlxTypedGroup<FlxSprite>();
 		add(menuImageItems);
 
@@ -95,7 +99,7 @@ class MainMenuState extends MusicBeatState
 
 		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
 
-		for(i in 0...4){
+		for(i in 0...optionShit.length){
 			var spr:FlxSprite = new FlxSprite();
 			spr.loadGraphic('assets/images/mainMenu/img_bg_' + (i + 1));
 			spr.ID = i;
@@ -183,6 +187,7 @@ class MainMenuState extends MusicBeatState
 				}
 				else
 				{
+					CameraTweens.tweenOut(0,180,0.8);
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 
@@ -192,7 +197,7 @@ class MainMenuState extends MusicBeatState
 					{
 						if (curSelected != spr.ID)
 						{
-							FlxTween.tween(spr, {alpha: 0}, 0.4, {
+							FlxTween.tween(spr, {alpha: 0}, 0.8, {
 								ease: FlxEase.quadOut,
 								onComplete: function(twn:FlxTween)
 								{
