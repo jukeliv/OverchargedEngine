@@ -18,4 +18,9 @@ haxelib git extension-webm https://github.com/KadeDev/extension-webm
 haxelib install openfl-webm
 lime rebuild extension-webm windows
 
+haxelib install heaps
+haxelib git heaps https://github.com/HeapsIO/heaps.git
+
+haxelib git faxe https://github.com/ashea-code/faxe.git
+
 pause>exit

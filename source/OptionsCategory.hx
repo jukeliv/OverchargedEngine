@@ -18,13 +18,13 @@ class OptionsCategory extends MusicBeatSubstate
         //here you add some UI or init some global variables
         super.create();
     }
-    inline public function changeState(state:FlxSubState,?confirm:Bool = true){
+    public function changeState(state:FlxSubState,?confirm:Bool = true){
 		if(confirm)
 			FlxG.sound.play(Paths.sound('confirmMenu'));
 
-		spr_UI.forEach(function(spr:FlxSprite){
-			FlxTween.tween(spr,{alpha:0},0.35,{ease: FlxEase.elasticInOut});
-		});
+		//spr_UI.forEach(function(spr:FlxSprite){
+		//	FlxTween.tween(spr,{alpha:0},0.35,{ease: FlxEase.elasticInOut});
+		//});
         new FlxTimer().start(0.45,function(tmr:FlxTimer){
             FlxG.state.closeSubState();
             FlxG.state.openSubState(state);

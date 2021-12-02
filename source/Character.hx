@@ -132,7 +132,7 @@ class Character extends FlxSprite
 				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24);
 				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
 
-				addOffset('idle');
+				addOffset('idle',0,0);
 				addOffset("singUP", -6, 50);
 				addOffset("singRIGHT", 0, 27);
 				addOffset("singLEFT", -10, 10);
@@ -496,6 +496,21 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 
+			case 'skippa':
+				tex = Paths.getCharAtlas('dum/skippa');
+				frames = tex;
+				animation.addByPrefix('idle','Skipper Idle');
+				animation.addByPrefix('singUP','Skipper Up');
+				animation.addByPrefix('singRIGHT','Skipper Right');
+				animation.addByPrefix('singDOWN','Skipper Down');
+				animation.addByPrefix('singLEFT','Skipper Left');
+
+				addOffset('idle',0,0);
+				addOffset("singUP", 54, 181);
+				addOffset("singRIGHT", -44, -10);
+				addOffset("singLEFT", 120, 1);
+				addOffset("singDOWN", 100, -70);
+
 			default:
 				tex = Paths.getCharAtlas('DADDY_DEAREST');
 				frames = tex;
@@ -505,7 +520,7 @@ class Character extends FlxSprite
 				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24);
 				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
 
-				addOffset('idle');
+				addOffset('idle',0,0);
 				addOffset("singUP", -6, 50);
 				addOffset("singRIGHT", 0, 27);
 				addOffset("singLEFT", -10, 10);

@@ -7,6 +7,8 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
+using StringTools;
+
 class GameOverSubstate extends MusicBeatSubstate
 {
 	var bf:Boyfriend;
@@ -16,19 +18,14 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	public function new(x:Float, y:Float)
 	{
-		var daStage = PlayState.curStage;
+		var daStage:String = PlayState.SONG.stage.toLowerCase();
 		var daBf:String = '';
-		switch (daStage)
-		{
-			case 'school':
-				stageSuffix = '-pixel';
-				daBf = 'bf-pixel-dead';
-			case 'schoolEvil':
-				stageSuffix = '-pixel';
-				daBf = 'bf-pixel-dead';
-			default:
-				daBf = 'bf';
+		if(daStage.endsWith('school')){
+			stageSuffix = '-pixel';
+			daBf = 'bf-pixel-dead';
 		}
+		else
+			daBf = 'bf';
 
 		super();
 

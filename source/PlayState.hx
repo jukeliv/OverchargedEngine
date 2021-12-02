@@ -1,7 +1,6 @@
 package;
 
-//import CustomChart.SwagModChart;
-
+import Snd.Sound;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -50,10 +49,7 @@ using StringTools;
 
 class PlayState extends MusicBeatState
 {
-	public static var curStage:String = '';
 	public static var SONG:SwagSong;
-
-	//public static var CUSTOM:SwagModChart;
 
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
@@ -189,8 +185,6 @@ class PlayState extends MusicBeatState
 
 		if (SONG == null)
 			SONG = Song.loadFromJson('tutorial');
-		//if(CUSTOM == null && SONG.song.toLowerCase() == 'tutorial')
-		//	CUSTOM = CustomChart.loadFromJson();
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -274,7 +268,6 @@ class PlayState extends MusicBeatState
 			{
 					case 'mansion': 
 					{
-						curStage = 'spooky';
 						halloweenLevel = true;
 
 						var hallowTex = Paths.getSparrowAtlas('halloween_bg');
@@ -290,9 +283,7 @@ class PlayState extends MusicBeatState
 						isHalloween = true;
 					}
 					case 'train-station': 
-						{
-							curStage = 'philly';
-
+					{
 							var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('philly/sky'));
 							bg.scrollFactor.set(0.1, 0.1);
 							add(bg);
@@ -331,7 +322,6 @@ class PlayState extends MusicBeatState
 					}
 					case 'limo-stage':
 					{
-							curStage = 'limo';
 							defaultCamZoom = 0.90;
 
 							var skyBG:FlxSprite = new FlxSprite(-120, -50).loadGraphic(Paths.image('limo/limoSunset'));
@@ -371,8 +361,6 @@ class PlayState extends MusicBeatState
 					}
 					case 'mall':
 					{
-								curStage = 'mall';
-
 							defaultCamZoom = 0.80;
 
 							var bg:FlxSprite = new FlxSprite(-1000, -500).loadGraphic(Paths.image('christmas/bgWalls'));
@@ -427,7 +415,6 @@ class PlayState extends MusicBeatState
 					}
 					case 'spooky-mall':
 					{
-							curStage = 'mallEvil';
 							var bg:FlxSprite = new FlxSprite(-400, -500).loadGraphic(Paths.image('christmas/evilBG'));
 							bg.antialiasing = true;
 							bg.scrollFactor.set(0.2, 0.2);
@@ -447,9 +434,7 @@ class PlayState extends MusicBeatState
 							}
 					case 'senpai-school':
 					{
-							curStage = 'school';
-
-							// defaultCamZoom = 0.9;
+							defaultCamZoom = 1.3;
 
 							var bgSky = new FlxSprite().loadGraphic(Paths.image('weeb/weebSky'));
 							bgSky.scrollFactor.set(0.1, 0.1);
@@ -514,8 +499,6 @@ class PlayState extends MusicBeatState
 					}
 					case 'spooky-school':
 					{
-							curStage = 'schoolEvil';
-
 							wiggleShit.effectType = WiggleEffectType.WAVY;
 							wiggleShit.waveAmplitude = 0.01;
 							wiggleShit.waveFrequency = 60;
@@ -537,7 +520,6 @@ class PlayState extends MusicBeatState
 					}
 					case 'stage':
 						defaultCamZoom = 0.9;
-						curStage = 'stage';
 						var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
 						bg.antialiasing = true;
 						bg.scrollFactor.set(0.9, 0.9);
@@ -563,7 +545,6 @@ class PlayState extends MusicBeatState
 					default:
 					{
 							defaultCamZoom = 0.9;
-							curStage = 'stage';
 							var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
 							bg.antialiasing = true;
 							bg.scrollFactor.set(0.9, 0.9);
@@ -638,27 +619,28 @@ class PlayState extends MusicBeatState
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
 
 		// REPOSITIONING PER STAGE
-		switch (curStage)
+		switch (SONG.stage.toLowerCase())
 		{
-			case 'limo':
+			case 'limo-stage':
 				boyfriend.y -= 220;
 				boyfriend.x += 260;
 
 				resetFastCar();
 				add(fastCar);
+				add(limo);
 
 			case 'mall':
 				boyfriend.x += 200;
 
-			case 'mallEvil':
+			case 'spooky-mall':
 				boyfriend.x += 320;
 				dad.y -= 80;
-			case 'school':
+			case 'senpai-school':
 				boyfriend.x += 200;
 				boyfriend.y += 220;
 				gf.x += 180;
 				gf.y += 300;
-			case 'schoolEvil':
+			case 'spooky-school':
 				// trailArea.scrollFactor.set();
 
 				var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
@@ -672,9 +654,6 @@ class PlayState extends MusicBeatState
 				gf.x += 180;
 				gf.y += 300;
 		}
-		// Shitty layering but whatev it works LOL
-		if (curStage == 'limo')
-			add(limo);
 
 		if(screens.alpha != 1){
 			add(gf);
@@ -903,7 +882,7 @@ class PlayState extends MusicBeatState
 	}
 
 	var startTimer:FlxTimer;
-	var perfectMode:Bool = false;
+	var perfectMode:Bool = true;
 
 	function startCountdown():Void
 	{
@@ -925,15 +904,15 @@ class PlayState extends MusicBeatState
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
-			introAssets.set('school', ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel']);
-			introAssets.set('schoolEvil', ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel']);
+			introAssets.set('senpai-school', ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel']);
+			introAssets.set('spooky-school', ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel']);
 
 			var introAlts:Array<String> = introAssets.get('default');
 			var altSuffix:String = "";
 
 			for (value in introAssets.keys())
 			{
-				if (value == curStage)
+				if (value == SONG.stage.toLowerCase())
 				{
 					introAlts = introAssets.get(value);
 					altSuffix = '-pixel';
@@ -951,7 +930,7 @@ class PlayState extends MusicBeatState
 					ready.scrollFactor.set();
 					ready.updateHitbox();
 
-					if (curStage.startsWith('school'))
+					if (SONG.stage.toLowerCase().endsWith('school'))
 						ready.setGraphicSize(Std.int(ready.width * daPixelZoom));
 
 					ready.screenCenter();
@@ -969,7 +948,7 @@ class PlayState extends MusicBeatState
 					set.cameras = [camHUD];
 					set.scrollFactor.set();
 
-					if (curStage.startsWith('school'))
+					if (SONG.stage.toLowerCase().endsWith('school'))
 						set.setGraphicSize(Std.int(set.width * daPixelZoom));
 
 					set.screenCenter();
@@ -987,7 +966,7 @@ class PlayState extends MusicBeatState
 					go.cameras = [camHUD];
 					go.scrollFactor.set();
 
-					if (curStage.startsWith('school'))
+					if (SONG.stage.toLowerCase().endsWith('school'))
 						go.setGraphicSize(Std.int(go.width * daPixelZoom));
 
 					go.updateHitbox();
@@ -1144,9 +1123,9 @@ class PlayState extends MusicBeatState
 			// FlxG.log.add(i);
 			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
 
-			switch (curStage)
+			switch (SONG.stage.toLowerCase())
 			{
-				case 'school' | 'schoolEvil':
+				case 'senpai-school' | 'spooky-school':
 					babyArrow.loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
 					babyArrow.animation.add('green', [6]);
 					babyArrow.animation.add('red', [7]);
@@ -1346,9 +1325,9 @@ class PlayState extends MusicBeatState
 				iconP1.animation.play('bf-old');
 		}
 
-		switch (curStage)
+		switch (SONG.stage.toLowerCase())
 		{
-			case 'philly':
+			case 'train-station':
 				if (trainMoving)
 				{
 					trainFrameTiming += elapsed;
@@ -1375,8 +1354,8 @@ class PlayState extends MusicBeatState
 			persistentDraw = true;
 			paused = true;
 
-			// 1 / 1000 chance for Gitaroo Man easter egg
-			if (FlxG.random.bool(0.7))
+			// 30% of chance for Gitaroo Man easter egg
+			if (FlxG.random.bool(30))
 			{
 				// gitaroo man easter egg
 				FlxG.switchState(new GitarooPause());
@@ -1502,16 +1481,16 @@ class PlayState extends MusicBeatState
 			{
 				camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 
-				switch (curStage)
+				switch (SONG.stage.toLowerCase())
 				{
-					case 'limo':
+					case 'limo-stage':
 						camFollow.x = boyfriend.getMidpoint().x - 300;
 					case 'mall':
 						camFollow.y = boyfriend.getMidpoint().y - 200;
-					case 'school':
+					case 'senpai-school':
 						camFollow.x = boyfriend.getMidpoint().x - 200;
 						camFollow.y = boyfriend.getMidpoint().y - 200;
-					case 'schoolEvil':
+					case 'spooky-school':
 						camFollow.x = boyfriend.getMidpoint().x - 200;
 						camFollow.y = boyfriend.getMidpoint().y - 200;
 				}
@@ -1719,12 +1698,15 @@ class PlayState extends MusicBeatState
 				// WIP interpolation shit? Need to fix the pause issue
 				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 
+				if(daNote.y < -daNote.height && daNote.tooLate || daNote.y < -daNote.height && !daNote.wasGoodHit){
+					if(perfectMode)
+						goodNoteHit(daNote);
+					else
+						badNoteCheck(false);
+				}
+				
 				if (daNote.y < -daNote.height)
 				{
-					if (daNote.tooLate || !daNote.wasGoodHit)
-					{
-						badNoteCheck();
-					}
 
 					daNote.active = false;
 					daNote.visible = false;
@@ -1856,59 +1838,67 @@ class PlayState extends MusicBeatState
 		if (noteDiff > Conductor.safeZoneOffset * 0.9 + saveFrames)
 		{
 			daRating = 'awfull';
-			misses ++;
-			awfulls++;
-			score-=100;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.85 + saveFrames)
 		{
 			daRating = 'shit';
-			misses ++;
-			shits++;
-			score = -50;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.75 + saveFrames)
 		{
 			daRating = 'fuck';
-			fucks++;
-			score = 0;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.6 + saveFrames)
 		{
 			daRating = 'bad';
-			bads++;
-			score = 50;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.55 + saveFrames)
 		{
 			daRating = 'meh';
-			mehs++;
-			score = 100;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.2 + saveFrames)
 		{
 			daRating = 'good';
-			goods++;
-			score = 200;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.1 + saveFrames)
 		{
 			daRating = 'sick';
-			spawnNoteSplashOnNote(n);
-			sicks++;
-			score = 250;
 		}
-		else
-			perfects++;
-			spawnNoteSplashOnNote(n);
-			score = 400;
+		
+		switch(daRating){
+			case 'awfull':
+				awfulls++;
+				score= -100;
+			case 'shit':
+				shits++;
+				score = -50;
+			case 'fuck':
+				fucks++;
+				score = 0;
+			case 'bad':
+				bads++;
+				score = 50;
+			case 'meh':
+				mehs++;
+				score = 100;
+			case 'good':
+				goods++;
+				score = 200;
+			case 'sick':
+				spawnNoteSplashOnNote(n);
+				sicks++;
+				score = 250;
+			case 'perfect':
+				spawnNoteSplashOnNote(n);
+				perfects++;
+				score = 400;
+		}
 
 		songScore += score;
 
 		var pixelShitPart1:String = "";
 		var pixelShitPart2:String = '';
 
-		if (curStage.startsWith('school'))
+		if (SONG.stage.toLowerCase().endsWith('school'))
 		{
 			pixelShitPart1 = 'weeb/pixelUI/';
 			pixelShitPart2 = '-pixel';
@@ -1940,7 +1930,7 @@ class PlayState extends MusicBeatState
 
 		rating.cameras = [camHUD];
 
-		if (!curStage.startsWith('school'))
+		if (!SONG.stage.toLowerCase().endsWith('school'))
 		{
 			rating.setGraphicSize(Std.int(rating.width * 0.7));
 			rating.antialiasing = true;
@@ -1970,7 +1960,7 @@ class PlayState extends MusicBeatState
 			numScore.x = coolText.x + (43 * daLoop) - 90;
 			numScore.y += 80;
 
-			if (!curStage.startsWith('school'))
+			if (!SONG.stage.toLowerCase().endsWith('school'))
 			{
 				numScore.antialiasing = true;
 				numScore.setGraphicSize(Std.int(numScore.width * 0.5));
@@ -2075,6 +2065,9 @@ class PlayState extends MusicBeatState
 					{
 						for (coolNote in possibleNotes)
 						{
+							if (perfectMode)
+								controlArray[coolNote.noteData] = true;
+
 							if (controlArray[coolNote.noteData])
 								goodNoteHit(coolNote);
 							else
@@ -2106,41 +2099,10 @@ class PlayState extends MusicBeatState
 				{
 					noteCheck(controlArray[daNote.noteData], daNote);
 				}
-				/* 
-					if (controlArray[daNote.noteData])
-						goodNoteHit(daNote);
-				 */
-				// trace(daNote.noteData);
-				/* 
-						switch (daNote.noteData)
-						{
-							case 2: // NOTES YOU JUST PRESSED
-								if (upP || rightP || downP || leftP)
-									noteCheck(upP, daNote);
-							case 3:
-								if (upP || rightP || downP || leftP)
-									noteCheck(rightP, daNote);
-							case 1:
-								if (upP || rightP || downP || leftP)
-									noteCheck(downP, daNote);
-							case 0:
-								if (upP || rightP || downP || leftP)
-									noteCheck(leftP, daNote);
-						}
-
-					//this is already done in noteCheck / goodNoteHit
-					if (daNote.wasGoodHit)
-					{
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
-					}
-				 */
 			}
-			else
+			else if(!inCutscene && !newInput)
 			{
-				if(!inCutscene && !newInput)
-					badNoteCheck();
+				badNoteCheck();
 			}
 		}
 
@@ -2204,7 +2166,7 @@ class PlayState extends MusicBeatState
 						spr.animation.play('static');
 			}
 
-			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+			if (spr.animation.curAnim.name == 'confirm' && !SONG.stage.toLowerCase().endsWith('school'))
 			{
 				spr.centerOffsets();
 				spr.offset.x -= 13;
@@ -2219,6 +2181,7 @@ class PlayState extends MusicBeatState
 	{
 		if (!boyfriend.stunned)
 		{
+			misses++;
 			popUpScore(null,'awfull');
 			FlxG.camera.shake(0.005,0.3);
 			var screenTrik:FlxSprite = new FlxSprite().makeGraphic(FlxG.width,FlxG.height,FlxColor.fromRGB(38,10,92));
@@ -2265,33 +2228,23 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function badNoteCheck()
+	function badNoteCheck(?b:Bool = true)
 	{
-		// just double pasting this shit cuz fuk u
-		// REDO THIS SYSTEM!
-		var upP = controls.UP_P;
-		var rightP = controls.RIGHT_P;
-		var downP = controls.DOWN_P;
-		var leftP = controls.LEFT_P;
+		var keysP:Array<Bool> = [controls.UP_P,controls.RIGHT_P,controls.DOWN_P,controls.LEFT_P];
 
-		if (!leftP)
-			noteMiss(0);
-		if (!downP)
-			noteMiss(1);
-		if (!upP)
-			noteMiss(2);
-		if (!rightP)
-			noteMiss(3);
+		for(i in 0... keysP.length){
+			if(keysP[i] == b)
+				noteMiss(i);
+		}
 	}
 
 	function noteCheck(keyP:Bool, note:Note):Void
 	{
 		if (keyP)
 			goodNoteHit(note);
-		else
+		else if(!inCutscene)
 		{
-			if(!inCutscene)
-				badNoteCheck();
+			badNoteCheck();
 		}
 	}
 
@@ -2299,6 +2252,7 @@ class PlayState extends MusicBeatState
 	{
 		if (!note.wasGoodHit)
 		{
+			FlxG.sound.play(Paths.soundRandom('hitSounds/Hit',1,4));
 			if (!note.isSustainNote)
 			{
 				popUpScore(note);
@@ -2499,15 +2453,6 @@ class PlayState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
-		
-		//for(i in 0... CUSTOM.steps.length){
-		//	if(curStep == Std.int(CUSTOM.steps[i])){
-		//		switch(CUSTOM.events[i].toString()){
-		//			case "changeDad":
-		//				switchDad(CUSTOM.values[i].toString());
-		//		}
-		//	}
-		//}
 
 		if (generatedMusic)
 		{
@@ -2569,9 +2514,9 @@ class PlayState extends MusicBeatState
 			dad.playAnim('cheer', true);
 		}
 
-		switch (curStage)
+		switch (SONG.stage.toLowerCase())
 		{
-			case 'school':
+			case 'senpai-school':
 				bgGirls.dance();
 
 			case 'mall':
@@ -2579,7 +2524,7 @@ class PlayState extends MusicBeatState
 				bottomBoppers.animation.play('bop', true);
 				santa.animation.play('idle', true);
 
-			case 'limo':
+			case 'limo-stage':
 				grpLimoDancers.forEach(function(dancer:BackgroundDancer)
 				{
 					dancer.dance();
@@ -2587,7 +2532,7 @@ class PlayState extends MusicBeatState
 
 				if (FlxG.random.bool(10) && fastCarCanDrive)
 					fastCarDrive();
-			case "philly":
+			case "train-station":
 				if (!trainMoving)
 					trainCooldown += 1;
 

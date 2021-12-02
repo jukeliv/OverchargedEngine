@@ -28,6 +28,7 @@ using StringTools;
 
 class KeyBindMenu extends OptionsCategory
 {
+    var keyDisplayText:FlxTypedGroup<FlxText>;
 
     var keyTextDisplay:FlxText;
     var keyWarning:FlxText;
@@ -50,15 +51,30 @@ class KeyBindMenu extends OptionsCategory
     var state:String = "select";
 
 	override function create()
-	{	
+	{
+        keyDisplayText = new FlxTypedGroup<FlxText>();
+        add(keyDisplayText);
+
+        for(i in 0... keyText.length){
+            var text:FlxText = new FlxText(0,20 + (i * 70),0,keyText[i],32);
+            text.setFormat(Paths.font("vcr.ttf"), 52, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+            text.borderSize = 3;
+            text.borderQuality = 3;
+            text.ID = i;
+            if(text.ID == 0)
+                text.color = FlxColor.YELLOW;
+            text.screenCenter(X);
+            keyDisplayText.add(text);
+        }
+
 		persistentUpdate = persistentDraw = true;
 
-        keyTextDisplay = new FlxText(0, 0, 1280, "", 72);
-		keyTextDisplay.scrollFactor.set(0, 0);
-		keyTextDisplay.setFormat(Paths.font("vcr.ttf"), 72, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		keyTextDisplay.borderSize = 3;
-		keyTextDisplay.borderQuality = 1;
-        add(keyTextDisplay);
+        //keyTextDisplay = new FlxText(0, 0, 1280, "", 72);
+		//keyTextDisplay.scrollFactor.set(0, 0);
+		//keyTextDisplay.setFormat(Paths.font("vcr.ttf"), 72, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		//keyTextDisplay.borderSize = 3;
+		//keyTextDisplay.borderQuality = 1;
+        //add(keyTextDisplay);
 
         advertenceText = new FlxText(0, 580, 1280, "Backspace: Back to Options Menu\n Enter: Change the keyblind", 42);
 		advertenceText.scrollFactor.set(0, 0);
@@ -105,7 +121,6 @@ class KeyBindMenu extends OptionsCategory
                     state = "input";
                 }
                 else if(FlxG.keys.justPressed.ESCAPE){
-                    FlxG.sound.play(Paths.sound('cancelMenu'));
                     quit();
                 }
 				else if (FlxG.keys.justPressed.BACKSPACE){
@@ -153,19 +168,29 @@ class KeyBindMenu extends OptionsCategory
 
     function switchSubState(subState:FlxSubState){
         FlxG.sound.play(Paths.sound('cancelMenu'));
-        FlxTween.tween(keyTextDisplay,{alpha: 0},0.45,{ease: FlxEase.elasticInOut});
+        keyDisplayText.forEach(function(txt:FlxText){
+            FlxTween.tween(txt,{alpha: 0},0.45,{ease: FlxEase.elasticInOut});
+        });
+        //FlxTween.tween(keyTextDisplay,{alpha: 0},0.45,{ease: FlxEase.elasticInOut});
         FlxTween.tween(advertenceText,{alpha: 0},0.45,{ease: FlxEase.elasticInOut});
         changeState(subState,false);
     }
 
     function textUpdate(){
 
-        keyTextDisplay.text = "\n\n";
+        keyDisplayText.forEach(function(txt:FlxText){
+            txt.color = txt.ID == curSelected?FlxColor.YELLOW:FlxColor.WHITE;
+            for(i in 0...4){
+                txt.ID == i?keyText[i]:txt.text.toString();
+            }
+        });
+
+        /*keyTextDisplay.text = "\n\n";
 
         for(i in 0...4){
 
             var textStart = (i == curSelected) ? ">" : "  ";
-            keyTextDisplay.text += textStart + keyText[i] + ": " + ((keys[i] != keyText[i]) ? (keys[i] + " + ") : "" ) + keyText[i] + " ARROW\n";
+            keyTextDisplay.text += textStart + keyText[i] + ": " + ((keys[i] != keyText[i]) ? (keys[i]) : "" ) + "\n";
 
         }
 
@@ -173,7 +198,7 @@ class KeyBindMenu extends OptionsCategory
 
         keyTextDisplay.text += textStart + "RESET: " + keys[4]  + "\n";
 
-        keyTextDisplay.screenCenter();
+        keyTextDisplay.screenCenter();*/
 
     }
 
