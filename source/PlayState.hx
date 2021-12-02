@@ -256,13 +256,8 @@ class PlayState extends MusicBeatState
 		screens.alpha = blackAlpha;
 		screens.blend = BlendMode.ALPHA;
 		add(screens);
+		isPixel = SONG.stage.toLowerCase().endsWith('school');
 
-		switch(SONG.song.toLowerCase()){
-			case 'roses' | 'senpai' | 'thorns':
-				isPixel = true;
-			default:
-				isPixel = false;
-		}
 		if(screens.alpha != 1){
 			switch (StringTools.trim(SONG.stage.toLowerCase()))
 			{
@@ -415,6 +410,14 @@ class PlayState extends MusicBeatState
 					}
 					case 'spooky-mall':
 					{
+						wiggleShit.effectType = WiggleEffectType.WAVY;
+						wiggleShit.waveAmplitude = 0.05;
+						wiggleShit.waveFrequency = 60;
+						wiggleShit.waveSpeed = 0.8;
+
+						boyfriend.shader = wiggleShit.shader;
+						dad.shader = wiggleShit.shader;
+
 							var bg:FlxSprite = new FlxSprite(-400, -500).loadGraphic(Paths.image('christmas/evilBG'));
 							bg.antialiasing = true;
 							bg.scrollFactor.set(0.2, 0.2);
@@ -499,13 +502,14 @@ class PlayState extends MusicBeatState
 					}
 					case 'spooky-school':
 					{
-							wiggleShit.effectType = WiggleEffectType.WAVY;
-							wiggleShit.waveAmplitude = 0.01;
+						//WHY THIS CRASH ?!?!?!?!	
+							/*wiggleShit.effectType = WiggleEffectType.WAVY;
+							wiggleShit.waveAmplitude = 0.17;
 							wiggleShit.waveFrequency = 60;
 							wiggleShit.waveSpeed = 0.8;
 
 							boyfriend.shader = wiggleShit.shader;
-							dad.shader = wiggleShit.shader;
+							dad.shader = wiggleShit.shader;*/
 
 							var posX = 400;
 							var posY = 200;
@@ -578,6 +582,7 @@ class PlayState extends MusicBeatState
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
+		//OFFSET PER CHARACTER
 		switch (SONG.player2)
 		{
 			case 'gf':
