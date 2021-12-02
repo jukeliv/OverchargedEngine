@@ -13,6 +13,8 @@ haxelib install flixel-tools
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons
 
+haxelib git polymod https://github.com/larsiusprime/polymod.git
+
 haxelib install actuate
 haxelib git extension-webm https://github.com/KadeDev/extension-webm
 haxelib install openfl-webm
