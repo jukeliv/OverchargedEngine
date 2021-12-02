@@ -1699,9 +1699,6 @@ class PlayState extends MusicBeatState
 				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 
 				if(daNote.y < -daNote.height && daNote.tooLate || daNote.y < -daNote.height && !daNote.wasGoodHit){
-					if(perfectMode)
-						goodNoteHit(daNote);
-					else
 						badNoteCheck(false);
 				}
 				
@@ -2065,9 +2062,6 @@ class PlayState extends MusicBeatState
 					{
 						for (coolNote in possibleNotes)
 						{
-							if (perfectMode)
-								controlArray[coolNote.noteData] = true;
-
 							if (controlArray[coolNote.noteData])
 								goodNoteHit(coolNote);
 							else
@@ -2100,10 +2094,9 @@ class PlayState extends MusicBeatState
 					noteCheck(controlArray[daNote.noteData], daNote);
 				}
 			}
-			else if(!inCutscene && !newInput)
-			{
-				badNoteCheck();
-			}
+			else
+				if(!inCutscene && !newInput)
+					badNoteCheck();
 		}
 
 		if ((up || right || down || left) && !boyfriend.stunned && generatedMusic)
@@ -2242,10 +2235,9 @@ class PlayState extends MusicBeatState
 	{
 		if (keyP)
 			goodNoteHit(note);
-		else if(!inCutscene)
-		{
-			badNoteCheck();
-		}
+		else
+			if(!inCutscene)
+				badNoteCheck();
 	}
 
 	function goodNoteHit(note:Note):Void
