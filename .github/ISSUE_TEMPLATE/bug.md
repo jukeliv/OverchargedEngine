@@ -1,8 +1,10 @@
 ---
 name: Bug Report
 about: Report a bug or critical performance issue
-title: 'Bug Report: [DESCRIBE YOUR BUG IN DETAIL HERE]'
+title: 'Bug Report: [DESCRIBE YOUR BUG(S) IN DETAIL HERE]'
 labels: bug
+assignees: ''
+
 ---
 
 [weed]: <> (FILL THIS ISSUE THING OUT AS MUCH AS POSSIBLE)
@@ -18,11 +20,9 @@ labels: bug
 [weed]: <> (Put an X in the [ ] thingies to fill out checkbox!)
 [weed]: <> (something like [x] pretty much, don't screw up or you will look stupid)
 
-- [ ] [Newgrounds](https://www.newgrounds.com/portal/view/770371)
 - [ ] [Itch.io](https://ninja-muffin24.itch.io/funkin)? Specify below
 - - [ ] Windows
-- - [ ] Mac
-- - [ ] Linux
+- - [ ] Html5
 
 ### If you are playing the game in a browser, what browser are you using?
 
@@ -32,7 +32,7 @@ labels: bug
 - [ ] Firefox
 - [ ] Safari
 
-## What version of the game are you using? Look in the bottom left corner of the main menu. (ex: 0.2.7, 0.2.1, shit like that)
+## What version of the game are you using? Look in the bottom left corner of the main menu. (ex: 0.1release, 0.1.5alpha , shit like that)
 
 
 ## Have you identified any steps to reproduce the bug? If so, please describe them below in as much detail as possible. Use images if possible.
