@@ -15,7 +15,8 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?skin:String, ?note:Int = 0) {
 		super(x, y);
 
-		if(skin == null)skin = 'noteSplashes';
+		if(skin == null && PlayState.daSkin == null)skin = 'noteSplashes';
+		else skin = PlayState.daSkin.noteSplash_path;
 
 		loadAnims(skin);
 

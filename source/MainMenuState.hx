@@ -44,8 +44,6 @@ class MainMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		CameraTweens.tweenInS();
-
 		PlayerSettings.player1.controls.loadKeyBinds();
 
 		transIn = FlxTransitionableState.defaultTransIn;
@@ -144,9 +142,14 @@ class MainMenuState extends MusicBeatState
 	}
 
 	var selectedSomethin:Bool = false;
+	var endFunnyMove:Bool = false;
 
 	override function update(elapsed:Float)
 	{
+		if(!endFunnyMove){
+			CameraTweens.tweenInS();
+			endFunnyMove = true;
+		}
 		menuImageItems.forEach(function(spr:FlxSprite){
 			setPosition(spr,camFollow.x - 200,camFollow.y);
 
@@ -156,7 +159,7 @@ class MainMenuState extends MusicBeatState
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
 
-		if (!selectedSomethin)
+		if (!selectedSomethin && endFunnyMove)
 		{
 			if (controls.UP_P)
 			{

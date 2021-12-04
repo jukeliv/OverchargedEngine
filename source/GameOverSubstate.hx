@@ -52,6 +52,9 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
+		if(PlayState.vocals.playing)
+			PlayState.vocals.stop();
+
 		if (controls.ACCEPT)
 		{
 			endBullshit();
@@ -75,11 +78,6 @@ class GameOverSubstate extends MusicBeatSubstate
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished)
 		{
 			FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix));
-		}
-
-		if (FlxG.sound.music.playing)
-		{
-			Conductor.songPosition = FlxG.sound.music.time;
 		}
 	}
 

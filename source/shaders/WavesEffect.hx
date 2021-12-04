@@ -1,9 +1,9 @@
-package;
+package shaders;
 
 // STOLEN FROM HAXEFLIXEL DEMO LOL
 import flixel.system.FlxAssets.FlxShader;
 
-enum WiggleEffectType
+enum WavesEffectType
 {
 	DREAMY;
 	WAVY;
@@ -12,10 +12,10 @@ enum WiggleEffectType
 	FLAG;
 }
 
-class WiggleEffect
+class WavesEffect
 {
-	public var shader(default, null):WiggleShader = new WiggleShader();
-	public var effectType(default, set):WiggleEffectType = DREAMY;
+	public var shader(default, null):WavesShader = new WavesShader();
+	public var effectType(default, set):WavesEffectType = DREAMY;
 	public var waveSpeed(default, set):Float = 0;
 	public var waveFrequency(default, set):Float = 0;
 	public var waveAmplitude(default, set):Float = 0;
@@ -30,10 +30,10 @@ class WiggleEffect
 		shader.uTime.value[0] += elapsed;
 	}
 
-	function set_effectType(v:WiggleEffectType):WiggleEffectType
+	function set_effectType(v:WavesEffectType):WavesEffectType
 	{
 		effectType = v;
-		shader.effectType.value = [WiggleEffectType.getConstructors().indexOf(Std.string(v))];
+		shader.effectType.value = [WavesEffectType.getConstructors().indexOf(Std.string(v))];
 		return v;
 	}
 
@@ -59,7 +59,7 @@ class WiggleEffect
 	}
 }
 
-class WiggleShader extends FlxShader
+class WavesShader extends FlxShader
 {
 	@:glFragmentSource('
 		#pragma header
@@ -126,6 +126,7 @@ class WiggleShader extends FlxShader
 			vec2 uv = sineWave(openfl_TextureCoordv);
 			gl_FragColor = texture2D(bitmap, uv);
 		}')
+	
 	public function new()
 	{
 		super();

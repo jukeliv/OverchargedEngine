@@ -135,11 +135,11 @@ class KeyBindMenu extends OptionsCategory
                 state = "waiting";
 
             case "waiting":
-                if(FlxG.keys.justPressed.ESCAPE){
+                if(controls.BACK){
                     keys[curSelected] = tempKey;
                     state = "select";
                 }
-                else if(FlxG.keys.justPressed.ENTER){
+                else if(controls.ACCEPT){
                     addKey(defaultKeys[curSelected]);
                     save();
                     state = "select";
