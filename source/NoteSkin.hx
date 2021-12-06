@@ -18,10 +18,9 @@ class NoteSkin
 	public var noteSplash_path:String;
 	public var hit_sounds:Array<String>;
 
-	public static function loadFromJson(skin:String):Skin
+	public static function loadFromJson(folder:String,skin:String,?library:String):Skin
 	{
-        var skinLowered:String = skin.toLowerCase();
-		var rawJson = Assets.getText('assets/note_skins/$skinLowered.json').trim();
+		var rawJson = Assets.getText(Paths.json(folder.toLowerCase() + '/' + skin.toLowerCase())).trim();
 
 		while (!rawJson.endsWith("}"))
 		{

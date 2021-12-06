@@ -34,6 +34,8 @@ class Note extends FlxSprite
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
+	public var noteRating:String = 'perfect';
+
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false,noteType:Int = 0)
 	{
 		super();
@@ -199,9 +201,9 @@ class Note extends FlxSprite
 
 		if (mustPress)
 		{
-			// The * 0.5 is so that it's easier to hit them too late, instead of too early
+			// The * 0.8 is so that it's easier to hit them too late, instead of too early
 			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
+				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.8))
 				canBeHit = true;
 			else
 				canBeHit = false;
@@ -213,7 +215,7 @@ class Note extends FlxSprite
 		{
 			canBeHit = false;
 
-			if (strumTime <= Conductor.songPosition)
+			if (strumTime <= Conductor.songPosition - Conductor.safeZoneOffset)
 				wasGoodHit = true;
 		}
 

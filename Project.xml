@@ -75,36 +75,34 @@
 		<library name="skins"    preload="false" />
 	</section>
 	
-	<assets path="assets/songs"    library="songs"    include="*.mp3" if="web"/>
-	<assets path="assets/songs"    library="songs"    include="*.ogg" unless="web"/>
-	<assets path="assets/shared"   library="shared"   include="*.mp3" if="web"/>
-	<assets path="assets/shared"   library="shared"   include="*.ogg" unless="web"/>
-	<assets path="assets/tutorial" library="tutorial" include="*.mp3" if="web"/>
-	<assets path="assets/tutorial" library="tutorial" include="*.ogg" unless="web"/>
-	<assets path="assets/week1"    library="week1"    include="*.mp3" if="web"/>
-	<assets path="assets/week1"    library="week1"    include="*.ogg" unless="web"/>
-	<assets path="assets/week2"    library="week2"    include="*.mp3" if="web"/>
-	<assets path="assets/week2"    library="week2"    include="*.ogg" unless="web"/>
-	<assets path="assets/week3"    library="week3"    include="*.mp3" if="web"/>
-	<assets path="assets/week3"    library="week3"    include="*.ogg" unless="web"/>
-	<assets path="assets/week4"    library="week4"    include="*.mp3" if="web"/>
-	<assets path="assets/week4"    library="week4"    include="*.ogg" unless="web"/>
-	<assets path="assets/week5"    library="week5"    include="*.mp3" if="web"/>
-	<assets path="assets/week5"    library="week5"    include="*.ogg" unless="web"/>
-	<assets path="assets/week6"    library="week6"    include="*.mp3" if="web"/>
-	<assets path="assets/week6"    library="week6"    include="*.ogg" unless="web"/>
-	<assets path="assets/videos" library="videos" include="*.mp3" if="web"/>
-	<assets path="assets/videos" library="videos" include="*.ogg" unless="web"/>
-	<assets path="assets/note_skins" library="skins" include="*.mp3" if="web"/>
-	<assets path="assets/note_skins" library="skins" include="*.ogg" unless="web"/>
+	<assets path="assets/songs"    library="songs"    include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/songs"    library="songs"    include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/shared"   library="shared"   include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/shared"   library="shared"   include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/tutorial" library="tutorial" include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/tutorial" library="tutorial" include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/week1"    library="week1"    include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/week1"    library="week1"    include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/week2"    library="week2"    include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/week2"    library="week2"    include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/week3"    library="week3"    include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/week3"    library="week3"    include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/week4"    library="week4"    include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/week4"    library="week4"    include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/week5"    library="week5"    include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/week5"    library="week5"    include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/week6"    library="week6"    include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/week6"    library="week6"    include="*.ogg" exclude="*.mp3" unless="web"/>
+	<assets path="assets/videos" library="videos" include="*.mp3" exclude="*.ogg" if="web"/>
+	<assets path="assets/videos" library="videos" include="*.ogg" exclude="*.mp3"  unless="web"/>
 	
 	<!--Ignore random stuff-->
 	<assets path='!help' embed='true'/>
-	<assets path='assets/videos/Webm-Num.bat' embed='true'/>
 	<assets path="CHANGELOG.md" embed='true'/>
 	<assets path="assets/shared/images/images-go-here.txt" embed='true'/>
 	<assets path="assets/preload/data/data-goes-here.txt" embed='true'/>
 	<assets path="assets/preload/data/dialogues/dialogues-go-here.txt" embed='true'/>
+	<assets path="assets/videos" exclued="*.bat"/>
 	
 	<!--Rename shit-->
 	<assets path='assets/videos/important' rename='assets/videos/crash' embed='false'/>
@@ -137,8 +135,6 @@
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
 	<haxelib name="newgrounds"/>
-	<haxelib name="faxe" if='switch'/>
-	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 

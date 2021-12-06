@@ -529,6 +529,11 @@ class Character extends FlxSprite
 				playAnim('idle');
 		}
 
+		if(curCharacter == 'spirit' || curCharacter == 'senpai-angry' || curCharacter == 'senpai' || curCharacter == 'bf-pixel-dead' || curCharacter == 'bf-pixel')
+			antialiasing = false;
+		else
+			antialiasing = FlxG.save.data.antialiasing;
+
 		dance();
 
 		if (isPlayer)

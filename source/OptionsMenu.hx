@@ -11,22 +11,20 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+import states.options.PreferencesMenuState;
 
 class OptionsMenu extends MusicBeatState
 {
 	var selector:FlxText;
 	var curSelected:Int = 0;
 
-	var controlsStrings:Array<String> = [];
+	var optionsStrings:Array<String> = ['Controls','Preferences'];
 
 	private var grpControls:FlxTypedGroup<Alphabet>;
 
-	var menuBG:FlxSprite;
-
 	override function create()
 	{
-		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = CoolUtil.coolTextFile(Paths.txt('controls'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -34,43 +32,49 @@ class OptionsMenu extends MusicBeatState
 		menuBG.antialiasing = true;
 		add(menuBG);
 
-		FlxG.sound.playMusic(Paths.sound('breakfast'));
+		grpControls = new FlxTypedGroup<Alphabet>();
+		add(grpControls);
+
+		for (i in 0...optionsStrings.length)
+		{
+			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, optionsStrings[i].toLowerCase(), true, false);
+			controlLabel.isMenuItem = true;
+			controlLabel.targetY = i;
+			if(controlLabel.ID == 0){
+				controlLabel.color = FlxColor.YELLOW;
+			}
+			grpControls.add(controlLabel);
+			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
+		}
 
 		super.create();
-
-		openSubState(new OptionsSubState());
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		menuBG.x = FlxG.camera.x;
-		menuBG.y = FlxG.camera.y;
-	}
 
-	function waitingInput():Void
-	{
-		if (FlxG.keys.getIsDown().length > 0)
+		if (controls.ACCEPT)
 		{
-			PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxG.keys.getIsDown()[0].ID, null);
+			switch(optionsStrings[curSelected]){
+				case 'Controls':
+					FlxG.state.openSubState(new KeyBindMenu());
+				case 'Preferences':
+					FlxG.switchState(new PreferencesMenuState());
+			}
+		}
+		else
+		{
+			if (controls.BACK)
+				FlxG.switchState(new MainMenuState());
+			if (controls.UP_P)
+				changeSelection(-1);
+			if (controls.DOWN_P)
+				changeSelection(1);
 		}
 	}
-
-	var isSettingControl:Bool = false;
-
-	function changeBinding():Void
-	{
-		if (!isSettingControl)
-		{
-			isSettingControl = true;
-		}
-	}
-
 	function changeSelection(change:Int = 0)
 	{
-		#if !switch
-		NGio.logEvent('Fresh');
-		#end
 
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
@@ -89,12 +93,12 @@ class OptionsMenu extends MusicBeatState
 			bullShit++;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
+			item.color = FlxColor.WHITE;
 
 			if (item.targetY == 0)
 			{
+				item.color = FlxColor.YELLOW;
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
 	}

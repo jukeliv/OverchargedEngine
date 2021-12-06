@@ -21,7 +21,7 @@ import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import editors.ChartingState;
+import states.editors.ChartingState;
 import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.addons.display.FlxGridOverlay;
@@ -76,6 +76,9 @@ class PlayState extends MusicBeatState
 	public static var fucks:Int = 0;
 	public static var shits:Int = 0;
 	public static var awfulls:Int = 0;
+
+	private var totalPlayed:Int = 0;
+	private var totalNotesHit:Int = 0;
 
 	var halloweenLevel:Bool = false;
 
@@ -139,7 +142,7 @@ class PlayState extends MusicBeatState
 
 	var talking:Bool = true;
 	var songScore:Int = 0;
-	var scoreTxt:FlxText;
+	var infoTxt:FlxText;
 	var songDur:FlxText;
 
 	public static var campaignScore:Int = 0;
@@ -167,11 +170,7 @@ class PlayState extends MusicBeatState
 
 	var mosaicEffect = new MosaicEffect();
 
-	override public function create()
-	{
-		if (FlxG.sound.music != null)
-			FlxG.sound.music.stop();
-
+	public function resetValues():Void {
 		misses = 0;
 		perfects = 0;
 		sicks = 0;
@@ -181,16 +180,28 @@ class PlayState extends MusicBeatState
 		fucks = 0;
 		shits = 0;
 		awfulls = 0;
+	}
+
+	override public function create()
+	{
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
+		isPixel = SONG.stage.toLowerCase().endsWith('school');
+
+		resetValues();
+
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
-		FlxG.cameras.add(camHUD);
+		FlxG.cameras.add(camHUD,false);
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 
-		FlxCamera.defaultCameras = [camGame];
+		FlxG.cameras.setDefaultDrawTarget(camGame,true);
+		//FlxCamera.defaultCameras = [camGame];
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -201,8 +212,8 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
-		if (daSkin == null)
-			daSkin = NoteSkin.loadFromJson('default_note_skin');
+		if(daSkin ==  null && !isPixel)
+			daSkin = NoteSkin.loadFromJson('default_skin','skins');
 
 		//if(SONG.song.toLowerCase() == 'bopeebo' || SONG.song.toLowerCase() == 'dadbattle' || SONG.song.toLowerCase() == 'roses'  || SONG.song.toLowerCase() == 'senpai' || SONG.song.toLowerCase() == 'thorns' || SONG.song.toLowerCase() == 'fresh')
 		//	dialogue = CoolUtil.coolTextFile(Paths.dialogue(SONG.song.toLowerCase()));
@@ -271,7 +282,6 @@ class PlayState extends MusicBeatState
 		screens.alpha = blackAlpha;
 		screens.blend = BlendMode.ALPHA;
 		add(screens);
-		isPixel = SONG.stage.toLowerCase().endsWith('school');
 
 		if(screens.alpha != 1){
 			switch (StringTools.trim(SONG.stage.toLowerCase()))
@@ -676,7 +686,7 @@ class PlayState extends MusicBeatState
 				// evilTrail.changeValuesEnabled(false, false, false, false);
 				// evilTrail.changeGraphic()
 				add(evilTrail);
-				// evilTrail.scrollFactor.set(1.1, 1.1);
+				// evilTrail.scrolmainMlFactor.set(1.1, 1.1);
 
 				boyfriend.x += 200;
 				boyfriend.y += 220;
@@ -695,6 +705,8 @@ class PlayState extends MusicBeatState
 
 			mosaicEffect.setStrength(2, 2);
 		}
+		if(isPixel)
+			mosaicEffect.setStrength(5, 5);
 
 		if(screens.alpha != 1){
 			add(gf);
@@ -766,12 +778,12 @@ class PlayState extends MusicBeatState
 		songDur.scrollFactor.set();
 		add(songDur);
 
-		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, "", 20);
-		scoreTxt.x -= 200;
-		scoreTxt.y += 20;
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
-		scoreTxt.scrollFactor.set();
-		add(scoreTxt);
+		infoTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, "", 20);
+		infoTxt.x -= 200;
+		infoTxt.y += 20;
+		infoTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
+		infoTxt.scrollFactor.set();
+		add(infoTxt);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
@@ -789,7 +801,7 @@ class PlayState extends MusicBeatState
 		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
-		scoreTxt.cameras = [camHUD];
+		infoTxt.cameras = [camHUD];
 		songDur.cameras = [camHUD];
 		dialoguesLol.cameras = [camHUD];
 
@@ -1212,7 +1224,7 @@ class PlayState extends MusicBeatState
 					}
 
 				default:
-					babyArrow.frames = Paths.getSparrowAtlas(daSkin.skin_path);
+					babyArrow.frames = Paths.getSparrowAtlas(daSkin.skin_path,'skins');
 					babyArrow.animation.addByPrefix('green', 'arrowUP');
 					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
 					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
@@ -1397,8 +1409,8 @@ class PlayState extends MusicBeatState
 		songDur.text = (Conductor.songPosition/60 + ':' + Conductor.songPosition % 60);
 
 		super.update(elapsed);
-		
-		scoreTxt.text = 'Misses: $misses // Score: $songScore';
+		var ranking = Ranking.GenerateRanking();
+		infoTxt.text = 'Misses: $misses // Ranking: $ranking // Score: $songScore';
 
 		if(FlxG.keys.justPressed.TWO)
 			perfectMode = !perfectMode;
@@ -1854,9 +1866,8 @@ class PlayState extends MusicBeatState
 
 				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 				FlxG.sound.music.stop();
-
-				LoadingState.loadAndSwitchState(new PlayState());
 			}
+			LoadingState.loadAndSwitchState(new PlayState());
 		}
 		else
 		{
@@ -1869,7 +1880,7 @@ class PlayState extends MusicBeatState
 
 	private function popUpScore(n:Note,?strin:String = null):Void
 	{
-		var noteDiff:Float = Math.abs((n==null?0:n.strumTime) - Conductor.songPosition);
+		var noteDiff:Float = Math.abs(Conductor.songPosition - (n==null?0:n.strumTime));
 		// boyfriend.playAnim('hey');
 		vocals.volume = 1;
 
@@ -1882,37 +1893,9 @@ class PlayState extends MusicBeatState
 		//
 		var score:Int = 350;
 
-		var daRating:String = "perfect";
-		var saveFrames = (FlxG.save.data.saveFrames / 4);
+		n.noteRating = Ranking.GenerateRating(noteDiff);
 
-		if (noteDiff > Conductor.safeZoneOffset * 0.9 + saveFrames)
-		{
-			daRating = 'awfull';
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.85 + saveFrames)
-		{
-			daRating = 'shit';
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.75 + saveFrames)
-		{
-			daRating = 'fuck';
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.6 + saveFrames)
-		{
-			daRating = 'bad';
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.55 + saveFrames)
-		{
-			daRating = 'meh';
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.2 + saveFrames)
-		{
-			daRating = 'good';
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.1 + saveFrames)
-		{
-			daRating = 'sick';
-		}
+		var daRating:String = n.noteRating;
 		
 		switch(daRating){
 			case 'awfull':

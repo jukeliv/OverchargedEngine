@@ -1,4 +1,4 @@
-package editors;
+package states.editors;
 
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import Conductor.BPMChangeEvent;

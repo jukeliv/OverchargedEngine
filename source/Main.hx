@@ -1,6 +1,9 @@
 package;
 
 import lime.app.Application;
+import openfl.display.BlendMode;
+import openfl.text.TextFormat;
+import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
@@ -51,6 +54,8 @@ class Main extends Sprite
 		setupGame();
 	}
 
+	var fpsCounter:FPS;
+
 	private function setupGame():Void
 	{
 		var stageWidth:Int = Lib.current.stage.stageWidth;
@@ -64,6 +69,12 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
+
+		//#if web
+		framerate = 60;
+		//#else
+		//framerate = 120;
+		//#end
 
 		#if !debug
 		initialState = TitleState;
@@ -93,8 +104,15 @@ class Main extends Sprite
 		#end
 
 		#if !mobile
-		if(FlxG.save.data.fpsCounter) addChild(new FPS(10, 3, 0xFFFFFF));
+		fpsCounter = new FPS(10, 3, 0xFFFFFF);
+		addChild(fpsCounter);
 		#end
+	}
 
+	public function toggleFpsCounter(value:Bool):Void {
+		fpsCounter.visible = value;
+	}
+	public function setFPSCap(cap:Float){
+		openfl.Lib.current.stage.frameRate = cap;
 	}
 }

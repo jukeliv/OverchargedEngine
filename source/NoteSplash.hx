@@ -15,7 +15,7 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?skin:String, ?note:Int = 0) {
 		super(x, y);
 
-		if(skin == null && PlayState.daSkin == null)skin = 'noteSplashes';
+		if(skin == null && PlayState.daSkin == null)skin = 'default_noteSplash';
 		else skin = PlayState.daSkin.noteSplash_path;
 
 		loadAnims(skin);
@@ -43,7 +43,7 @@ class NoteSplash extends FlxSprite
 	}
 
 	function loadAnims(path:String) {
-		frames = Paths.getSparrowAtlas(path);
+		frames = Paths.getSparrowAtlas(path,'skins');
 		for (i in 1...3) {
 			animation.addByPrefix("splash1-" + i, "splash blue " + i, 16, false);
 			animation.addByPrefix("splash2-" + i, "splash green " + i, 16, false);

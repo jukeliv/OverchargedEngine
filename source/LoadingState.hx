@@ -24,8 +24,7 @@ class LoadingState extends MusicBeatState
 	var callbacks:MultiCallback;
 	
 	var logo:FlxSprite;
-	var gfDance:FlxSprite;
-	var danceLeft = false;
+	var note:FlxSprite;
 	
 	function new(target:FlxState, stopMusic:Bool)
 	{
@@ -42,15 +41,10 @@ class LoadingState extends MusicBeatState
 		logo.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logo.animation.play('bump');
 		logo.updateHitbox();
-		// logoBl.screenCenter();
-		// logoBl.color = FlxColor.BLACK;
 
-		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
-		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
-		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = true;
-		add(gfDance);
+		note = new Note(0,FlxG.random.int(0,3),null,false,0);
+		
+		add(note);
 		add(logo);
 		
 		initSongsManifest().onComplete
@@ -70,7 +64,9 @@ class LoadingState extends MusicBeatState
 				
 				var fadeTime = 0.5;
 				FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
-				new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
+				//duplicated shit XD
+				new FlxTimer().start(fadeTime + MIN_TIME,function(_)ended=true);
+				new FlxTimer().start(fadeTime + MIN_TIME, function(_)introComplete());
 			}
 		);
 	}
@@ -107,16 +103,8 @@ class LoadingState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
-		
-		logo.animation.play('bump');
-		danceLeft = !danceLeft;
-		
-		if (danceLeft)
-			gfDance.animation.play('danceRight');
-		else
-			gfDance.animation.play('danceLeft');
 	}
-	
+	var ended:Bool = false;
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -124,6 +112,9 @@ class LoadingState extends MusicBeatState
 		if (FlxG.keys.justPressed.SPACE)
 			trace('fired: ' + callbacks.getFired() + " unfired:" + callbacks.getUnfired());
 		#end
+
+		if(!ended)
+			note.angle += 50*elapsed;
 	}
 	
 	function onLoad()
