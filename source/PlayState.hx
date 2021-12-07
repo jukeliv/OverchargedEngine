@@ -672,14 +672,19 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -5000;
 
-		strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
+		if(FlxG.save.data.downscroll){
+			strumLine = new FlxSprite(0, 570).makeGraphic(FlxG.width, 10);
+		}
+		else {
+			strumLine = new FlxSprite(0, 30).makeGraphic(FlxG.width, 10);
+		}
 		strumLine.scrollFactor.set();
 
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();
 		add(strumLineNotes);
 		add(noteSplashes);
 
-		var splash:NoteSplash = new NoteSplash(100, 100, 'noteSplashes',0);
+		var splash:NoteSplash = new NoteSplash(100, 100, 0, 'noteSplashes');
 		noteSplashes.add(splash);
 		splash.alpha = 0.0;
 
@@ -710,7 +715,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
+		healthBarBG = new FlxSprite(0, FlxG.save.data.downscroll ? FlxG.height * 0.1 : FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.y -= 30;
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
@@ -1595,7 +1600,7 @@ class PlayState extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (daNote.y > FlxG.height)
+				/*if (daNote.y > FlxG.height)
 				{
 					daNote.active = false;
 					daNote.visible = false;
@@ -1604,10 +1609,12 @@ class PlayState extends MusicBeatState
 				{
 					daNote.visible = true;
 					daNote.active = true;
+				}*/
 
-				}
-
-				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed * FlxG.save.data.scrollSpeed, 2)));
+				if(FlxG.save.data.downscroll)
+					daNote.y = (strumLine.y + (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed * FlxG.save.data.scrollSpeed, 2)));
+				else
+					daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed * FlxG.save.data.scrollSpeed, 2)));
 
 				// i am so fucking sorry for this if condition
 				if (daNote.isSustainNote
@@ -1649,11 +1656,21 @@ class PlayState extends MusicBeatState
 							daNote.active = false;
 							daNote.visible = false;
 
-							daNote.kill();
+							//daNote.kill();
 							notes.remove(daNote,true);
 							daNote.destroy();
 						}
 					}
+
+					if (FlxG.save.data.downscroll ? (daNote.y > strumLine.y + daNote.height + 50) : (daNote.y < strumLine.y - daNote.height - 50))
+						if (daNote.tooLate){
+
+							daNote.active = false;
+							daNote.visible = false;
+
+							daNote.destroy();
+						}
+
 					//replaced stuff
 					//var swagRect = new FlxRect(0, strumLine.y + Note.swagWidth / 2 - daNote.y, daNote.width * 2, daNote.height * 2);
 					//swagRect.y /= daNote.scale.y;

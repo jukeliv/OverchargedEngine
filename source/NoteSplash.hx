@@ -2,57 +2,41 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
 
-//Code and sprites maded by PsychEngine Team
-//Edited by OverchargedDev
-
+//Code inspired by PsychEngine Code
 class NoteSplash extends FlxSprite
 {
-	private var idleAnim:String;
-	private var textureLoaded:String = null;
-
-	public function new(x:Float = 0, y:Float = 0, ?skin:String, ?note:Int = 0) {
+	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0, ?skin:String = 'noteSplashes') {
 		super(x, y);
+		setupNoteSplash(x, y, note,skin);
 
-		if(skin == null)skin = 'noteSplashes';
+		loadAnimations(skin);
 
-		loadAnims(skin);
-
-		setupNoteSplash(x, y, note, skin);
 		antialiasing = Options.antialiasing;
 	}
 
-	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null) {
+	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, skin:String) {
 		setPosition(x - Note.swagWidth * 0.95, y - Note.swagWidth);
 		alpha = 0.6;
-
-		if(texture == null) {
-			texture = 'noteSplashes';
-		}
-
-		if(textureLoaded != texture) {
-			loadAnims(texture);
-		}
-		offset.set(10, 10);
-
-		var animNum:Int = FlxG.random.int(1, 2);
-		animation.play('splash' + note + '-' + animNum, true);
+		animation.play('note' + note + '-' + FlxG.random.int(1, 2), true);
+		animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
+		updateHitbox();
+		offset.set(Std.int(0.3 * width), Std.int(0.3 * height));
 	}
 
-	function loadAnims(path:String) {
+	public function loadAnimations(path:String){
 		frames = Paths.getSparrowAtlas(path);
 		for (i in 1...3) {
-			var framerate:Int = FlxG.random.int(16,24);
-			animation.addByPrefix("splash1-" + i, "splash blue " + i, framerate, false);
-			animation.addByPrefix("splash2-" + i, "splash green " + i, framerate, false);
-			animation.addByPrefix("splash0-" + i, "splash purple " + i, framerate, false);
-			animation.addByPrefix("splash3-" + i, "splash red " + i, framerate, false);
+			animation.addByPrefix("splash1-" + 1, "splash blue" + i, 24, false);
+			animation.addByPrefix("splash2-" + 1, "splash green" + i, 24, false);
+			animation.addByPrefix("splash0-" + 1, "splash purple" + i, 24, false);
+			animation.addByPrefix("splash3-" + 1, "splash red" + i, 24, false);
 		}
 	}
 
-	override function update(elapsed:Float) {
-		if(animation.curAnim.finished)
+	override public function update(elapsed)
+	{
+		if (animation.curAnim.finished)
 			kill();
 		super.update(elapsed);
 	}
