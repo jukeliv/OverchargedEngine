@@ -22,38 +22,17 @@ class StoryMenuState extends MusicBeatState
 {
 	var scoreText:FlxText;
 
-	var weekData:Array<Dynamic> = [
-		['Tutorial'],
-		['Bopeebo', 'Fresh', 'Dadbattle'],
-		['Spookeez', 'South', "Monster"],
-		['Pico', 'Philly', "Blammed"],
-		['Satin-Panties', "High", "Milf"],
-		['Cocoa', 'Eggnog', 'Winter-Horrorland'],
-		['Senpai', 'Roses', 'Thorns']
-	];
+	var weekData:Array<Dynamic> = [];
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true];
+	public static var weekUnlocked:Array<Bool> = [true, false, false, false, false, false, false];
+	#if debug
+	weekUnlocked =  [true, true, true, true, true, true, true];
+	#end
 
-	var weekCharacters:Array<Dynamic> = [
-		['dad', 'bf', 'gf'],
-		['dad', 'bf', 'gf'],
-		['spooky', 'bf', 'gf'],
-		['pico', 'bf', 'gf'],
-		['mom', 'bf', 'gf'],
-		['parents-christmas', 'bf', 'gf'],
-		['senpai', 'bf', 'gf']
-	];
+	var weekCharacters:Array<Dynamic> = [];
 
-	var weekNames:Array<String> = [
-		"",
-		"Daddy Dearest",
-		"Spooky Month",
-		"PICO",
-		"MOMMY MUST MURDER",
-		"RED SNOW",
-		"hating simulator ft. moawling"
-	];
+	var weekNames:Array<String> = [];
 
 	var txtWeekTitle:FlxText;
 
@@ -82,9 +61,17 @@ class StoryMenuState extends MusicBeatState
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 
+		addWeek(CoolUtil.coolTextFile(Paths.txt('weeks/tutorial')),['dad','bf','gf'],'tutorial','GF');
+		addWeek(CoolUtil.coolTextFile(Paths.txt('weeks/week1')),['dad','bf','gf'],'week1','Daddy Dearest');
+		addWeek(CoolUtil.coolTextFile(Paths.txt('weeks/week2')),['spooky','bf','gf'],'week2','Spooky Month');
+		addWeek(CoolUtil.coolTextFile(Paths.txt('weeks/week3')),['pico','bf','gf'],'week3','PICO');
+		addWeek(CoolUtil.coolTextFile(Paths.txt('weeks/week4')),['mom','bf','gf'],'week4','MOMMY MUST MURDER');
+		addWeek(CoolUtil.coolTextFile(Paths.txt('weeks/week5')),['parents-christmas','bf','gf'],'week5','RED SNOW');
+		addWeek(CoolUtil.coolTextFile(Paths.txt('weeks/week6')),['senpai','bf','gf'],'week6','week6 simulator ft. moawling');
+
 		persistentUpdate = persistentDraw = true;
 
-		scoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
+		scoreText = new FlxText(10, 10, 0, "SCORE: 69696969", 36);
 		scoreText.setFormat("VCR OSD Mono", 32);
 
 		txtWeekTitle = new FlxText(FlxG.width * 0.7, 10, 0, "", 32);
@@ -120,7 +107,7 @@ class StoryMenuState extends MusicBeatState
 
 		for (i in 0...weekData.length)
 		{
-			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, i);
+			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, weekAssets[i]);
 			weekThing.y += ((weekThing.height + 20) * i);
 			weekThing.targetY = i;
 			grpWeekText.add(weekThing);
@@ -444,5 +431,14 @@ class StoryMenuState extends MusicBeatState
 		#if !switch
 		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
 		#end
+	}
+	var weekAssets:Array<String> = [];
+
+	function addWeek(songs:Array<String>,characters:Array<String>,weekAsset:String,?weekName:String = 'default name'):Void{
+		weekAssets.push(weekAsset);
+		weekNames.push(weekName);
+		weekData.push(songs);
+		weekCharacters.push(characters);
+		trace('Week: $weekName \n Songs: $songs \n Characters: $characters');
 	}
 }

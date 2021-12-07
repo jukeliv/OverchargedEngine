@@ -52,15 +52,21 @@ class TitleState extends MusicBeatState
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
+		#if web
+		FlxG.save.data.fpsLimit = 60;
+		#else
+		FlxG.save.data.fpsLimit = 120;
+		#end
+
 		// DEBUG BULLSHIT
 
 		super.create();
 
 		#if ng
-		NGio.noLogin(APIStuff.API);
+		NGio.noLogin(NGio.API);
 
-		var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
-		trace('NEWGROUNDS LOL');
+		var ng:NGio = new NGio(NGio.API, NGio.EncKey);
+		trace('NEWGROUNDS');
 		#end
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
@@ -132,7 +138,7 @@ class TitleState extends MusicBeatState
 			// music.play();
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 
-			FlxG.sound.music.fadeIn(4, 0, 0.7);
+			FlxG.sound.music.fadeIn(4, 0, (0.7 * FlxG.save.data.masterVolume));
 		}
 
 		Conductor.changeBPM(102);
@@ -279,7 +285,7 @@ class TitleState extends MusicBeatState
 			titleText.animation.play('press');
 
 			FlxG.camera.flash(FlxColor.WHITE, 1);
-			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7 * FlxG.save.data.masterVolume);
 
 			transitioning = true;
 			// FlxG.sound.music.stop();

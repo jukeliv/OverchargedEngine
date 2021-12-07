@@ -21,6 +21,9 @@ using StringTools;
  */
 class NGio
 {
+	public static var API:String = "";
+	public static var EncKey:String = "";
+	
 	public static var isLoggedIn:Bool = false;
 	public static var scoreboardsLoaded:Bool = false;
 

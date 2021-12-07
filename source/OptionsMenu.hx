@@ -37,11 +37,16 @@ class OptionsMenu extends MusicBeatState
 
 		for (i in 0...optionsStrings.length)
 		{
-			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, optionsStrings[i].toLowerCase(), true, false);
+			var controlLabel:Alphabet = new Alphabet(0, (60 * i) + 60, optionsStrings[i].toLowerCase(), true, false);
 			controlLabel.isMenuItem = true;
 			controlLabel.targetY = i;
-			if(controlLabel.ID == 0){
+			if(i == 0){
 				controlLabel.color = FlxColor.YELLOW;
+				controlLabel.alpha = 1;
+			}
+			else{
+				controlLabel.color = FlxColor.WHITE;
+				controlLabel.alpha = 0.6;
 			}
 			grpControls.add(controlLabel);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
@@ -76,7 +81,7 @@ class OptionsMenu extends MusicBeatState
 	function changeSelection(change:Int = 0)
 	{
 
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(Paths.sound('scrollMenu'),Math.abs(1 * FlxG.save.data.masterVolume));
 
 		curSelected += change;
 

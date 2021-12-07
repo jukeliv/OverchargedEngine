@@ -4,7 +4,7 @@ import lime.app.Application;
 import openfl.display.BlendMode;
 import openfl.text.TextFormat;
 import flixel.util.FlxColor;
-import flixel.FlxG;
+import openfl.Lib;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -70,12 +70,6 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		//#if web
-		framerate = 60;
-		//#else
-		//framerate = 120;
-		//#end
-
 		#if !debug
 		initialState = TitleState;
 		#end
@@ -109,10 +103,10 @@ class Main extends Sprite
 		#end
 	}
 
-	public function toggleFpsCounter(value:Bool):Void {
+	inline public function toggleFpsCounter(value:Bool):Void {
 		fpsCounter.visible = value;
 	}
-	public function setFPSCap(cap:Float){
-		openfl.Lib.current.stage.frameRate = cap;
+	inline public function setFramerate(value:Float){
+		Lib.current.stage.frameRate = value;
 	}
 }

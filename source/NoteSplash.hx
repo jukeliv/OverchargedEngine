@@ -15,13 +15,13 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?skin:String, ?note:Int = 0) {
 		super(x, y);
 
-		if(skin == null && PlayState.daSkin == null)skin = 'default_noteSplash';
-		else skin = PlayState.daSkin.noteSplash_path;
+		if(skin == null /*&& PlayState.daSkin == null*/)skin = 'default_noteSplash';
+		//else skin = PlayState.daSkin.noteSplash_path;
 
 		loadAnims(skin);
 
 		setupNoteSplash(x, y, note, skin);
-		antialiasing = Options.globalAntialias;
+		antialiasing = Options.antialiasing;
 	}
 
 	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null) {
@@ -43,7 +43,7 @@ class NoteSplash extends FlxSprite
 	}
 
 	function loadAnims(path:String) {
-		frames = Paths.getSparrowAtlas(path,'skins');
+		frames = Paths.getSparrowAtlas(path);
 		for (i in 1...3) {
 			animation.addByPrefix("splash1-" + i, "splash blue " + i, 16, false);
 			animation.addByPrefix("splash2-" + i, "splash green " + i, 16, false);

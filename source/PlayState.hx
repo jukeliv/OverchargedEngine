@@ -1,6 +1,7 @@
 package;
 
 //import Snd.Sound;
+import flixel.addons.plugin.taskManager.FlxTask;
 import flixel.math.FlxRandom;
 import NoteSkin.Skin;
 import FreeplayState.SongMetadata;
@@ -58,7 +59,7 @@ using StringTools;
 class PlayState extends MusicBeatState
 {
 	public static var SONG:SwagSong;
-	public static var daSkin:Skin;
+	//public static var daSkin:Skin;
 
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
@@ -77,8 +78,7 @@ class PlayState extends MusicBeatState
 	public static var shits:Int = 0;
 	public static var awfulls:Int = 0;
 
-	private var totalPlayed:Int = 0;
-	private var totalNotesHit:Int = 0;
+	public static var daRanking:String;
 
 	var halloweenLevel:Bool = false;
 
@@ -212,8 +212,8 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
-		if(daSkin ==  null && !isPixel)
-			daSkin = NoteSkin.loadFromJson('default_skin','skins');
+		//if(daSkin ==  null && !isPixel)
+		//	daSkin = NoteSkin.loadFromJson('default_skin','skins');
 
 		//if(SONG.song.toLowerCase() == 'bopeebo' || SONG.song.toLowerCase() == 'dadbattle' || SONG.song.toLowerCase() == 'roses'  || SONG.song.toLowerCase() == 'senpai' || SONG.song.toLowerCase() == 'thorns' || SONG.song.toLowerCase() == 'fresh')
 		//	dialogue = CoolUtil.coolTextFile(Paths.dialogue(SONG.song.toLowerCase()));
@@ -824,7 +824,7 @@ class PlayState extends MusicBeatState
 					new FlxTimer().start(0.1, function(tmr:FlxTimer)
 					{
 						remove(blackScreen);
-						FlxG.sound.play(Paths.sound('Lights_Turn_On'));
+						FlxG.sound.play(Paths.sound('Lights_Turn_On'),Math.abs(1 * FlxG.save.data.masterVolume));
 						camFollow.y = -2050;
 						camFollow.x += 200;
 						FlxG.camera.focusOn(camFollow.getPosition());
@@ -845,7 +845,7 @@ class PlayState extends MusicBeatState
 					});
 				case 'senpai' | 'roses' | 'thorns' | 'tutorial' | 'fresh' | 'bopeebo' | 'dadbattle':
 					if(curSong.toLowerCase() == 'roses')
-						FlxG.sound.play(Paths.sound('ANGRY'));
+						FlxG.sound.play(Paths.sound('ANGRY'),Math.abs(1 * FlxG.save.data.masterVolume));
 					schoolIntro(dialoguesLol);
 				default:
 					startCountdown();
@@ -913,7 +913,7 @@ class PlayState extends MusicBeatState
 							else
 							{
 								senpaiEvil.animation.play('idle');
-								FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
+								FlxG.sound.play(Paths.sound('Senpai_Dies'), Math.abs(1 * FlxG.save.data.masterVolume), false, null, true, function()
 								{
 									remove(senpaiEvil);
 									remove(red);
@@ -984,7 +984,7 @@ class PlayState extends MusicBeatState
 
 			{
 				case 0:
-					FlxG.sound.play(Paths.sound('intro3'), 0.6);
+					FlxG.sound.play(Paths.sound('intro3'), Math.abs(0.6 * FlxG.save.data.masterVolume));
 				case 1:
 					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
 					ready.cameras = [camHUD];
@@ -1003,7 +1003,7 @@ class PlayState extends MusicBeatState
 							ready.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('intro2'), 0.6);
+					FlxG.sound.play(Paths.sound('intro2'), Math.abs(0.6 * FlxG.save.data.masterVolume));
 				case 2:
 					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
 					set.cameras = [camHUD];
@@ -1021,7 +1021,7 @@ class PlayState extends MusicBeatState
 							set.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('intro1'), 0.6);
+					FlxG.sound.play(Paths.sound('intro1'), Math.abs(0.6 * FlxG.save.data.masterVolume));
 				case 3:
 					var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
 					go.cameras = [camHUD];
@@ -1041,7 +1041,7 @@ class PlayState extends MusicBeatState
 							go.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('introGo'), 0.6);
+					FlxG.sound.play(Paths.sound('introGo'), Math.abs(0.6 * FlxG.save.data.masterVolume));
 				case 4:
 					inCutscene = false;
 			}
@@ -1066,7 +1066,7 @@ class PlayState extends MusicBeatState
 		if (!paused){
 			FlxG.sound.music.onComplete = endSong;
 
-			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
+			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), Math.abs(1 * FlxG.save.data.masterVolume), false);
 			vocals.play();
 		}
 
@@ -1224,7 +1224,7 @@ class PlayState extends MusicBeatState
 					}
 
 				default:
-					babyArrow.frames = Paths.getSparrowAtlas(daSkin.skin_path,'skins');
+					babyArrow.frames = Paths.getSparrowAtlas('default_skin');
 					babyArrow.animation.addByPrefix('green', 'arrowUP');
 					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
 					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
@@ -1409,8 +1409,8 @@ class PlayState extends MusicBeatState
 		songDur.text = (Conductor.songPosition/60 + ':' + Conductor.songPosition % 60);
 
 		super.update(elapsed);
-		var ranking = Ranking.GenerateRanking();
-		infoTxt.text = 'Misses: $misses // Ranking: $ranking // Score: $songScore';
+		daRanking = Ranking.UpdateRanking();
+		infoTxt.text = 'Misses: $misses || Ranking: $daRanking || Score: $songScore';
 
 		if(FlxG.keys.justPressed.TWO)
 			perfectMode = !perfectMode;
@@ -1817,7 +1817,7 @@ class PlayState extends MusicBeatState
 
 			if (storyPlaylist.length <= 0)
 			{
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FlxG.sound.playMusic(Paths.music('freakyMenu'),Math.abs(1 * FlxG.save.data.masterVolume));
 
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
@@ -1857,7 +1857,7 @@ class PlayState extends MusicBeatState
 					add(blackShit);
 					camHUD.visible = false;
 
-					FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+					FlxG.sound.play(Paths.sound('Lights_Shut_off'),Math.abs(1 * FlxG.save.data.masterVolume));
 				}
 
 				FlxTransitionableState.skipNextTransIn = true;
@@ -1893,9 +1893,7 @@ class PlayState extends MusicBeatState
 		//
 		var score:Int = 350;
 
-		n.noteRating = Ranking.GenerateRating(noteDiff);
-
-		var daRating:String = n.noteRating;
+		var daRating:String = Ranking.GenerateRating(noteDiff);
 		
 		switch(daRating){
 			case 'awfull':
@@ -1921,12 +1919,12 @@ class PlayState extends MusicBeatState
 				sicks++;
 				score = 250;
 
-				FlxG.sound.play(Paths.sound(daSkin.hit_sounds[FlxG.random.int(1,4)]),0.8);
+				FlxG.sound.play(Paths.sound('hitSounds/Hit' + [FlxG.random.int(1,4)]),Math.abs(0.8 * FlxG.save.data.masterVolume));
 			case 'perfect':
 				spawnNoteSplashOnNote(n);
 				perfects++;
 				score = 400;
-				FlxG.sound.play(Paths.sound(daSkin.hit_sounds[FlxG.random.int(1,4)]),1);
+				FlxG.sound.play(Paths.sound(Paths.sound('hitSounds/Hit' + [FlxG.random.int(1,4)])), Math.abs(1 * FlxG.save.data.masterVolume));
 		}
 
 		songScore += score;
@@ -2234,7 +2232,7 @@ class PlayState extends MusicBeatState
 
 			songScore -= 50;
 
-			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.4, 0.8));
+			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), Math.abs(FlxG.random.float(0.4,0.8) * FlxG.save.data.masterVolume));
 			vocals.volume = 0;
 
 			// get stunned for 5 seconds
@@ -2296,6 +2294,7 @@ class PlayState extends MusicBeatState
 			switch (note.noteData)
 			{
 				case 0:
+					FlxG.camera.x += 100;
 					switch(note.noteType){
 						case 0:
 							boyfriend.playAnim('singLEFT', true);
@@ -2304,6 +2303,7 @@ class PlayState extends MusicBeatState
 							gf.playAnim('cheer',true);
 					}
 				case 1:
+					FlxG.camera.y += 100;
 					switch(note.noteType){
 						case 0:
 							boyfriend.playAnim('singDOWN', true);
@@ -2312,6 +2312,7 @@ class PlayState extends MusicBeatState
 							gf.playAnim('cheer',true);
 					}
 				case 2:
+					FlxG.camera.y -= 100;
 					switch(note.noteType){
 						case 0:
 							boyfriend.playAnim('singUP', true);
@@ -2320,6 +2321,7 @@ class PlayState extends MusicBeatState
 							gf.playAnim('cheer',true);
 					}
 				case 3:
+					FlxG.camera.x -= 100;
 					switch(note.noteType){
 						case 0:
 							boyfriend.playAnim('singRIGHT', true);
@@ -2372,7 +2374,7 @@ class PlayState extends MusicBeatState
 
 	function fastCarDrive()
 	{
-		FlxG.sound.play(Paths.soundRandom('carPass', 0, 1), 0.7);
+		FlxG.sound.play(Paths.soundRandom('carPass', 0, 1), Math.abs(0.7 * FlxG.save.data.masterVolume));
 
 		fastCar.velocity.x = (FlxG.random.int(170, 220) / FlxG.elapsed) * 3;
 		fastCarCanDrive = false;
@@ -2438,7 +2440,7 @@ class PlayState extends MusicBeatState
 
 	function lightningStrikeShit():Void
 	{
-		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
+		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2),Math.abs(1 * FlxG.save.data.masterVolume));
 		halloweenBG.animation.play('lightning');
 		FlxG.camera.flash(FlxColor.WHITE,0.6);
 

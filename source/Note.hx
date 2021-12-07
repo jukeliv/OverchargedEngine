@@ -86,7 +86,7 @@ class Note extends FlxSprite
 		else{
 			switch(noteType){
 				case 0:
-					frames = Paths.getSparrowAtlas('NOTE_assets');
+					frames = Paths.getSparrowAtlas('default_skin');
 
 					animation.addByPrefix('greenScroll', 'green0');
 					animation.addByPrefix('redScroll', 'red0');

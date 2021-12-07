@@ -58,7 +58,6 @@
 		<library name="week5"    preload="true" />
 		<library name="week6"    preload="true" />
 		<library name="videos"    preload="true" />
-		<library name="skins"    preload="true" />
 	</section>
 	
 	<section if="NO_PRELOAD_ALL">
@@ -72,34 +71,33 @@
 		<library name="week5"    preload="false" />
 		<library name="week6"    preload="true" />
 		<library name="videos"    preload="true" />
-		<library name="skins"    preload="false" />
 	</section>
 	
-	<assets path="assets/songs"    library="songs"    include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/songs"    library="songs"    include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/shared"   library="shared"   include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/shared"   library="shared"   include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/tutorial" library="tutorial" include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/tutorial" library="tutorial" include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/week1"    library="week1"    include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/week1"    library="week1"    include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/week2"    library="week2"    include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/week2"    library="week2"    include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/week3"    library="week3"    include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/week3"    library="week3"    include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/week4"    library="week4"    include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/week4"    library="week4"    include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/week5"    library="week5"    include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/week5"    library="week5"    include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/week6"    library="week6"    include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/week6"    library="week6"    include="*.ogg" exclude="*.mp3" unless="web"/>
-	<assets path="assets/videos" library="videos" include="*.mp3" exclude="*.ogg" if="web"/>
-	<assets path="assets/videos" library="videos" include="*.ogg" exclude="*.mp3"  unless="web"/>
+	<assets path="assets/songs"    library="songs"    exclude="*.ogg" if="web"/>
+	<assets path="assets/songs"    library="songs"    exclude="*.mp3" unless="web"/>
+	<assets path="assets/shared"   library="shared"   exclude="*.ogg" if="web"/>
+	<assets path="assets/shared"   library="shared"   exclude="*.mp3" unless="web"/>
+	<assets path="assets/tutorial" library="tutorial" exclude="*.ogg" if="web"/>
+	<assets path="assets/tutorial" library="tutorial" exclude="*.mp3" unless="web"/>
+	<assets path="assets/week1"    library="week1"    exclude="*.ogg" if="web"/>
+	<assets path="assets/week1"    library="week1"    exclude="*.mp3" unless="web"/>
+	<assets path="assets/week2"    library="week2"    exclude="*.ogg" if="web"/>
+	<assets path="assets/week2"    library="week2"    exclude="*.mp3" unless="web"/>
+	<assets path="assets/week3"    library="week3"    exclude="*.ogg" if="web"/>
+	<assets path="assets/week3"    library="week3"    exclude="*.mp3" unless="web"/>
+	<assets path="assets/week4"    library="week4"    exclude="*.ogg" if="web"/>
+	<assets path="assets/week4"    library="week4"    exclude="*.mp3" unless="web"/>
+	<assets path="assets/week5"    library="week5"    exclude="*.ogg" if="web"/>
+	<assets path="assets/week5"    library="week5"    exclude="*.mp3" unless="web"/>
+	<assets path="assets/week6"    library="week6"    exclude="*.ogg" if="web"/>
+	<assets path="assets/week6"    library="week6"    exclude="*.mp3" unless="web"/>
+	<assets path="assets/videos" library="videos" exclude="*.ogg" if="web"/>
+	<assets path="assets/videos" library="videos" exclude="*.mp3"  unless="web"/>
 	
 	<!--Ignore random stuff-->
 	<assets path='!help' embed='true'/>
 	<assets path="CHANGELOG.md" embed='true'/>
-	<assets path="assets/shared/images/images-go-here.txt" embed='true'/>
+	<!-- <assets path="assets/shared/images/images-go-here.txt" embed='true'/> -->
 	<assets path="assets/preload/data/data-goes-here.txt" embed='true'/>
 	<assets path="assets/preload/data/dialogues/dialogues-go-here.txt" embed='true'/>
 	<assets path="assets/videos" exclued="*.bat"/>

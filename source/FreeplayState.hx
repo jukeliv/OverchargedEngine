@@ -1,5 +1,7 @@
 package;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -12,6 +14,7 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+import flash.display.BlendMode;
 
 using StringTools;
 
@@ -27,6 +30,8 @@ class FreeplayState extends MusicBeatState
 	var diffText:FlxText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
+
+	var bg:FlxSprite;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
@@ -65,7 +70,7 @@ class FreeplayState extends MusicBeatState
 			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
 
 		if (StoryMenuState.weekUnlocked[2] || isDebug)
-			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky']);
+			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky','spooky','monster']);
 
 		if (StoryMenuState.weekUnlocked[3] || isDebug)
 			addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
@@ -83,7 +88,10 @@ class FreeplayState extends MusicBeatState
 
 		// LOAD CHARACTERS
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var df:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDF'));
+		df.blend = BlendMode.MULTIPLY;
+		add(df);
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -289,6 +297,23 @@ class FreeplayState extends MusicBeatState
 		for (i in 0...iconArray.length)
 		{
 			iconArray[i].alpha = 0.6;
+
+			if(i == curSelected){
+				switch(iconArray[i].animation.name){
+					case 'dad' | 'parents-christmas':
+						switchColor(FlxColor.fromRGB(169,15,246),bg);
+					case 'spooky' | 'spirit':
+						switchColor(FlxColor.fromRGB(33,8,155),bg);
+					case 'monster-christmas' | 'monster':
+						switchColor(FlxColor.fromRGB(242,246,15),bg);
+					case 'mom' | 'gf':
+						switchColor(FlxColor.fromRGB(246,15,148),bg);
+					case 'pico':
+						switchColor(FlxColor.fromRGB(15,246,50),bg);
+					case 'senpai':
+						switchColor(FlxColor.fromRGB(246,131,15),bg);
+				}
+			}
 		}
 
 		iconArray[curSelected].alpha = 1;
@@ -307,6 +332,11 @@ class FreeplayState extends MusicBeatState
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
+	}
+
+	public function switchColor(v:FlxColor,spr:FlxSprite){
+		FlxTween.tween(spr,{color: v},0.4,{ease: FlxEase.bounceInOut});
+		trace('color:' + v);
 	}
 }
 

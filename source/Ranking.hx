@@ -2,7 +2,7 @@ package;
 import flixel.FlxG;
 
 class Ranking {
-    static public function GenerateRanking():String{
+    static public function UpdateRanking():String{
         var ranking:String = '?';
 
         if(PlayState.perfects >= 1 && PlayState.sicks == 0 && PlayState.goods == 0 && PlayState.mehs == 0 && PlayState.bads == 0 && PlayState.fucks == 0 && PlayState.shits == 0 && PlayState.misses == 0)
@@ -18,7 +18,7 @@ class Ranking {
         else if(PlayState.misses > 10)
             ranking = 'Fucked';
         else
-            ranking = '?';
+            ranking = 'N/A';
 
         return ranking;
     }
