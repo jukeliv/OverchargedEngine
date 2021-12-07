@@ -25,7 +25,9 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+#if newgrounds
 import io.newgrounds.NG;
+#end
 import lime.app.Application;
 import openfl.Assets;
 
@@ -274,7 +276,7 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
-			#if ng
+			#if newgrounds
 			NGio.unlockMedal(60960);
 
 			// If it's Friday according to da clock
@@ -302,6 +304,7 @@ class TitleState extends MusicBeatState
 				if(debug){
 					var version:String = Application.current.meta.get('version');
 
+					#if newgrounds
 					if (version.trim() != NGio.GAME_VER_NUMS.trim() && !OutdatedSubState.leftState)
 					{
 						FlxG.switchState(new OutdatedSubState());
@@ -310,9 +313,10 @@ class TitleState extends MusicBeatState
 						trace('cur ver: ' + NGio.GAME_VER_NUMS.trim());
 					}
 					else
-					{
-						//FlxG.switchState(new VideoState('assets/videos/secret/e.webm',new MainMenuState()));
-					}
+						FlxG.switchState(new MainMenuState());
+					#else
+					FlxG.switchState(new MainMenuState());
+					#end
 				}
 
 				else{

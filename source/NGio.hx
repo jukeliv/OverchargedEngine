@@ -1,8 +1,10 @@
+#if newgrounds
 package;
 
 import flixel.FlxG;
 import flixel.util.FlxSignal;
 import flixel.util.FlxTimer;
+
 import io.newgrounds.NG;
 import io.newgrounds.components.ScoreBoardComponent.Period;
 import io.newgrounds.objects.Medal;
@@ -24,7 +26,9 @@ class NGio
 	public static var isLoggedIn:Bool = false;
 	public static var scoreboardsLoaded:Bool = false;
 
+	#if newgrounds
 	public static var scoreboardArray:Array<Score> = [];
+	#end
 
 	public static var ngDataLoaded(default, null):FlxSignal = new FlxSignal();
 	public static var ngScoresLoaded(default, null):FlxSignal = new FlxSignal();
@@ -195,3 +199,4 @@ class NGio
 		}
 	}
 }
+#end

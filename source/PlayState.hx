@@ -795,7 +795,8 @@ class PlayState extends MusicBeatState
 				case 'senpai' | 'roses' | 'thorns' | 'tutorial' | 'fresh' | 'bopeebo' | 'dadbattle':
 					if(curSong.toLowerCase() == 'roses')
 						FlxG.sound.play(Paths.sound('ANGRY'));
-					schoolIntro(dialoguesLol);
+					if(isStoryMode)
+						schoolIntro(dialoguesLol);
 				default:
 					startCountdown();
 			}
@@ -913,7 +914,7 @@ class PlayState extends MusicBeatState
 			boyfriend.dance();
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
-			introAssets.set('default', ['ready', "set", "go"]);
+			introAssets.set('default', ['ui/ready', "ui/set", "ui/go"]);
 			introAssets.set('senpai-school', ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel']);
 			introAssets.set('spooky-school', ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel']);
 
@@ -1783,7 +1784,9 @@ class PlayState extends MusicBeatState
 
 				if (SONG.validScore)
 				{
+					#if newgrounds
 					NGio.unlockMedal(60961);
+					#end
 					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 				}
 
@@ -1898,6 +1901,8 @@ class PlayState extends MusicBeatState
 			pixelShitPart1 = 'weeb/pixelUI/';
 			pixelShitPart2 = '-pixel';
 		}
+		else
+			pixelShitPart1 = 'ui/';
 
 		rating.loadGraphic(Paths.image('rating/' + pixelShitPart1 + daRating + pixelShitPart2,'shared'));
 		rating.screenCenter();

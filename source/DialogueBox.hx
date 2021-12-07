@@ -89,7 +89,7 @@ class DialogueBox extends FlxSpriteGroup
 				add(face);
 			 default:
 				hasDialog = true;
-				box.frames = Paths.getSparrowAtlas('speech_bubble_talking');
+				box.frames = Paths.getSparrowAtlas('ui/speech_bubble_talking');
 				box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
 				box.animation.addByPrefix('normal', 'speech bubble normal', 24, true);
 		}

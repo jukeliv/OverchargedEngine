@@ -27,7 +27,7 @@
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="true"/>
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false" vsync="false"/>
+	<window if="mobile" orientation="landscape" fullscreen="true" width="1280" height="720" resizable="false"/>
 
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
@@ -118,22 +118,23 @@
 
 	<haxelib name="flixel" />
 	<haxedev set='webgl' />
-
-	<!--In case you want to use Shaders-->
-	<haxedef name="next"/>
 	
 	<!--In case you want to use the webm addons-->
-	<haxelib name="actuate" />
+	<haxelib name="actuate" else="android"/>
 	<haxelib name="extension-webm" if="desktop" />
 
 	<!--In case you want to use the addons package-->
 	<haxelib name="flixel-addons" />
-	<haxelib name="hscript" />
+	<haxelib name="hscript"/>
 
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
-	<haxelib name="newgrounds"/>
+	<haxelib name="newgrounds" if="newgrounds" unless="mobile"/>
 	<haxelib name="discord_rpc" if="desktop"/>
+
+	<!--In case you want to export to Android-->
+	<define name="mobileC" if="mobile" />
+
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 
 	<!-- <haxelib name="markdown" /> -->
@@ -166,7 +167,7 @@
 	<!--<haxedef name="FLX_NO_SOUND_SYSTEM" />-->
 
 	<!--Disable the Flixel core focus lost screen-->
-	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
+	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN"/>
 
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
@@ -185,6 +186,6 @@
 
 
 	<!-- <haxedef name="SKIP_TO_PLAYSTATE" if="debug" /> -->
-	<haxedef name="NG_LOGIN" if="newgrounds" />
+	<haxedef name="NG_LOGIN" if="newgrounds"/>
 	
 </project>
