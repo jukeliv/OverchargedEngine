@@ -10,7 +10,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
 
 class PreferencesMenuState extends MusicBeatState {
-    var textMenuItems:Array<String> = ['Scroll Speed','Ghost Tapping','Framerate','Antialiasing', 'Toggle FPS Cap'];
+    var textMenuOptions:Array<String> = ['Scroll Speed','Ghost Tapping','Framerate','Antialiasing', 'Toggle FPS Cap'];
 	var curSelected:Int = 0;
 
 	var grpOptionsTexts:FlxTypedGroup<Alphabet>;
@@ -34,8 +34,9 @@ class PreferencesMenuState extends MusicBeatState {
 		grpOptionsTexts = new FlxTypedGroup<Alphabet>();
 		add(grpOptionsTexts);
 
-		for (i in 0...textMenuItems.length)
+		for (i in 0...textMenuOptions.length)
 		{
+			var textMenuItems:Array<String> = ['Scroll Speed: ' + Options.scrollSpeed,'Ghost Tapping: ' + Options.ghostTap,'Framerate: ' + Options.framerate,'Antialiasing: ' + Options.antialiasing , 'Toggle FPS Cap: ' + Options.fpsCap];
             var controlLabel:Alphabet = new Alphabet(0, (60 * i) + 60, textMenuItems[i].toLowerCase(), true, false);
 			controlLabel.isMenuItem = true;
 			controlLabel.targetY = i;
@@ -53,7 +54,7 @@ class PreferencesMenuState extends MusicBeatState {
 
         bf.screenCenter();
         bf.x += 350;
-        bf.flipX = true;
+        bf.animation.play('idle',true);
         bf.visible = false;
         add(bf);
 
@@ -73,10 +74,12 @@ class PreferencesMenuState extends MusicBeatState {
 			changeSelection(1);
 
 		if(controls.LEFT_P){
-			switch(textMenuItems[curSelected]){
+			switch(textMenuOptions[curSelected]){
 				case 'Scroll Speed':
+					updateDescription('Scroll Speed: ' + Options.scrollSpeed);
 					Options.scrollSpeed-=0.1;
 				case 'Framerate':
+					updateDescription('Framerate: ' + Options.framerate);
 					if(Options.framerate >= 1){
 						Options.framerate-=1;
 						(cast(Lib.current.getChildAt(0),Main)).setFramerate(Options.framerate);
@@ -84,10 +87,12 @@ class PreferencesMenuState extends MusicBeatState {
 			}
 		}
 		if(controls.RIGHT_P){
-			switch(textMenuItems[curSelected]){
+			switch(textMenuOptions[curSelected]){
 				case 'Scroll Speed':
+					updateDescription('Scroll Speed: ' + Options.scrollSpeed);
 					Options.scrollSpeed+=0.1;
 				case 'Framerate':
+					updateDescription('Framerate: ' + Options.framerate);
 					if(Options.framerate <= FlxG.save.data.fpsLimit){
 						Options.framerate+=1;
 						(cast(Lib.current.getChildAt(0),Main)).setFramerate(Options.framerate);
@@ -95,15 +100,18 @@ class PreferencesMenuState extends MusicBeatState {
 			}
 		}
         if(controls.ACCEPT){
-            switch(textMenuItems[curSelected]){
+            switch(textMenuOptions[curSelected]){
                 case 'Antialiasing':
+					updateDescription('Antialiasing: ' + Options.antialiasing);
 					FlxG.sound.play(Paths.sound('confirmMenu'));
                     Options.antialiasing = !Options.antialiasing;
                 case 'Toggle FPS Cap':
+					updateDescription('Toggle FPS Cap: ' + Options.fpsCap);
 					FlxG.sound.play(Paths.sound('confirmMenu'));
                     Options.fpsCap = !Options.fpsCap;
                     (cast(Lib.current.getChildAt(0),Main)).toggleFpsCounter(Options.fpsCap);
 				case 'Ghost Tapping':
+					updateDescription('Ghost Tapping: ' + Options.ghostTap);
 					FlxG.sound.play(Paths.sound('confirmMenu'));
                     Options.ghostTap = !Options.ghostTap;
             }
@@ -116,18 +124,22 @@ class PreferencesMenuState extends MusicBeatState {
 		}
     }
 
+	public function updateDescription(str:String){
+		grpOptionsTexts.members[curSelected].text = str;
+	}
+
 	public function changeSelection(huh:Int){
 		curSelected += huh;
 
 		FlxG.sound.play(Paths.sound('scrollMenu'),1);
 
 		if (curSelected < 0)
-			curSelected = textMenuItems.length - 1;
+			curSelected = textMenuOptions.length - 1;
 
-		if (curSelected >= textMenuItems.length)
+		if (curSelected >= textMenuOptions.length)
 			curSelected = 0;
 
-        if(textMenuItems[curSelected] == 'Antialiasing')
+        if(textMenuOptions[curSelected] == 'Antialiasing')
             bf.visible = true;
         else
             bf.visible = false;

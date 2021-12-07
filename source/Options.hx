@@ -11,6 +11,7 @@ class Options
 	public static var optimization:Bool = false;
 	public static var framerate:Int = 60;
 	public static var ghostTap:Bool = true;
+	public static var safeZone:Int = 0;
 
 	//to much cloned stuff xD, if you dont like it
 	//fuk you and re-do the system IDIOT!!
@@ -21,6 +22,7 @@ class Options
 		FlxG.save.data.optimization = optimization;
 		FlxG.save.data.framerate = framerate;
 		FlxG.save.data.ghostTap = ghostTap;
+		FlxG.save.data.safeZone = safeZone;
 	}
 	static public function load(){
 		if(FlxG.save.data.scrollSpeed != null)
@@ -35,5 +37,7 @@ class Options
 			framerate = FlxG.save.data.framerate;
 		if(FlxG.save.data.ghostTap != null)
 			ghostTap = FlxG.save.data.ghostTap;
+		if(FlxG.save.data.safeZone != null)
+			safeZone = FlxG.save.data.safeZone;
 	}
 }

@@ -15,8 +15,7 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?skin:String, ?note:Int = 0) {
 		super(x, y);
 
-		if(skin == null /*&& PlayState.daSkin == null*/)skin = 'default_noteSplash';
-		//else skin = PlayState.daSkin.noteSplash_path;
+		if(skin == null)skin = 'noteSplashes';
 
 		loadAnims(skin);
 
@@ -39,24 +38,22 @@ class NoteSplash extends FlxSprite
 
 		var animNum:Int = FlxG.random.int(1, 2);
 		animation.play('splash' + note + '-' + animNum, true);
-		animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
 	}
 
 	function loadAnims(path:String) {
 		frames = Paths.getSparrowAtlas(path);
 		for (i in 1...3) {
-			animation.addByPrefix("splash1-" + i, "splash blue " + i, 16, false);
-			animation.addByPrefix("splash2-" + i, "splash green " + i, 16, false);
-			animation.addByPrefix("splash0-" + i, "splash purple " + i, 16, false);
-			animation.addByPrefix("splash3-" + i, "splash red " + i, 16, false);
+			var framerate:Int = FlxG.random.int(16,24);
+			animation.addByPrefix("splash1-" + i, "splash blue " + i, framerate, false);
+			animation.addByPrefix("splash2-" + i, "splash green " + i, framerate, false);
+			animation.addByPrefix("splash0-" + i, "splash purple " + i, framerate, false);
+			animation.addByPrefix("splash3-" + i, "splash red " + i, framerate, false);
 		}
 	}
 
 	override function update(elapsed:Float) {
-		if(animation.curAnim.finished){
+		if(animation.curAnim.finished)
 			kill();
-			trace(this + ' elemenated');
-		}
 		super.update(elapsed);
 	}
 }
