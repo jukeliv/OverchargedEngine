@@ -71,7 +71,7 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		#if !debug
+		#if !html5
 		initialState = PreloadState;
 		#end
 

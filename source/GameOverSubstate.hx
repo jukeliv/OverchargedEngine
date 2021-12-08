@@ -18,6 +18,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	public function new(x:Float, y:Float)
 	{
+		FlxG.sound.music.stop();
 		var daStage:String = PlayState.SONG.stage.toLowerCase();
 		var daBf:String = '';
 		if(daStage.endsWith('school')){
@@ -51,9 +52,6 @@ class GameOverSubstate extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
-		if(PlayState.vocals.playing)
-			PlayState.vocals.stop();
 
 		if (controls.ACCEPT)
 		{

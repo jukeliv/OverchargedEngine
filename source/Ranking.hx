@@ -22,22 +22,22 @@ class Ranking {
 
         return ranking;
     }
-    static public function GenerateRating(noteDiff:Float,?safeSone:Float):String{
+    static public function GenerateRating(noteDiff:Float,?saveFrames:Float = 0):String{
         var daRating:String = 'perfect';
-        if (noteDiff > Conductor.safeZoneOffset * 0.9 + safeSone)
-            daRating = 'awfull';
-        else if (noteDiff > Conductor.safeZoneOffset * 0.85 + safeSone)
-            daRating = 'shit';
-        else if (noteDiff > Conductor.safeZoneOffset * 0.75 + safeSone)
-            daRating = 'fuck';
-        else if (noteDiff > Conductor.safeZoneOffset * 0.6 + safeSone)
-            daRating = 'bad';
-        else if (noteDiff > Conductor.safeZoneOffset * 0.55 + safeSone)
-            daRating = 'meh';
-        else if (noteDiff > Conductor.safeZoneOffset * 0.2 + safeSone)
-            daRating = 'good';
-        else if (noteDiff > Conductor.safeZoneOffset * 0.1 + safeSone)
-            daRating = 'sick';
+        if (noteDiff > Conductor.safeZoneOffset * 0.9 + saveFrames)
+			daRating = 'awfull';
+		else if (noteDiff > Conductor.safeZoneOffset * 0.85 + saveFrames)
+			daRating = 'shit';
+		else if (noteDiff > Conductor.safeZoneOffset * 0.75 + saveFrames)
+			daRating = 'fuck';
+		else if (noteDiff > Conductor.safeZoneOffset * 0.6 + saveFrames)
+			daRating = 'bad';
+		else if (noteDiff > Conductor.safeZoneOffset * 0.55 + saveFrames)
+			daRating = 'meh';
+		else if (noteDiff > Conductor.safeZoneOffset * 0.2 + saveFrames)
+			daRating = 'good';
+		else if (noteDiff > Conductor.safeZoneOffset * 0.1 + saveFrames)
+			daRating = 'sick';
 
             return daRating;
     }

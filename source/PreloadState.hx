@@ -15,16 +15,24 @@ class PreloadState extends MusicBeatState
     var loadingText:FlxText;
 
     var songsCached:Bool = false;
-    var songs:Array<String> =[
-        "Tutorial","freakyMenu"
-    ];
+    var songs:Array<String> =["Tutorial", 
+    "Bopeebo", "Fresh", "Dadbattle", 
+    "Spookeez", "South", "Monster",
+    "Pico", "Philly", "Blammed", 
+    "Satin-Panties", "High", "Milf", 
+    "Cocoa", "Eggnog", "Winter-Horrorland", 
+    "Senpai", "Roses", "Thorns",
+    "Dum", "freakyMenu"];
 
     var charactersCached:Bool = false;
     var characters:Array<String> =[
-        "characters/bf_assets",
-        "characters/GF_assets",
-        "characters/DADDY_DEAREST",
-        "characters/dum/skippa"];
+        "characters/bf_assets","characters/GF_assets","DADDY_DEAREST",
+        "characters/bfCar","characters/gfCar","characters/Mom_Assets",
+        "characters/bfChristmas","characters/gfChristmas","characters/mom_dad_christmas_assets","characters/momCar",
+        "characters/monsterChristmas","characters/Pico_FNF_assetss","characters/dum/skippa",
+        "characters/week2/Monster_Assets","characters/week2/spooky_kids_assets",
+        "weeb/bfPixel","weeb/gfPixel","weeb/senpai","weeb/spirit"
+    ];
     
     var soundsCached:Bool = false;
     var sounds:Array<String> =[
@@ -38,7 +46,11 @@ class PreloadState extends MusicBeatState
     var graphics:Array<String> =[
         "logoBumpin", "titleBG", "gfDanceTitle", "titleEnter",
         "stageback", "stagefront", "stagecurtains",
-        "rozeSplash","FNF_main_menu_assets","iconGrid"];
+        "rozeSplash","FNF_main_menu_assets","iconGrid",
+        "animatedEvilSchool","senpaiCrazy","senpaiPortrait","dialogueBox-pixel",
+        "dialogueBox-senpaiMad","arrows-pixels","arrowEnds",
+        "noteSplashes","NOTE_assets","go","ready","set","speech_bubble_talking"
+    ];
 
     var cacheStart:Bool = false;
 
