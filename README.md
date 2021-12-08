@@ -1,7 +1,7 @@
 # Friday Night Funkin Overcharged Engine
 ![](https://raw.githubusercontent.com/susyboy23/OverchargedEngine/main/art/OverchargedEngineLogoNew.png)
 
-IF YOU MAKE A MOD AND DISTRIBUTE A MODIFIED / RECOMPILED VERSION, YOU MUST OPEN SOURCE YOUR MOD AS WELL
+ninjamuffin99: **IF YOU MAKE A MOD AND DISTRIBUTE A MODIFIED / RECOMPILED VERSION, YOU MUST OPEN SOURCE YOUR MOD AS WELL**
 
 ## Special Thanks
 
@@ -11,6 +11,10 @@ IF YOU MAKE A MOD AND DISTRIBUTE A MODIFIED / RECOMPILED VERSION, YOU MUST OPEN 
 - [ShadowMario](https://github.com/ShadowMario) and [Alan Yao](https://github.com/alanyao)
 - [KadeDev](https://github.com/KadeDev)
 - [Rozebud](https://github.com/ThatRozebudDude)
+
+## Show Up
+
+(ADD SHITTY STUFF THAN SHOW'S UP MORE STUFF DUMM ASS) 
 
 ## Features
 - Easy to make Dialogues:
