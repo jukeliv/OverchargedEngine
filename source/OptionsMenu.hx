@@ -62,8 +62,6 @@ class OptionsMenu extends MusicBeatState
 		if (controls.ACCEPT)
 		{
 			switch(optionsStrings[curSelected]){
-				case 'Controls':
-					FlxG.state.openSubState(new KeyBindMenu());
 				case 'Preferences':
 					FlxG.switchState(new PreferencesMenuState());
 			}

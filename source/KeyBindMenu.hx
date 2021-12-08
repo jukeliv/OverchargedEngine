@@ -224,7 +224,13 @@ class KeyBindMenu extends MusicBeatSubstate
 
         var notAllowed:Array<String> = [];
 
-        for(x in blacklist){notAllowed.push(x);}
+        var usedKey:Array<String> = [];
+
+        for(key in keys){
+            if(key != tempKey){usedKey.push(key);}
+        }
+
+        for(notAllow in blacklist){notAllowed.push(notAllow);}
 
         if(curSelected != 4){
 
@@ -240,17 +246,26 @@ class KeyBindMenu extends MusicBeatSubstate
         for(x in notAllowed){
             if(x == r){
                 shouldReturn = false;
-                FlxG.sound.play(Paths.sound('cancelMenu'));
+            }
+        }
+
+        for(dum in usedKey){
+            if(dum == r){
+                shouldReturn = true;
             }
         }
 
         if(shouldReturn){
+            for(i in 0... keys.length){
+                if(keys[i] == r)
+                    keys[i] = null;
+            }
             keys[curSelected] = r;
-            FlxG.sound.play('assets/sounds/scrollMenu.ogg');
+            FlxG.sound.play(Paths.sound('acceptMenu'));
         }
         else{
             keys[curSelected] = tempKey;
-            FlxG.sound.play('assets/sounds/cancelMenu.ogg');
+            FlxG.sound.play(Paths.sound('cancelMenu'));
             keyWarning.alpha = 1;
             warningTween.cancel();
             warningTween = FlxTween.tween(keyWarning, {alpha: 0}, 0.5, {ease: FlxEase.circOut, startDelay: 2});

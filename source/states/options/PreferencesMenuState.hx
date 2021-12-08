@@ -1,5 +1,6 @@
 package states.options;
 
+import flixel.text.FlxText;
 import openfl.Lib;
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
@@ -10,12 +11,14 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
 
 class PreferencesMenuState extends MusicBeatState {
-    var textMenuOptions:Array<String> = ['Scroll Speed','Ghost Tapping','Framerate','Antialiasing', 'Toggle FPS Cap'];
+    var textMenuOptions:Array<String> = ['Controls','Ghost Tapping','Framerate','Scroll Speed','Antialiasing', 'Toggle FPS Cap','Reset'];
 	var curSelected:Int = 0;
 
 	var grpOptionsTexts:FlxTypedGroup<Alphabet>;
 
     var bf:Character = new Character(0,0);
+
+	var descText:FlxText;
 
 	override function create()
 	{
@@ -29,6 +32,11 @@ class PreferencesMenuState extends MusicBeatState {
 		menuBG.antialiasing = true;
 		add(menuBG);
 
+		descText = new FlxText(320, 635, 640, "", 20);
+		descText.scrollFactor.set(0, 0);
+		descText.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descText.borderQuality = 1;
+
 		Options.load();//new load stuff
 
 		grpOptionsTexts = new FlxTypedGroup<Alphabet>();
@@ -36,11 +44,14 @@ class PreferencesMenuState extends MusicBeatState {
 
 		for (i in 0...textMenuOptions.length)
 		{
-			var textMenuItems:Array<String> = ['Scroll Speed: ' + Options.scrollSpeed,'Ghost Tapping: ' + Options.ghostTap,'Framerate: ' + Options.framerate,'Antialiasing: ' + Options.antialiasing , 'Toggle FPS Cap: ' + Options.fpsCap];
-            var controlLabel:Alphabet = new Alphabet(0, (60 * i) + 60, textMenuItems[i].toLowerCase(), true, false);
+            var controlLabel:Alphabet = new Alphabet(0, (60 * i) + 60, textMenuOptions[i].toLowerCase(), true, false);
+			controlLabel.setGraphicSize(Std.int(controlLabel.width * 0.8));
+			controlLabel.updateHitbox();
+
 			controlLabel.isMenuItem = true;
 			controlLabel.targetY = i;
-			if(i == 0){
+			controlLabel.ID = i;
+			if(controlLabel.ID == 0){
 				controlLabel.color = FlxColor.YELLOW;
 				controlLabel.alpha = 1;
 			}
@@ -89,18 +100,20 @@ class PreferencesMenuState extends MusicBeatState {
 		if(controls.RIGHT_P){
 			switch(textMenuOptions[curSelected]){
 				case 'Scroll Speed':
-					updateDescription('Scroll Speed: ' + Options.scrollSpeed);
 					Options.scrollSpeed+=0.1;
+					updateDescription('Scroll Speed: ' + Options.scrollSpeed);
 				case 'Framerate':
-					updateDescription('Framerate: ' + Options.framerate);
 					if(Options.framerate <= FlxG.save.data.fpsLimit){
 						Options.framerate+=1;
 						(cast(Lib.current.getChildAt(0),Main)).setFramerate(Options.framerate);
+						updateDescription('Framerate: ' + Options.framerate);
 					}
 			}
 		}
         if(controls.ACCEPT){
             switch(textMenuOptions[curSelected]){
+				case 'Controls':
+					FlxG.state.openSubState(new KeyBindMenu());
                 case 'Antialiasing':
 					updateDescription('Antialiasing: ' + Options.antialiasing);
 					FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -125,7 +138,10 @@ class PreferencesMenuState extends MusicBeatState {
     }
 
 	public function updateDescription(str:String){
-		grpOptionsTexts.members[curSelected].text = str;
+		for(item in grpOptionsTexts){
+			if(item.ID == curSelected)
+				item.text = str;
+		}
 	}
 
 	public function changeSelection(huh:Int){

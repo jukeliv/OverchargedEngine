@@ -11,6 +11,7 @@ class Options
 	public static var optimization:Bool = false;
 	public static var framerate:Int = 60;
 	public static var ghostTap:Bool = true;
+	public static var downscroll:Bool = true;
 	public static var safeZone:Int = 0;
 
 	//to much cloned stuff xD, if you dont like it
@@ -39,5 +40,16 @@ class Options
 			ghostTap = FlxG.save.data.ghostTap;
 		if(FlxG.save.data.safeZone != null)
 			safeZone = FlxG.save.data.safeZone;
+	}
+	static public function reset(){
+		scrollSpeed = 1;
+		antialiasing = true;
+		fpsCap = true;
+		optimization = false;
+		framerate = 60;
+		ghostTap = true;
+		downscroll = true;
+		safeZone = 0;
+		save();
 	}
 }
