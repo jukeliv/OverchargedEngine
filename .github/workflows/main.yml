@@ -23,22 +23,22 @@ jobs:
         run: |
           haxelib setup C:/haxelib
           haxelib install hxcpp > nul
-          haxelib install lime
-          haxelib install openfl
-          haxelib --never install flixel
-          haxelib run lime setup flixel
-          haxelib run lime setup
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib --never install flixel 4.0.9
+          haxelib run lime setup flixel --quiet
+          haxelib run lime setup --quiet
           haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install hscript
-          haxelib install newgrounds
-          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-          haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons
-          haxelib install actuate
-          haxelib git extension-webm https://github.com/KadeDev/extension-webm
+          haxelib install flixel-ui --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install hscript --quiet
+          haxelib install newgrounds --quiet
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet
+          haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons --quiet
+          haxelib install actuate --quiet
+          haxelib git extension-webm https://github.com/KadeDev/extension-webm --quiet
           haxelib install openfl-webm
-          lime rebuild extension-webm windows
+          lime rebuild extension-webm windows --quiet
           haxelib list
         shell: cmd
       - name: Create Version Tag
