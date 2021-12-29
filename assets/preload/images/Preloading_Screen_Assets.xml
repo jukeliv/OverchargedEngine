@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Preloading_Screen_Assets.png">
+	<!-- Created with Adobe Animate version 21.0.0.35450 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Apear0000" x="718" y="0" width="712" height="498"/>
+	<SubTexture name="Apear0001" x="718" y="0" width="712" height="498"/>
+	<SubTexture name="Apear0002" x="718" y="0" width="712" height="498"/>
+	<SubTexture name="Apear0003" x="1430" y="0" width="712" height="498"/>
+	<SubTexture name="Apear0004" x="2142" y="0" width="712" height="498"/>
+	<SubTexture name="Apear0005" x="718" y="498" width="712" height="498"/>
+	<SubTexture name="Apear0006" x="1430" y="498" width="712" height="498"/>
+	<SubTexture name="Apear0007" x="2142" y="498" width="712" height="498"/>
+	<SubTexture name="Apear0008" x="2142" y="498" width="712" height="498"/>
+	<SubTexture name="Apear0009" x="2142" y="498" width="712" height="498"/>
+	<SubTexture name="end0000" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0001" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0002" x="712" y="996" width="712" height="498"/>
+	<SubTexture name="end0003" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0004" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0005" x="712" y="996" width="712" height="498"/>
+	<SubTexture name="end0006" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0007" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0008" x="712" y="996" width="712" height="498"/>
+	<SubTexture name="end0009" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0010" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0011" x="712" y="996" width="712" height="498"/>
+	<SubTexture name="end0012" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0013" x="712" y="996" width="712" height="498"/>
+	<SubTexture name="end0014" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0015" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0016" x="0" y="523" width="712" height="498"/>
+	<SubTexture name="end0017" x="1424" y="996" width="712" height="498"/>
+	<SubTexture name="end0018" x="2136" y="996" width="712" height="498"/>
+	<SubTexture name="end0019" x="0" y="1021" width="712" height="498"/>
+	<SubTexture name="end0020" x="712" y="1494" width="712" height="498"/>
+	<SubTexture name="end0021" x="718" y="0" width="712" height="498"/>
+	<SubTexture name="end0022" x="718" y="0" width="712" height="498"/>
+	<SubTexture name="logo bumpin0000" x="0" y="1519" width="678" height="493" frameX="-20" frameY="-15" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0001" x="0" y="0" width="718" height="523"/>
+	<SubTexture name="logo bumpin0002" x="0" y="0" width="718" height="523"/>
+	<SubTexture name="logo bumpin0003" x="1424" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0004" x="1424" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0005" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0006" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0007" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0008" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0009" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0010" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0011" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0012" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0013" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+	<SubTexture name="logo bumpin0014" x="2114" y="1494" width="690" height="502" frameX="-14" frameY="-11" frameWidth="718" frameHeight="523"/>
+</TextureAtlas>

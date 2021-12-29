@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
+import lime.utils.Assets;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
@@ -60,10 +61,17 @@ class PreloadState extends MusicBeatState
         FlxG.mouse.visible = false;
         FlxG.sound.muteKeys = null;
 
+		Highscore.load();
+		KeyBinds.keyCheck();
+		PlayerSettings.init();
+
+        PlayerSettings.player1.controls.loadKeyBinds();
+
         splash = new FlxSprite(0, 0);
-        splash.frames = Paths.getSparrowAtlas('rozeSplash');
-        splash.animation.addByPrefix('start', 'Splash Start', 24, false);
-        splash.animation.addByPrefix('end', 'Splash End', 24, false);
+        splash.frames = Paths.getSparrowAtlas('Preloading_Screen_Assets');
+        splash.animation.addByPrefix('start', 'Apear', 24, false);
+        splash.animation.addByPrefix('idle', 'logo bumpin', 24, false);
+        splash.animation.addByPrefix('end', 'end', 24, false);
         add(splash);
         splash.animation.play("start");
         splash.updateHitbox();
@@ -90,6 +98,7 @@ class PreloadState extends MusicBeatState
         if(splash.animation.curAnim.finished && splash.animation.curAnim.name == "start" && !cacheStart){
             preload();
             cacheStart = true;
+            splash.animation.play('idle');
         }
 
         if(songsCached && charactersCached && graphicsCached && soundsCached && !animEnd){
@@ -113,30 +122,45 @@ class PreloadState extends MusicBeatState
         loadingText.text = "Preloading All!";
         loadingText.screenCenter(X);
         if(!songsCached)
-            sys.thread.Thread.create(() -> {
+            #if sys sys.thread.Thread.create(() -> {
                 preloadMusic();
             });
+            #else
+            preloadMusic();
+            #end
 
         if(!charactersCached)
-            sys.thread.Thread.create(() -> {
+            #if sys sys.thread.Thread.create(() -> {
                 preloadCharacters();
             });
+            #else
+            preloadCharacters();
+            #end
 
         if(!graphicsCached)
-            sys.thread.Thread.create(() -> {
+            #if sys sys.thread.Thread.create(() -> {
                 preloadGraphics();
             });
+            #else
+            preloadGraphics();
+            #end
 
         if(!soundsCached)
-            sys.thread.Thread.create(() -> {
+            #if sys sys.thread.Thread.create(() -> {
                 preloadSounds();
             });
+            #else
+            preloadSounds();
+            #end
     }
 
     function preloadMusic(){
         for(i in 0... sounds.length){
-            FlxG.sound.cache(Paths.sound(songs[i] + "_Inst"));
-            loadingText.text = "Cached Songs: " + i + "/" + songs.length;
+            if(Assets.exists(Paths.music(songs[i] + "_Inst")))
+                FlxG.sound.cache(Paths.music(songs[i] + "_Inst"));
+            else
+                FlxG.sound.cache(Paths.music(songs[i]));
+            loadingText.text = "Cached Songs: " + i + "/" + Lambda.count(songs);
         }
         songsCached = true;
     }
@@ -144,7 +168,7 @@ class PreloadState extends MusicBeatState
     function preloadSounds(){
         for(i in 0... sounds.length){
             FlxG.sound.cache(Paths.sound(sounds[i]));
-            loadingText.text = "Cached Sounds: " + i + "/" + sounds.length;
+            loadingText.text = "Cached Sounds: " + i + "/" + Lambda.count(sounds);
         }
         soundsCached = true;
     }
@@ -152,7 +176,7 @@ class PreloadState extends MusicBeatState
     function preloadCharacters(){
         for(i in 0... characters.length){
             FlxG.sound.cache(Paths.image(characters[i]));
-            loadingText.text = "Cached Characters: " + i + "/" + characters.length;
+            loadingText.text = "Cached Characters: " + i + "/" + Lambda.count(characters);
         }
         charactersCached = true;
     }
@@ -160,7 +184,7 @@ class PreloadState extends MusicBeatState
     function preloadGraphics(){
         for(i in 0... graphics.length){
             FlxG.sound.cache(Paths.image(graphics[i]));
-            loadingText.text = "Cached Graphic: " + i + "/" + graphics.length;
+            loadingText.text = "Cached Graphic: " + i + "/" + Lambda.count(graphics);
         }
         graphicsCached = true;
     }
