@@ -1,7 +1,8 @@
-# Friday Night Funkin Overcharged Engine
+#Overcharged Engine
 ![](https://raw.githubusercontent.com/susyboy23/OverchargedEngine/main/art/OverchargedEngineLogoNew.png)
 
-ninjamuffin99: **IF YOU MAKE A MOD AND DISTRIBUTE A MODIFIED / RECOMPILED VERSION, YOU MUST OPEN SOURCE YOUR MOD AS WELL**
+"**IF YOU MAKE A MOD AND DISTRIBUTE A MODIFIED / RECOMPILED VERSION, YOU MUST OPEN SOURCE YOUR MOD AS WELL**"
+-ninjamuffin99
 
 ## Special Thanks
 
