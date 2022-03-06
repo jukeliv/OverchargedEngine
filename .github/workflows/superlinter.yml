@@ -1,8 +1,10 @@
 jobs:
-  build_windows:
-    runs-on: [windows]
+  build:
+    runs-on: [ubuntu-latest,macos-latest]
     steps:
+    - users: krdlab/setup-haxe@v1
       with:
         haxe-version: 4.0.5
-      - run: |
-          lime build windows -minify
+    - run: |
+      haxe -version
+      haxelib install hxnodejs
