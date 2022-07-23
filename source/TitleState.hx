@@ -64,13 +64,6 @@ class TitleState extends MusicBeatState
 
 		super.create();
 
-		#if ng
-		NGio.noLogin(APIStuff.API);
-
-		var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
-		trace('NEWGROUNDS');
-		#end
-
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		Highscore.load();
